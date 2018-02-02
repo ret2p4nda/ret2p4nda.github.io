@@ -179,7 +179,23 @@
                 <div class="abstract-content">
                     HITCTF是哈尔滨工业大学组织的一场校赛，在假期时间看了一下题目，锻炼一下，以此记录。
 
+本次比赛共有五道PWN题：
 
+stackoverflow （栈溢出）
+login（爆破）
+DragonBall（整数溢出）
+nodes（溢出BSS段，影响程序逻辑）
+babynote（UAF）
+
+
+stackoverflow此题目是PWN题的签到题，函数逻辑简单，在主函数调用的vuln函数中存在明显的栈溢出漏洞
+
+可以溢出覆盖0x18个字节，并且没有开启canary保护， 可以利用ROP技术控制执行流
+
+如程序中存在一个flag函数，可以直接获取flag
+
+exp.py脚本如下
+123456789...
                 </div>
             </a>
             <div class="abstract-post-meta">
