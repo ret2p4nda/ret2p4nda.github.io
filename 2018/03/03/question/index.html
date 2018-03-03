@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
     <title>
         
-        p4nda&#39;s blog
+        问题解决及工具使用 · p4nda&#39;s blog
         
     </title>
     <link rel="icon" href= /assets/p4nda.ico>
@@ -58,14 +58,23 @@
 </head>
 
     
-        <body class="home-body">
+        <body class="post-body">
     
     
-<header class="header index-header">
+<header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >p4nda@dubhe</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">问题解决及工具使用</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>p4nda@dubhe</a>
 </header>
@@ -75,17 +84,17 @@
     <!-- 主页  -->
     
     
-    <!-- 文章页  -->
+    <!-- 404页  -->
             
-    <div class="site-intro-img" style="background-image: url(/intro/intro-desktop.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/all_star.png)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            p4nda@dubhe
-            <!-- 文章页  -->
+            问题解决及工具使用
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
@@ -93,12 +102,36 @@
             <!-- 主页副标题  -->
             
             
-                PWN | Security Research
-            
-            <!-- 文章页  -->
+            <!-- 404 -->
             
         </p>
         <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Questions>Questions</a>
+    
+</div>
+            
+            <script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "1", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = "/static/api/js/share.js"];</script>
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/03/03</span>
+                <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                    <span class="iconfont-archer">&#xe604;</span>
+                    <span id="busuanzi_value_page_pv"></span>
+                </span>
+                <span class="shareWrapper">
+                    <span class="iconfont-archer shareIcon">
+                        &#xe601;
+                    </span>
+                    <span class="bdsharebuttonbox">
+                        <a href="#" class="bds_more shareText" data-cmd="more">Share</a>
+                    </span>
+                </span>
+            </div>
         
     </div>
 </div>
@@ -166,183 +199,53 @@
             }
         </script>
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/03/question/" >
-                
-                    <span class="stick-top iconfont-archer">&#xe63d;</span>
-                    
-                    <span>问题解决及工具使用</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/03/question/" >
-                <div class="abstract-content">
-                    记录一些工具的使用方法和遇到的问题解决途径
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>记录一些工具的使用方法和遇到的问题解决途径</p>
 
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Questions>Questions</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/03</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/02/05/hitctf/" >
-                
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2018/02/05/hitctf/" title= HITCTF 2018 PWN 题记录 >
+                    <span>Previous Post</span>
                     <span>HITCTF 2018 PWN 题记录</span>
-            </a>
-            <a class="content-show-full" href = "/2018/02/05/hitctf/" >
-                <div class="abstract-content">
-                    HITCTF是哈尔滨工业大学组织的一场校赛，在假期时间看了一下题目，锻炼一下，以此记录。
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
 
-本次比赛共有五道PWN题：
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMzUzOS8xMDA5NQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
 
-stackoverflow （栈溢出）
-login（爆破）
-DragonBall（整数溢出）
-nodes（溢出BSS段，影响程序逻辑）
-babynote（UAF）
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
 
 
-stackoverflow此题目是PWN题的签到题，函数逻辑简单，在主函数调用的vuln函数中存在明显的栈溢出漏洞
-
-可以溢出覆盖0x18个字节，并且没有开启canary保护， 可以利用ROP技术控制执行流
-
-如程序中存在一个flag函数，可以直接获取flag
-
-exp.py脚本如下
-123456789...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/02/05</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/01/23/hello-world/" >
-                
-                    <span>Hello World</span>
-            </a>
-            <a class="content-show-full" href = "/2018/01/23/hello-world/" >
-                <div class="abstract-content">
-                    Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new "My New Post"
-More info: Writing
-Run server1$ hexo server
-More...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = hello>hello</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = world>world</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/23</span>
-                </div>
-            </div>
-        </article>
-    
-    <!-- paginator  -->
-    
+    <!-- 评论 -->
 </main>
             <!-- profile -->
-            
-            <div class="profile">
-    <img class="profile-avatar" src= /avatar/p4nda.jpeg >
-    <div class="profile-name">p4nda</div>
-    
-    <div class="profile-signature">
-        PWN | Security Research
-    </div>
-    
-    
-    <div class="profile-social">
-        
-    
-        
-            
-                <a href="mailto:p4nda_dubhe@163.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title="github"></a>
-            
-        
-    
-        
-            
-                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title="zhihu"></a>
-            
-        
-    
-        
-            
-                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
-            
-        
-    
-
-    </div>
-    
-    
-        <div class="friends">
-            <div>FRIENDS</div>
-            
-                <span>
-                    <a href= //p4nda.top/WooyunDrops/ target="_black">Wooyun知识库</a>
-                </span>
-            
-        </div>
-    
-    
-        <div class="about-me">
-            <div>
-                <a href = "/about" >ABOUT ME</a>
-            </div>
-        </div>
-    
-</div>
             
         </div>
         <footer class="footer footer-unloaded">
@@ -392,6 +295,13 @@ More...
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        
+    </div>
     
     <div class="back-top">&#xe639;</div>
     <div class="sidebar">
