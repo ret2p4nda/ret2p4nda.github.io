@@ -158,6 +158,39 @@
     
     
         <article class="index-post">
+            <a class="abstract-title" href = "/2018/03/06/hgame/" >
+                
+                    <span>HGAME 2018 PWN题记录</span>
+            </a>
+            <a class="content-show-full" href = "/2018/03/06/hgame/" >
+                <div class="abstract-content">
+                    HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
+LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件生成随机数，使用这个随机数作为rand()的种子，生成随机数，与用户输入的随机数进行比较，比较正确就会返回system(‘cat flag’)。
+
+这题存在一个明显的栈溢出漏洞，但是开启了canary保护。起初思路被urandom函数带偏了，以为是要用伪随机本地爆破rand()种子，再进行生成，还暗搓搓的感叹好难啊。。后来发现在guess_num函数中的栈溢出是可以利用的，这个随机数...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/06</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="abstract-title" href = "/2018/02/05/hitctf/" >
                 
                     <span>HITCTF 2018 PWN 题记录</span>
@@ -293,7 +326,14 @@ exp.py脚本如下
     
     
     
-    <div class="total-archive"> Total : 3 </div>
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 4 </div>
     
     <div class="post-archive">
     
@@ -302,6 +342,11 @@ exp.py脚本如下
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/06</span><a class="archive-post-title" href= "/2018/03/06/hgame/" >HGAME 2018 PWN题记录</a>
+        </li>
     
     
         <li class="archive-post-item">
