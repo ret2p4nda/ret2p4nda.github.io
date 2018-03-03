@@ -293,7 +293,7 @@
 <h2 id="hacker-system-ver3"><a href="#hacker-system-ver3" class="headerlink" title="hacker_system_ver3"></a>hacker_system_ver3</h2><p>函数维护了一个bss段上的结构体数组，其每一个结构体的大小是0x38，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">0x00 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">	   | length     |     name 1     | </span><br><span class="line">0x10 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">     | name 2     |     name 3     | </span><br><span class="line">0x20 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">     | name 4     |       age      | </span><br><span class="line">0x30 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</span><br><span class="line">     | intr addr  |                </span><br><span class="line">0x38 +-+-+-+-+-+-+-</span><br></pre></td></tr></table></figure>
 <p>其漏洞在于删除函数中，利用name寻址，将intr address释放后，再释放该结构体，最终将数组的该位置置空。</p>
-<p><img src="/img/hgame2018/4_4_1.png" alt=""></p>
+<p><img src="/img/hgame2018/4_3_1.png" alt=""></p>
 <p>但问题在于，当出现name相同的结构体时，仅置空了最后一个数组的指针，造成之前的指针均为悬垂指针，进而造成double free漏洞。</p>
 <p>该double free漏洞可以控制任意大小的fastbin，原因是，在add 功能时，可以add任意大小的内存块。</p>
 <p>这里采用了bluecake@dubhe大佬的fastbin利用方法。</p>
