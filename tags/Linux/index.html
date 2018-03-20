@@ -164,7 +164,7 @@
             </a>
             <a class="content-show-full" href = "/2018/03/20/tcache/" >
                 <div class="abstract-content">
-                    tcache，全称是thread local caching，是libc 2.26版本中新增加的内存管理机制，术语一种缓存机制，处理逻辑位于malloc函数和free函数中，优先级较高，第一次见到这个结构是在34C3 CTF中的SimpleGC一题。
+                    tcache，全称是thread local caching，是libc 2.26版本中新增加的内存管理机制，属于一种缓存机制，处理逻辑位于malloc函数和free函数中，优先级较高，第一次见到这个结构是在34C3 CTF中的SimpleGC一题。
 总体简介tcache是一个用于加速malloc分配的缓存结构，有由64个链表组成。其优先级很高，会先于全部的bin来处理。每个链表的个数是一定的，当缓存链表装满时，分配方式就与之前版本的malloc相同。但使用了tcache版本的malloc与free函数时，对于堆块的安全性检查就相比于之前的版本弱化很多。
 本文依据的代码是libc 2.2...
                 </div>
@@ -390,9 +390,9 @@ vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fas
     
         <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
