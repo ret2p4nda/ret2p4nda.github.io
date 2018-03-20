@@ -158,6 +158,38 @@
     
     
         <article class="index-post">
+            <a class="abstract-title" href = "/2018/03/20/tcache/" >
+                
+                    <span>tcache 源码分析及利用思路</span>
+            </a>
+            <a class="content-show-full" href = "/2018/03/20/tcache/" >
+                <div class="abstract-content">
+                    tcache，全称是thread local caching，是libc 2.26版本中新增加的内存管理机制，术语一种缓存机制，处理逻辑位于malloc函数和free函数中，优先级较高，第一次见到这个结构是在34C3 CTF中的SimpleGC一题。
+总体简介tcache是一个用于加速malloc分配的缓存结构，有由64个链表组成。其优先级很高，会先于全部的bin来处理。每个链表的个数是一定的，当缓存链表装满时，分配方式就与之前版本的malloc相同。但使用了tcache版本的malloc与free函数时，对于堆块的安全性检查就相比于之前的版本弱化很多。
+本文依据的代码是libc 2.2...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/20</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="abstract-title" href = "/2018/03/15/n1ctf2018/" >
                 
                     <span>N1CTF 2018 &amp;&amp; 线程堆知识源代码分析</span>
@@ -365,7 +397,16 @@ one_gadgetgithub : https://github.com/david942j/one_gadget
     
     
     
-    <div class="total-archive"> Total : 5 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 6 </div>
     
     <div class="post-archive">
     
@@ -374,6 +415,11 @@ one_gadgetgithub : https://github.com/david942j/one_gadget
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/20</span><a class="archive-post-title" href= "/2018/03/20/tcache/" >tcache 源码分析及利用思路</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -405,17 +451,17 @@ one_gadgetgithub : https://github.com/david942j/one_gadget
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">hello</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">world</a></span>
     
+        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
