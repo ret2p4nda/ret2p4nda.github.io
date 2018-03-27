@@ -158,6 +158,40 @@
     
     
         <article class="index-post">
+            <a class="abstract-title" href = "/2018/03/27/QWB2018/" >
+                
+                    <span>2018</span>
+            </a>
+            <a class="content-show-full" href = "/2018/03/27/QWB2018/" >
+                <div class="abstract-content">
+                    opm题目分析本题逻辑比较清晰，仅有两个功能，添加成员和展示全部成员两个功能。
+
+其中，在BSS段上维护了一个数组，用于存储成员的数据结构。该数据结构包括两个从堆上申请的数据块组成。
+分别是定长为0x30（new（0x20））的节点，和由malloc（len(s)）申请的动态节点构成。
+12340             8             16          24        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+| function ptr |   address  |   length   |   i...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/27</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="abstract-title" href = "/2018/03/20/tcache/" >
                 
                     <span>tcache 源码分析及利用思路</span>
@@ -418,7 +452,16 @@ exp.py脚本如下
     
     
     
-    <div class="total-archive"> Total : 6 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 7 </div>
     
     <div class="post-archive">
     
@@ -427,6 +470,11 @@ exp.py脚本如下
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2018/03/27/QWB2018/" >2018</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -463,17 +511,17 @@ exp.py脚本如下
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">hello</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">world</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
