@@ -232,7 +232,7 @@
 <p>对于title这个变量，是有限制的，遇到0x26232722403f210a任意一个时会截断，这样截断后会在堆块末尾写入这个截断值，此时会有一个溢出（off-by-one）。</p>
 <p><img src="/img/QWB2018/2_2.png" alt=""></p>
 <p>对于content变量，理论上智能改变3次，使用realloc进行扩容或者缩小。并且提供打印功能。</p>
-<p><img src="/img/QWB2018/2_3.PNG" alt=""></p>
+<p><img src="/img/QWB2018/2_3.png" alt=""></p>
 <p>对于comment变量是任意写的。</p>
 <h2 id="漏洞利用-1"><a href="#漏洞利用-1" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>此题比较特殊的点在于题目没有free，当没有free时，就需要创造free了…</p>
 <p>通过阅读realloc代码，可以发现其处理逻辑</p>
@@ -478,15 +478,15 @@
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">world</a></span>
+    
         <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
-    
-        <span class="sidebar-tag-name"><a href= "#">world</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
     
