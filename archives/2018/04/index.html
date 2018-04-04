@@ -58,10 +58,8 @@
 </head>
 
     
-        <body class="home-body">
     
-    
-<header class="header index-header">
+<header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
@@ -73,29 +71,18 @@
         <div class="site-intro">
     
     <!-- 主页  -->
-    
-    
-    <!-- 文章页  -->
             
-    <div class="site-intro-img" style="background-image: url(/intro/intro-desktop.jpg)"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-placeholder"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
             
-            p4nda@dubhe
-            <!-- 文章页  -->
-            
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
-            
-            
-                PWN | Security Research
-            
-            <!-- 文章页  -->
             
         </p>
         <!-- 文章页meta -->
@@ -171,42 +158,6 @@
     
     
         <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/03/question/" >
-                
-                    <span class="stick-top iconfont-archer">&#xe63d;</span>
-                    
-                    <span>问题解决及工具使用</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/03/question/" >
-                <div class="abstract-content">
-                    记录一些工具的使用方法和遇到的问题解决途径
-工具使用one_gadgetgithub : https://github.com/david942j/one_gadget
-所谓 one_gadget 就是一个实现了直接执行system(‘/bin/sh’)的程序跳板。
-常见的，可以使用one_gadget覆盖劫持got表、返回地址、hook（__malloc_hook、__free_hook）等等操作，也就是当可以劫持控制流后覆盖的捷径
-安装方法安装one_gadget需要ruby环境，因为是由ruby写成的。
-以ubuntu为例，首先安装ruby
-1sudo apt-get instal...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Questions>Questions</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/03</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
             <a class="abstract-title" href = "/2018/04/04/0ctf2018/" >
                 
                     <span>0ctf 2018 PWN 部分题解</span>
@@ -238,284 +189,10 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             </div>
         </article>
     
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/27/QWB2018/" >
-                
-                    <span>QWBCTF 2018 PWN 部分题解</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/27/QWB2018/" >
-                <div class="abstract-content">
-                    opm题目分析本题逻辑比较清晰，仅有两个功能，添加成员和展示全部成员两个功能。
-
-其中，在BSS段上维护了一个数组，用于存储成员的数据结构。该数据结构包括两个从堆上申请的数据块组成。
-分别是定长为0x30（new（0x20））的节点，和由malloc（len(s)）申请的动态节点构成。
-12340             8             16          24        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+| function ptr |   address  |   length   |   i...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/27</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/20/tcache/" >
-                
-                    <span>tcache 源码分析及利用思路</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/20/tcache/" >
-                <div class="abstract-content">
-                    tcache，全称是thread local caching，是libc 2.26版本中新增加的内存管理机制，属于一种缓存机制，处理逻辑位于malloc函数和free函数中，优先级较高，第一次见到这个结构是在34C3 CTF中的SimpleGC一题。
-总体简介tcache是一个用于加速malloc分配的缓存结构，有由64个链表组成。其优先级很高，会先于全部的bin来处理。每个链表的个数是一定的，当缓存链表装满时，分配方式就与之前版本的malloc相同。但使用了tcache版本的malloc与free函数时，对于堆块的安全性检查就相比于之前的版本弱化很多。
-本文依据的代码是libc 2.2...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/20</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/15/n1ctf2018/" >
-                
-                    <span>N1CTF 2018 &amp;&amp; 线程堆知识源代码分析</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/15/n1ctf2018/" >
-                <div class="abstract-content">
-                    Nu1L队组织的一场国际赛，涉及的知识面很广，仅记录PWN题的第一道和第二道。
-vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fastbin堆块的劫持。
-题目分析题目是一个投票系统，主要包括5个函数：
-
-涉及的数据结构是投票者的票数和名字：
-12340             8                16                 ...+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+| number      |     time       |   name  .........  | +-...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/15</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/06/hgame/" >
-                
-                    <span>HGAME 2018 PWN题记录</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/06/hgame/" >
-                <div class="abstract-content">
-                    HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
-LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件生成随机数，使用这个随机数作为rand()的种子，生成随机数，与用户输入的随机数进行比较，比较正确就会返回system(‘cat flag’)。
-
-这题存在一个明显的栈溢出漏洞，但是开启了canary保护。起初思路被urandom函数带偏了，以为是要用伪随机本地爆破rand()种子，再进行生成，还暗搓搓的感叹好难啊。。后来发现在guess_num函数中的栈溢出是可以利用的，这个随机数...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/06</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/02/05/hitctf/" >
-                
-                    <span>HITCTF 2018 PWN 题记录</span>
-            </a>
-            <a class="content-show-full" href = "/2018/02/05/hitctf/" >
-                <div class="abstract-content">
-                    HITCTF是哈尔滨工业大学组织的一场校赛，在假期时间看了一下题目，锻炼一下，以此记录。
-
-本次比赛共有五道PWN题：
-
-stackoverflow （栈溢出）
-login（爆破）
-DragonBall（整数溢出）
-nodes（溢出BSS段，影响程序逻辑）
-babynote（UAF）
-
-
-stackoverflow此题目是PWN题的签到题，函数逻辑简单，在主函数调用的vuln函数中存在明显的栈溢出漏洞
-
-可以溢出覆盖0x18个字节，并且没有开启canary保护， 可以利用ROP技术控制执行流
-
-如程序中存在一个flag函数，可以直接获取flag
-
-exp.py脚本如下
-123456789...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/02/05</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/01/23/hello-world/" >
-                
-                    <span>Hello World</span>
-            </a>
-            <a class="content-show-full" href = "/2018/01/23/hello-world/" >
-                <div class="abstract-content">
-                    Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new "My New Post"
-More info: Writing
-Run server1$ hexo server
-More...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = hello>hello</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = world>world</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/23</span>
-                </div>
-            </div>
-        </article>
-    
     <!-- paginator  -->
     
 </main>
             <!-- profile -->
-            
-            <div class="profile">
-    <img class="profile-avatar" src= /avatar/p4nda.jpeg >
-    <div class="profile-name">p4nda</div>
-    
-    <div class="profile-signature">
-        PWN | Security Research
-    </div>
-    
-    
-    <div class="profile-social">
-        
-    
-        
-            
-                <a href="mailto:p4nda_dubhe@163.com" class="iconfont-archer email" title=email ></a>
-            
-        
-    
-        
-            
-                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title="github"></a>
-            
-        
-    
-        
-            
-                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title="zhihu"></a>
-            
-        
-    
-        
-            
-                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
-            
-        
-    
-
-    </div>
-    
-    
-        <div class="friends">
-            <div>FRIENDS</div>
-            
-                <span>
-                    <a href= //p4nda.top/WooyunDrops/ target="_black">Wooyun知识库</a>
-                </span>
-            
-        </div>
-    
-    
-        <div class="about-me">
-            <div>
-                <a href = "/about" >ABOUT ME</a>
-            </div>
-        </div>
-    
-</div>
             
         </div>
         <footer class="footer footer-unloaded">
