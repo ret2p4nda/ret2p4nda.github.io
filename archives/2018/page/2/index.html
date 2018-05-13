@@ -158,6 +158,54 @@
     
     
         <article class="index-post">
+            <a class="abstract-title" href = "/2018/02/05/hitctf/" >
+                
+                    <span>HITCTF 2018 PWN 题记录</span>
+            </a>
+            <a class="content-show-full" href = "/2018/02/05/hitctf/" >
+                <div class="abstract-content">
+                    HITCTF是哈尔滨工业大学组织的一场校赛，在假期时间看了一下题目，锻炼一下，以此记录。
+
+本次比赛共有五道PWN题：
+
+stackoverflow （栈溢出）
+login（爆破）
+DragonBall（整数溢出）
+nodes（溢出BSS段，影响程序逻辑）
+babynote（UAF）
+
+
+stackoverflow此题目是PWN题的签到题，函数逻辑简单，在主函数调用的vuln函数中存在明显的栈溢出漏洞
+
+可以溢出覆盖0x18个字节，并且没有开启canary保护， 可以利用ROP技术控制执行流
+
+如程序中存在一个flag函数，可以直接获取flag
+
+exp.py脚本如下
+123456789...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/02/05</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="abstract-title" href = "/2018/01/23/hello-world/" >
                 
                     <span>Hello World</span>
@@ -365,7 +413,20 @@ More...
     
     
     
-    <div class="total-archive"> Total : 11 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 12 </div>
     
     <div class="post-archive">
     
@@ -374,6 +435,11 @@ More...
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/13</span><a class="archive-post-title" href= "/2018/05/13/ciscn-ctf-2018/" >全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -435,19 +501,19 @@ More...
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">hello</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">world</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
+        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
+        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
     
     </div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
