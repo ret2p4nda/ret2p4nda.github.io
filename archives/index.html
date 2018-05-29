@@ -158,6 +158,47 @@
     
     
         <article class="index-post">
+            <a class="abstract-title" href = "/2018/05/29/suctf2018/" >
+                
+                    <span>SUCTF 2018部分PWN题复现</span>
+            </a>
+            <a class="content-show-full" href = "/2018/05/29/suctf2018/" >
+                <div class="abstract-content">
+                    写论文已经两周了orz，今天终于写完了… SUCTF完全靠大佬们带飞，躺进XCTF联赛决赛圈了..
+
+notenote这题也是被大佬们秒的比较多的题目了，我个人觉得这次PWN出的还是挺好的。
+题目分析题目有添加、显示、潘多拉魔盒（？）函数：
+add：
+
+show:
+
+pandora box:
+
+可以看出add函数最多可以申请10次（用处不大？），起初初始化程序时申请了两个连续的0x88的块，在pandora box函数中释放，程序不存在修改操作。
+漏洞利用漏洞十分明显，在add函数中，对申请堆块的输入使用scanf(“%s”,(&amp;ptr)[i]，显然存在一个堆溢出漏洞，并且对堆块...
+                </div>
+            </a>
+            <div class="abstract-post-meta">
+                <!-- tags  -->
+                
+                <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+    
+</div>
+                
+                <!-- date  -->
+                <div class="abstract-date">
+                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/05/29</span>
+                </div>
+            </div>
+        </article>
+    
+    
+    
+        <article class="index-post">
             <a class="abstract-title" href = "/2018/05/13/ciscn-ctf-2018/" >
                 
                     <span>全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</span>
@@ -180,9 +221,9 @@ note-service2这道题给出的hint是
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
     
 </div>
                 
@@ -217,9 +258,9 @@ note-service2这道题给出的hint是
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
     
 </div>
                 
@@ -249,9 +290,9 @@ note-service2这道题给出的hint是
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
     
 </div>
                 
@@ -285,9 +326,9 @@ Linux 内核漏洞利用教程（二）：两个Demo
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
     
         <a class="post-tag" href="javascript:void(0);" data-href = KERNEL>KERNEL</a>
     
@@ -321,9 +362,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
     
 </div>
                 
@@ -355,9 +396,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
     
 </div>
                 
@@ -455,51 +496,15 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
                 
                 <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
     
 </div>
                 
                 <!-- date  -->
                 <div class="abstract-date">
                     <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/06</span>
-                </div>
-            </div>
-        </article>
-    
-    
-    
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/03/question/" >
-                
-                    <span class="stick-top iconfont-archer">&#xe63d;</span>
-                    
-                    <span>问题解决及工具使用</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/03/question/" >
-                <div class="abstract-content">
-                    记录一些工具的使用方法和遇到的问题解决途径
-工具使用one_gadgetgithub : https://github.com/david942j/one_gadget
-所谓 one_gadget 就是一个实现了直接执行system(‘/bin/sh’)的程序跳板。
-常见的，可以使用one_gadget覆盖劫持got表、返回地址、hook（__malloc_hook、__free_hook）等等操作，也就是当可以劫持控制流后覆盖的捷径
-安装方法安装one_gadget需要ruby环境，因为是由ruby写成的。
-以ubuntu为例，首先安装ruby
-1sudo apt-get instal...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-href = Questions>Questions</a>
-    
-</div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/03</span>
                 </div>
             </div>
         </article>
@@ -693,7 +698,16 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
     
     
-    <div class="total-archive"> Total : 12 </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-archive"> Total : 13 </div>
     
     <div class="post-archive">
     
@@ -702,6 +716,11 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/29</span><a class="archive-post-title" href= "/2018/05/29/suctf2018/" >SUCTF 2018部分PWN题复现</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -768,17 +787,17 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
         <div class="sidebar-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">hello</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">world</a></span>
     
-        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
-    
         <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+    
+        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
     
         <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
     
