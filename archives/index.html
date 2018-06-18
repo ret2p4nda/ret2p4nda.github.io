@@ -1,44 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
-    <title>
-        
-        p4nda&#39;s blog
-        
-    </title>
-    <link rel="icon" href= /assets/p4nda.ico>
-    <!-- TODO: 在font-face加载完毕后改变字体  -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
-    <!-- 提前加载place holder  -->
+    <!-- title -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="P4NDA">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="P4NDA">
+    <meta name="keywords" content="p4nda | PWN & security | P4NDA">
+    <meta name="description" content="">
+    <meta name="Cache-Control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>p4nda&#39;s blog</title>
     <style type="text/css">
-        @font-face {
-            font-family: 'Oswald-Regular';
-            src: url(/font/Oswald-Regular.ttf);
-        }
-    </style>
-    <style type="text/css">
-        .site-intro {
-            position: relative;
-            width: 100%;
-            height: 50vh;
-            overflow: hidden;
-            box-shadow: -0.1rem 0 0.5rem 0 rgba(0, 0, 0, 0.5);
-        }
-        .site-intro-placeholder {
-            position: absolute;
-            z-index: -2;
-            top: 0;
-            left: 0px;
-            width: calc(100% + 300px);
-            height: 100%;
-            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-            background-position: center center;
-            transform: translate3d(-226px, 0, 0);
-            animation: gradient-move 2.5s ease-out 0s 1;
-        }
-        @keyframes gradient-move {
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s 1;
+    }
+
+    @keyframes gradient-move {
         0% {
             transform: translate3d(-226px, 0, 0);
         }
@@ -46,11 +65,143 @@
             transform: translate3d(0, 0, 0);
         }
     }
+
 </style>
-    <link rel="stylesheet" href = /css/style.css?v=20180120 />
-    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+
+    <link rel="preload" href= /css/style.css?v=20180604 as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= /css/mobile.css?v=20180604 media="(max-width: 980px)">
     
-    <script src="/scripts/main.js" defer></script>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/p4nda.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+        <!-- algolia -->
+        <script>
+            
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"Search for Posts","hits_empty":"We did not find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}')
+
+            var algolia = {
+                applicationID: 'PO9IHPLN17',
+                apiKey: '3105479551f08f7d616c0ac3db57b9b2',
+                indexName: 'P4NDA BLOG',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
     <!-- 百度统计  -->
     
     <!-- 谷歌统计  -->
@@ -68,12 +219,21 @@
     <a class="home-link" href=/>p4nda@dubhe</a>
 </header>
     <div class="wrapper">
-        <div class="site-intro">
+        <div class="site-intro" style=
+
+
+
+
+
+
+
+
+>
     
     <!-- 主页  -->
             
-    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
@@ -89,82 +249,117 @@
         
     </div>
 </div>
-        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <script>
-            var browser = {
-                    versions: function () {
-                        var u = window.navigator.userAgent;
-                        return {
-                            userAgent: u,
-                            trident: u.indexOf('Trident') > -1, //IE内核
-                            presto: u.indexOf('Presto') > -1, //opera内核
-                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-                            iPad: u.indexOf('iPad') > -1, //是否为iPad
-                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
-                        };
-                    }()
-                }
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
 
-            function fontLoaded(){
-                console.log('font loaded');
-                if (document.getElementsByClassName('site-intro-meta')) {
-                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
-                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
-                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
-                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
-                        if (postIntroTags) {
-                            postIntroTags.classList.add('post-fade-in');
-                        }
-                        if (postIntroMeat) {
-                            postIntroMeat.classList.add('post-fade-in');
-                        }
-                    }
-                }
-                
-            console.log("userAgent:" + browser.versions.userAgent);
-            // UC不支持跨域，所以直接显示
-            if (browser.versions.uc) {
-                console.log("UCBrowser");
-                fontLoaded();
-            } else {
-                WebFont.load({
-                    custom: {
-                        families: ['Oswald-Regular']
-                    },
-                    loading: function () {  //所有字体开始加载
-                        // console.log('loading');
-                    },
-                    active: function () {  //所有字体已渲染
-                        fontLoaded();
-                    },
-                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
-                        console.log('inactive: timeout');
-                        fontLoaded();
-                    },
-                    timeout: 7000 // Set the timeout to two seconds
-                });
-            }
-        </script>
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
             <main class="main index-page">
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/05/29/suctf2018/" >
-                
-                    <span>SUCTF 2018部分PWN题复现</span>
-            </a>
-            <a class="content-show-full" href = "/2018/05/29/suctf2018/" >
-                <div class="abstract-content">
-                    写论文已经两周了orz，今天终于写完了… SUCTF完全靠大佬们带飞，躺进XCTF联赛决赛圈了..
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/05/29/suctf2018/" >
+            
+                <span>SUCTF 2018部分PWN题复现</span>
+        </a>
+        <div class="abstract-content">
+            写论文已经两周了orz，今天终于写完了… SUCTF完全靠大佬们带飞，躺进XCTF联赛决赛圈了..
 
 notenote这题也是被大佬们秒的比较多的题目了，我个人觉得这次PWN出的还是挺好的。
 题目分析题目有添加、显示、潘多拉魔盒（？）函数：
@@ -176,36 +371,37 @@ pandora box:
 
 可以看出add函数最多可以申请10次（用处不大？），起初初始化程序时申请了两个连续的0x88的块，在pandora box函数中释放，程序不存在修改操作。
 漏洞利用漏洞十分明显，在add函数中，对申请堆块的输入使用scanf(“%s”,(&amp;ptr)[i]，显然存在一个堆溢出漏洞，并且对堆块...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/05/29</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/05/29</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/05/13/ciscn-ctf-2018/" >
-                
-                    <span>全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</span>
-            </a>
-            <a class="content-show-full" href = "/2018/05/13/ciscn-ctf-2018/" >
-                <div class="abstract-content">
-                    ​    拖了好久才来整理全国大学生信息安全竞赛的题解，最近都在忙着DEF CON CHINA的RHG比赛的开发，虽然最后貌似只混了一件T恤… 这次比赛本来不想打的，三、四月份的比赛略多，最后趁着五一的假期，被Misty大佬召唤过来打了一天，队伍名称是Xopowo（俄语好的意思？хорошо）。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/05/13/ciscn-ctf-2018/" >
+            
+                <span>全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</span>
+        </a>
+        <div class="abstract-content">
+            ​    拖了好久才来整理全国大学生信息安全竞赛的题解，最近都在忙着DEF CON CHINA的RHG比赛的开发，虽然最后貌似只混了一件T恤… 这次比赛本来不想打的，三、四月份的比赛略多，最后趁着五一的假期，被Misty大佬召唤过来打了一天，队伍名称是Xopowo（俄语好的意思？хорошо）。
 
 ​    最后做出来和复现的有三道：note-service2  、 house_of_grey 、 echo_back
 note-service2这道题给出的hint是
@@ -214,36 +410,37 @@ note-service2这道题给出的hint是
 
 
 可能很多人发现的是delete函数那里悬垂...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/05/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/05/13</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/04/18/house-of-rabbit/" >
-                
-                    <span>House Of Rabbit 原理</span>
-            </a>
-            <a class="content-show-full" href = "/2018/04/18/house-of-rabbit/" >
-                <div class="abstract-content">
-                    House Of Rabbit是一个比较新的堆利用姿势，在满足条件的情况下，可以绕过堆块的地址随机化保护（ASLR）达到任意地址分配的目的。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/04/18/house-of-rabbit/" >
+            
+                <span>House Of Rabbit 原理</span>
+        </a>
+        <div class="abstract-content">
+            House Of Rabbit是一个比较新的堆利用姿势，在满足条件的情况下，可以绕过堆块的地址随机化保护（ASLR）达到任意地址分配的目的。
 所需条件
 可以分配任意大小的堆块并且释放，主要包括三类fastbin大小的堆块、smallbin大小的堆块、较大的堆块（用于分配到任意地址处）
 存在一块已知地址的内存空间，并可以任意写至少0x20长度的字节
@@ -251,268 +448,274 @@ note-service2这道题给出的hint是
 
 当存在上述三个条件时，即可使用House Of Rabbit攻击方法，Rabbit的含义大概是可以JUMP到任意地址（日本人的冷幽默？？）
 利用方法使用样例在此处有...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/04/18</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/04/18</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/04/17/hitb2018/" >
-                
-                    <span>HITB CTF 2018 部分PWN题解</span>
-            </a>
-            <a class="content-show-full" href = "/2018/04/17/hitb2018/" >
-                <div class="abstract-content">
-                    once此题共有四个函数，自行实现了一个类似于unsorted bin的数据结构，其结构体如下：
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/04/17/hitb2018/" >
+            
+                <span>HITB CTF 2018 部分PWN题解</span>
+        </a>
+        <div class="abstract-content">
+            once此题共有四个函数，自行实现了一个类似于unsorted bin的数据结构，其结构体如下：
 123456700000000 bin             struc ; (sizeof=0x20, mappedto_1)00000000 field_0         dq ?00000008 field_8         dd ?0000000C field_C         dd ?00000010 fd              dq ?00000018 bk              dq ?00000020 bin             ends
 其中第一个函数，...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/04/17</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/04/17</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/04/04/kernel-pwn-start/" >
-                
-                    <span>CTF KETNEL PWN 入门记录</span>
-            </a>
-            <a class="content-show-full" href = "/2018/04/04/kernel-pwn-start/" >
-                <div class="abstract-content">
-                    从强网杯2018开始，突然发现没有接触过的东西很多想拓展一下自己的知识面，开始从Linux Kernel的PWN入手吧。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/04/04/kernel-pwn-start/" >
+            
+                <span>CTF KETNEL PWN 入门记录</span>
+        </a>
+        <div class="abstract-content">
+            从强网杯2018开始，突然发现没有接触过的东西很多想拓展一下自己的知识面，开始从Linux Kernel的PWN入手吧。
 最开始参考的是安全客上的两篇文章，都来自o0xmuhe
 Linux 内核漏洞利用教程（一）：环境配置
 Linux 内核漏洞利用教程（二）：两个Demo
 本篇博客主要补充上述博客中没有详细描述的地方，和踩过的坑。（可能只有我基础这么差…）
 环境配置编译内核文中提到的安装依赖库及qemu时，在make menuconfig就很懵…
 1234567$ cd linux-2.6.32.1/$ sudo apt-get install libncurses5-dev$ sudo...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/04/04</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = KERNEL>KERNEL</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "KERNEL">KERNEL</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/04/04</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/04/04/0ctf2018/" >
-                
-                    <span>0ctf 2018 PWN 部分题解</span>
-            </a>
-            <a class="content-show-full" href = "/2018/04/04/0ctf2018/" >
-                <div class="abstract-content">
-                    这次比赛和哈尔滨工业大学及中国科学技术大学的大佬们组了一支联队emmmm，对就叫emmmm。还被TX点名了，hhhhhh。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/04/04/0ctf2018/" >
+            
+                <span>0ctf 2018 PWN 部分题解</span>
+        </a>
+        <div class="abstract-content">
+            这次比赛和哈尔滨工业大学及中国科学技术大学的大佬们组了一支联队emmmm，对就叫emmmm。还被TX点名了，hhhhhh。
 
 靠着 BLUECAKE@DUBHE 大佬，队伍一共出了三道PWN题。
 babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也没有输出orz，突然想起之前做过pwnable.tw上的starbound时，曾经接触过一种方法叫return-to-dl-resolve，这种方法可以再没有libc的条件下，找到并执行system函数。
 这篇博客对这个知识点讲的很清楚 http://www.freebuf.com/articles/system/149...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/04/04</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/04/04</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/27/QWB2018/" >
-                
-                    <span>QWBCTF 2018 PWN 部分题解</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/27/QWB2018/" >
-                <div class="abstract-content">
-                    opm题目分析本题逻辑比较清晰，仅有两个功能，添加成员和展示全部成员两个功能。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/27/QWB2018/" >
+            
+                <span>QWBCTF 2018 PWN 部分题解</span>
+        </a>
+        <div class="abstract-content">
+            opm题目分析本题逻辑比较清晰，仅有两个功能，添加成员和展示全部成员两个功能。
 
 其中，在BSS段上维护了一个数组，用于存储成员的数据结构。该数据结构包括两个从堆上申请的数据块组成。
 分别是定长为0x30（new（0x20））的节点，和由malloc（len(s)）申请的动态节点构成。
 12340             8             16          24        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+| function ptr |   address  |   length   |   i...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/27</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/27</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/20/tcache/" >
-                
-                    <span>tcache 源码分析及利用思路</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/20/tcache/" >
-                <div class="abstract-content">
-                    tcache，全称是thread local caching，是libc 2.26版本中新增加的内存管理机制，属于一种缓存机制，处理逻辑位于malloc函数和free函数中，优先级较高，第一次见到这个结构是在34C3 CTF中的SimpleGC一题。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/20/tcache/" >
+            
+                <span>tcache 源码分析及利用思路</span>
+        </a>
+        <div class="abstract-content">
+            tcache，全称是thread local caching，是libc 2.26版本中新增加的内存管理机制，属于一种缓存机制，处理逻辑位于malloc函数和free函数中，优先级较高，第一次见到这个结构是在34C3 CTF中的SimpleGC一题。
 总体简介tcache是一个用于加速malloc分配的缓存结构，有由64个链表组成。其优先级很高，会先于全部的bin来处理。每个链表的个数是一定的，当缓存链表装满时，分配方式就与之前版本的malloc相同。但使用了tcache版本的malloc与free函数时，对于堆块的安全性检查就相比于之前的版本弱化很多。
 本文依据的代码是libc 2.2...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/20</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Linux">Linux</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/20</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/15/n1ctf2018/" >
-                
-                    <span>N1CTF 2018 &amp;&amp; 线程堆知识源代码分析</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/15/n1ctf2018/" >
-                <div class="abstract-content">
-                    Nu1L队组织的一场国际赛，涉及的知识面很广，仅记录PWN题的第一道和第二道。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/15/n1ctf2018/" >
+            
+                <span>N1CTF 2018 &amp;&amp; 线程堆知识源代码分析</span>
+        </a>
+        <div class="abstract-content">
+            Nu1L队组织的一场国际赛，涉及的知识面很广，仅记录PWN题的第一道和第二道。
 vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fastbin堆块的劫持。
 题目分析题目是一个投票系统，主要包括5个函数：
 
 涉及的数据结构是投票者的票数和名字：
 12340             8                16                 ...+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+| number      |     time       |   name  .........  | +-...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/15</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = Linux>Linux</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Linux">Linux</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/15</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/06/hgame/" >
-                
-                    <span>HGAME 2018 PWN题记录</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/06/hgame/" >
-                <div class="abstract-content">
-                    HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/06/hgame/" >
+            
+                <span>HGAME 2018 PWN题记录</span>
+        </a>
+        <div class="abstract-content">
+            HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
 LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件生成随机数，使用这个随机数作为rand()的种子，生成随机数，与用户输入的随机数进行比较，比较正确就会返回system(‘cat flag’)。
 
 这题存在一个明显的栈溢出漏洞，但是开启了canary保护。起初思路被urandom函数带偏了，以为是要用伪随机本地爆破rand()种子，再进行生成，还暗搓搓的感叹好难啊。。后来发现在guess_num函数中的栈溢出是可以利用的，这个随机数...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/06</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/06</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     <!-- paginator  -->
     
     <nav class="page-nav">
-        <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">#NEXT</a>
+        <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">NEXT &#62;</a>
     </nav>
     
 </main>
@@ -527,26 +730,53 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
         
             
-                <a href="mailto:p4nda_dubhe@163.com" class="iconfont-archer email" title=email ></a>
+                <a href="mailto:root@p4nda.xyz" class="iconfont-archer email" title=email ></a>
             
         
     
         
             
-                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title="github"></a>
+                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title=github></a>
             
         
     
         
             
-                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title="zhihu"></a>
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
             
         
     
         
+    
+        
+    
+        
             
-                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
+                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title=zhihu></a>
             
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
         
     
 
@@ -554,29 +784,30 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
     <!-- powered by Hexo  -->
     <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
     </div>
     <!-- 不蒜子  -->
     
     <div class="busuanzi-container">
-        <span id="busuanzi_container_site_pv">VISITOR VOLUME: <span id="busuanzi_value_site_pv"></span>
-        </span>
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
     </div>
     
 </footer>
     </div>
     <!-- toc -->
     
-    <div class="back-top">&#xe639;</div>
-    <div class="sidebar">
-    <div class="sidebar-header sidebar-header-show-archive">
-        <div class="sidebar-category">
-            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
-            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
-        </div>
-    </div>
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
     <div class="sidebar-content sidebar-content-show-archive">
-          <div class="sidebar-archive">
+          <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
     
     
@@ -707,7 +938,15 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
     
     
-    <div class="total-archive"> Total : 13 </div>
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 13
+        <!-- search  -->
+        </div>
+            <div class="site-search popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
+    </div>
     
     <div class="post-archive">
     
@@ -784,24 +1023,25 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
     </div>
   </div>
-        <div class="sidebar-tags">
+        <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
+        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
-        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
-        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
+        <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
     
-        <span class="sidebar-tag-name"><a href= "#">world</a></span>
+        <span class="sidebar-tag-name" data-tags="world"><span class="iconfont-archer">&#xe606;</span>world</span>
     
-        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+        <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
-        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
-        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
+        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
     
     </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
     缺失模块。<br/>
     1、请确保node版本大于6.2<br/>
@@ -825,25 +1065,70 @@ jsonContent:
     link: false
     permalink: false
     excerpt: false
-    categories: false
+    categories: true
     tags: true</pre>
     </div> 
-    <div class="sidebar-tag-list"></div>
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
 </div>
     </div>
 </div> 
     <script>
-    var jsInfo = {
-        root: '/'
+    var siteMeta = {
+        root: "/",
+        author: "P4NDA"
     }
 </script>
-    <!-- 不蒜子  -->
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+        <div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="iconfont-archer">&#xe609;</i>
+    </span>
+  </div>
+</div>
+        <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.8.0/dist/instantsearch.min.js" defer></script>
+        <script src="/scripts/search.js" defer></script>
+    
+    <!-- busuanzi  -->
     
     <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     
-    <!-- CNZZ统计  -->
+    <!-- CNZZ  -->
     
     </div>
+    <!-- async load share.js -->
+     
     </body>
 </html>
 

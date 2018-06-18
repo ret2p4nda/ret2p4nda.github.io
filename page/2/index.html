@@ -1,44 +1,63 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" >
-    <title>
-        
-        p4nda&#39;s blog
-        
-    </title>
-    <link rel="icon" href= /assets/p4nda.ico>
-    <!-- TODO: 在font-face加载完毕后改变字体  -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.28/webfontloader.js"></script>
-    <!-- 提前加载place holder  -->
+    <!-- title -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="P4NDA">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="P4NDA">
+    <meta name="keywords" content="p4nda | PWN & security | P4NDA">
+    <meta name="description" content="">
+    <meta name="Cache-Control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <title>p4nda&#39;s blog</title>
     <style type="text/css">
-        @font-face {
-            font-family: 'Oswald-Regular';
-            src: url(/font/Oswald-Regular.ttf);
-        }
-    </style>
-    <style type="text/css">
-        .site-intro {
-            position: relative;
-            width: 100%;
-            height: 50vh;
-            overflow: hidden;
-            box-shadow: -0.1rem 0 0.5rem 0 rgba(0, 0, 0, 0.5);
-        }
-        .site-intro-placeholder {
-            position: absolute;
-            z-index: -2;
-            top: 0;
-            left: 0px;
-            width: calc(100% + 300px);
-            height: 100%;
-            background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
-            background-position: center center;
-            transform: translate3d(-226px, 0, 0);
-            animation: gradient-move 2.5s ease-out 0s 1;
-        }
-        @keyframes gradient-move {
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s 1;
+    }
+
+    @keyframes gradient-move {
         0% {
             transform: translate3d(-226px, 0, 0);
         }
@@ -46,11 +65,143 @@
             transform: translate3d(0, 0, 0);
         }
     }
+
 </style>
-    <link rel="stylesheet" href = /css/style.css?v=20180120 />
-    <script src="//cdn.staticfile.org/jquery/3.2.1/jquery.min.js" defer></script>
+
+    <link rel="preload" href= /css/style.css?v=20180604 as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= /css/mobile.css?v=20180604 media="(max-width: 980px)">
     
-    <script src="/scripts/main.js" defer></script>
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/p4nda.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+        <!-- algolia -->
+        <script>
+            
+            var hits = JSON.parse('{"per_page":10}')
+            var labels = JSON.parse('{"input_placeholder":"Search for Posts","hits_empty":"We did not find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}')
+
+            var algolia = {
+                applicationID: 'PO9IHPLN17',
+                apiKey: '3105479551f08f7d616c0ac3db57b9b2',
+                indexName: 'P4NDA BLOG',
+                hits: hits,
+                labels: labels
+            }
+        </script>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
     <!-- 百度统计  -->
     
     <!-- 谷歌统计  -->
@@ -70,15 +221,26 @@
     <a class="home-link" href=/>p4nda@dubhe</a>
 </header>
     <div class="wrapper">
-        <div class="site-intro">
+        <div class="site-intro" style=
+
+
+
+
+
+
+
+
+height:50vh;
+
+>
     
     <!-- 主页  -->
     
     
     <!-- 文章页  -->
             
-    <div class="site-intro-img" style="background-image: url(/intro/intro-desktop.jpg)"></div>
     <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/intro-desktop.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
@@ -102,115 +264,151 @@
         
     </div>
 </div>
-        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <script>
-            var browser = {
-                    versions: function () {
-                        var u = window.navigator.userAgent;
-                        return {
-                            userAgent: u,
-                            trident: u.indexOf('Trident') > -1, //IE内核
-                            presto: u.indexOf('Presto') > -1, //opera内核
-                            webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-                            gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-                            mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-                            ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-                            android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
-                            iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
-                            iPad: u.indexOf('iPad') > -1, //是否为iPad
-                            webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
-                            weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
-                            uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
-                        };
-                    }()
-                }
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
 
-            function fontLoaded(){
-                console.log('font loaded');
-                if (document.getElementsByClassName('site-intro-meta')) {
-                    document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
-                    document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
-                    var postIntroTags = document.getElementsByClassName('post-intro-tags')[0],
-                        postIntroMeat = document.getElementsByClassName('post-intro-meta')[0];
-                        if (postIntroTags) {
-                            postIntroTags.classList.add('post-fade-in');
-                        }
-                        if (postIntroMeat) {
-                            postIntroMeat.classList.add('post-fade-in');
-                        }
-                    }
-                }
-                
-            console.log("userAgent:" + browser.versions.userAgent);
-            // UC不支持跨域，所以直接显示
-            if (browser.versions.uc) {
-                console.log("UCBrowser");
-                fontLoaded();
-            } else {
-                WebFont.load({
-                    custom: {
-                        families: ['Oswald-Regular']
-                    },
-                    loading: function () {  //所有字体开始加载
-                        // console.log('loading');
-                    },
-                    active: function () {  //所有字体已渲染
-                        fontLoaded();
-                    },
-                    inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
-                        console.log('inactive: timeout');
-                        fontLoaded();
-                    },
-                    timeout: 7000 // Set the timeout to two seconds
-                });
-            }
-        </script>
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
             <main class="main index-page">
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/03/06/hgame/" >
-                
-                    <span>HGAME 2018 PWN题记录</span>
-            </a>
-            <a class="content-show-full" href = "/2018/03/06/hgame/" >
-                <div class="abstract-content">
-                    HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/06/hgame/" >
+            
+                <span>HGAME 2018 PWN题记录</span>
+        </a>
+        <div class="abstract-content">
+            HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
 LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件生成随机数，使用这个随机数作为rand()的种子，生成随机数，与用户输入的随机数进行比较，比较正确就会返回system(‘cat flag’)。
 
 这题存在一个明显的栈溢出漏洞，但是开启了canary保护。起初思路被urandom函数带偏了，以为是要用伪随机本地爆破rand()种子，再进行生成，还暗搓搓的感叹好难啊。。后来发现在guess_num函数中的栈溢出是可以利用的，这个随机数...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/06</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/03/06</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/02/05/hitctf/" >
-                
-                    <span>HITCTF 2018 PWN 题记录</span>
-            </a>
-            <a class="content-show-full" href = "/2018/02/05/hitctf/" >
-                <div class="abstract-content">
-                    HITCTF是哈尔滨工业大学组织的一场校赛，在假期时间看了一下题目，锻炼一下，以此记录。
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/02/05/hitctf/" >
+            
+                <span>HITCTF 2018 PWN 题记录</span>
+        </a>
+        <div class="abstract-content">
+            HITCTF是哈尔滨工业大学组织的一场校赛，在假期时间看了一下题目，锻炼一下，以此记录。
 
 本次比赛共有五道PWN题：
 
@@ -229,64 +427,64 @@ stackoverflow此题目是PWN题的签到题，函数逻辑简单，在主函数�
 
 exp.py脚本如下
 123456789...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/02/05</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = CTF>CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = PWN>PWN</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/02/05</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     
     
-        <article class="index-post">
-            <a class="abstract-title" href = "/2018/01/23/hello-world/" >
-                
-                    <span>Hello World</span>
-            </a>
-            <a class="content-show-full" href = "/2018/01/23/hello-world/" >
-                <div class="abstract-content">
-                    Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/01/23/hello-world/" >
+            
+                <span>Hello World</span>
+        </a>
+        <div class="abstract-content">
+            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
 Quick StartCreate a new post1$ hexo new "My New Post"
 More info: Writing
 Run server1$ hexo server
 More...
-                </div>
-            </a>
-            <div class="abstract-post-meta">
-                <!-- tags  -->
-                
-                <div class= abstract-tags >
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/01/23</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-href = hello>hello</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "hello">hello</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-href = world>world</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "world">world</a>
     
 </div>
-                
-                <!-- date  -->
-                <div class="abstract-date">
-                    <span class="abstract-calander iconfont-archer"></span><span class="abstract-time">2018/01/23</span>
-                </div>
-            </div>
-        </article>
+            
+        </div>
+    </article>
     
     <!-- paginator  -->
     
     <nav class="page-nav">
-        <a class="extend prev" rel="prev" href="/">#PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+        <a class="extend prev" rel="prev" href="/">&#60; PREV</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
     </nav>
     
 </main>
@@ -306,26 +504,53 @@ More...
     
         
             
-                <a href="mailto:p4nda_dubhe@163.com" class="iconfont-archer email" title=email ></a>
+                <a href="mailto:root@p4nda.xyz" class="iconfont-archer email" title=email ></a>
             
         
     
         
             
-                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title="github"></a>
+                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title=github></a>
             
         
     
         
             
-                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title="zhihu"></a>
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
             
         
     
         
+    
+        
+    
+        
             
-                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
+                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title=zhihu></a>
             
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
         
     
 
@@ -335,17 +560,17 @@ More...
         <div class="friends">
             <div>FRIENDS</div>
             
-                <span>
-                    <a href= //p4nda.top/WooyunDrops/ target="_black">Wooyun知识库</a>
-                </span>
+                
+                    <span>
+                        <a href= //p4nda.top/WooyunDrops/ target="_black">Wooyun知识库</a>
+                    </span>
+                
             
         </div>
     
     
         <div class="about-me">
-            <div>
-                <a href = "/about" >ABOUT ME</a>
-            </div>
+            <a href = "/about" >ABOUT ME</a>
         </div>
     
 </div>
@@ -359,26 +584,53 @@ More...
     
         
             
-                <a href="mailto:p4nda_dubhe@163.com" class="iconfont-archer email" title=email ></a>
+                <a href="mailto:root@p4nda.xyz" class="iconfont-archer email" title=email ></a>
             
         
     
         
             
-                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title="github"></a>
+                <a href="/github.com/ret2p4nda" class="iconfont-archer github" target="_blank" title=github></a>
             
         
     
         
             
-                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title="zhihu"></a>
+                <span class="iconfont-archer wechat" title=wechat>
+                  
+                  <img class="profile-qr" src="/assets/example_qr.png" />
+                </span>
             
         
     
         
+    
+        
+    
+        
             
-                <a href="/atom.xml" class="iconfont-archer rss" target="_blank" title="rss"></a>
+                <a href="https://www.zhihu.com/people/panda_Z/activities" class="iconfont-archer zhihu" target="_blank" title=zhihu></a>
             
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
         
     
 
@@ -386,29 +638,30 @@ More...
     
     <!-- powered by Hexo  -->
     <div class="copyright">
-        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">Theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">archer</a></span>
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
     </div>
     <!-- 不蒜子  -->
     
     <div class="busuanzi-container">
-        <span id="busuanzi_container_site_pv">VISITOR VOLUME: <span id="busuanzi_value_site_pv"></span>
-        </span>
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
     </div>
     
 </footer>
     </div>
     <!-- toc -->
     
-    <div class="back-top">&#xe639;</div>
-    <div class="sidebar">
-    <div class="sidebar-header sidebar-header-show-archive">
-        <div class="sidebar-category">
-            <span class="sidebar-archive-link"><span class="iconfont-archer">&#xe67d;</span>Archive</span>
-            <span class="sidebar-tags-link"><span class="iconfont-archer">&#xe610;</span>Tag</span>
-        </div>
-    </div>
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
     <div class="sidebar-content sidebar-content-show-archive">
-          <div class="sidebar-archive">
+          <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
     
     
@@ -539,7 +792,15 @@ More...
     
     
     
-    <div class="total-archive"> Total : 13 </div>
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 13
+        <!-- search  -->
+        </div>
+            <div class="site-search popup-trigger">
+                <span class="iconfont-archer search-icon">&#xe627;</span>
+            </div>
+    </div>
     
     <div class="post-archive">
     
@@ -616,24 +877,25 @@ More...
     
     </div>
   </div>
-        <div class="sidebar-tags">
+        <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name"><a href= "#">CTF</a></span>
+        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
-        <span class="sidebar-tag-name"><a href= "#">PWN</a></span>
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
-        <span class="sidebar-tag-name"><a href= "#">hello</a></span>
+        <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
     
-        <span class="sidebar-tag-name"><a href= "#">world</a></span>
+        <span class="sidebar-tag-name" data-tags="world"><span class="iconfont-archer">&#xe606;</span>world</span>
     
-        <span class="sidebar-tag-name"><a href= "#">Linux</a></span>
+        <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
-        <span class="sidebar-tag-name"><a href= "#">KERNEL</a></span>
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
-        <span class="sidebar-tag-name"><a href= "#">Questions</a></span>
+        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
     
     </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
     <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
     缺失模块。<br/>
     1、请确保node版本大于6.2<br/>
@@ -657,25 +919,70 @@ jsonContent:
     link: false
     permalink: false
     excerpt: false
-    categories: false
+    categories: true
     tags: true</pre>
     </div> 
-    <div class="sidebar-tag-list"></div>
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
 </div>
     </div>
 </div> 
     <script>
-    var jsInfo = {
-        root: '/'
+    var siteMeta = {
+        root: "/",
+        author: "P4NDA"
     }
 </script>
-    <!-- 不蒜子  -->
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+        <div class="site-search">
+  <div class="algolia-popup popup">
+    <div class="algolia-search">
+      <div class="algolia-search-input-icon">
+        <i class="fa fa-search"></i>
+      </div>
+      <div class="algolia-search-input" id="algolia-search-input"></div>
+    </div>
+
+    <div class="algolia-results">
+      <div id="algolia-stats"></div>
+      <div id="algolia-hits"></div>
+      <div id="algolia-pagination" class="algolia-pagination"></div>
+    </div>
+
+    <span class="popup-btn-close">
+      <i class="iconfont-archer">&#xe609;</i>
+    </span>
+  </div>
+</div>
+        <script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.8.0/dist/instantsearch.min.js" defer></script>
+        <script src="/scripts/search.js" defer></script>
+    
+    <!-- busuanzi  -->
     
     <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     
-    <!-- CNZZ统计  -->
+    <!-- CNZZ  -->
     
     </div>
+    <!-- async load share.js -->
+     
     </body>
 </html>
 
