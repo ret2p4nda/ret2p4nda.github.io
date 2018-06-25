@@ -354,6 +354,40 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/06/hgame/" >
+            
+                <span>HGAME 2018 PWN题记录</span>
+        </a>
+        <div class="abstract-content">
+            HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
+LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件生成随机数，使用这个随机数作为rand()的种子，生成随机数，与用户输入的随机数进行比较，比较正确就会返回system(‘cat flag’)。
+
+这题存在一个明显的栈溢出漏洞，但是开启了canary保护。起初思路被urandom函数带偏了，以为是要用伪随机本地爆破rand()种子，再进行生成，还暗搓搓的感叹好难啊。。后来发现在guess_num函数中的栈溢出是可以利用的，这个随机数...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/06</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/03/03/question/" >
             
                 <span class="stick-top iconfont-archer">&#xe63d;</span>
@@ -425,9 +459,9 @@ exp.py脚本如下
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -690,9 +724,38 @@ More...
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 13
+        Total : 14
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -707,6 +770,11 @@ More...
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span><a class="archive-post-title" href= "/2018/06/25/pwnhub_Panda's_gift/" >胖哈勃Panda's gift 及 TSCTF 2018 FINAL出题笔记</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -778,9 +846,9 @@ More...
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
-    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
         <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
     
@@ -788,9 +856,9 @@ More...
     
         <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
-        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
-    
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>

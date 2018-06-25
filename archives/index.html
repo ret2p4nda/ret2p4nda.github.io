@@ -354,6 +354,41 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/06/25/pwnhub_Panda's_gift/" >
+            
+                <span>胖哈勃Panda&#39;s gift 及 TSCTF 2018 FINAL出题笔记</span>
+        </a>
+        <div class="abstract-content">
+            胖哈勃Panda’s gift出题题目分析题目在main函数中首先提高了栈地址，去掉了部分栈地址随机化（后2字节），便于后续利用。
+在init函数中，利用时间作为随机数种子，使用mmap伪随机生成2个内存块，地址可预测。作为题目中visitor_name、motto两个变量的可使用内存。
+在login函数中，提供了三个功能。1. 向visitor_name赋值，长度最大为6字节。 2. 向motto赋值，长度最大为0x100字节。 3.打印motto的值。 
+上述三个功能由一个全局变量flag控制每个功能仅能调用一次。
+漏洞设置1、 利用libc及固定时间，visitor_name、mo...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/25</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/05/29/suctf2018/" >
             
                 <span>SUCTF 2018部分PWN题复现</span>
@@ -381,9 +416,9 @@ pandora box:
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -420,9 +455,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -458,9 +493,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -491,9 +526,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -528,9 +563,9 @@ Linux 内核漏洞利用教程（二）：两个Demo
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "KERNEL">KERNEL</a>
     
@@ -565,9 +600,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -600,9 +635,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -672,40 +707,6 @@ vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fas
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "Linux">Linux</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/03/06/hgame/" >
-            
-                <span>HGAME 2018 PWN题记录</span>
-        </a>
-        <div class="abstract-content">
-            HGAME 2018是由杭电的Vidar-Team举办的校内赛，历时一个月，记录一下其中的PWN题目。
-LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件生成随机数，使用这个随机数作为rand()的种子，生成随机数，与用户输入的随机数进行比较，比较正确就会返回system(‘cat flag’)。
-
-这题存在一个明显的栈溢出漏洞，但是开启了canary保护。起初思路被urandom函数带偏了，以为是要用伪随机本地爆破rand()种子，再进行生成，还暗搓搓的感叹好难啊。。后来发现在guess_num函数中的栈溢出是可以利用的，这个随机数...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/06</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -933,9 +934,38 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 13
+        Total : 14
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -950,6 +980,11 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/25</span><a class="archive-post-title" href= "/2018/06/25/pwnhub_Panda's_gift/" >胖哈勃Panda's gift 及 TSCTF 2018 FINAL出题笔记</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1021,9 +1056,9 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
-    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
+        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
         <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
     
@@ -1031,9 +1066,9 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
     
         <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
-        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
-    
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+    
+        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
