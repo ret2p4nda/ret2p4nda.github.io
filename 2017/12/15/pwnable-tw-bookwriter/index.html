@@ -276,9 +276,9 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
@@ -417,8 +417,7 @@ height:50vh;
     <article class="article-entry">
         <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p><strong>最开始是发到了<a href="https://bbs.pediy.com/thread-223334.htm" target="_blank" rel="noopener">看雪论坛</a>上的</strong></p>
 <p>最近在学习house_of_orange技术，house_of_orange技术已经和house_of_lore、house_of_Spirit一样，成为一种堆溢出利用技巧，思路来自ctf-HITCON-2016的同名题目。最近学习到这里，看了github上shellphish/how2heap中的讲解和多篇题解对漏洞触发条件依然不太理解，恰巧做到了pwnable.tw上的BookWriter题目，真正实践了一次。</p>
-<p>#题目分析</p>
-<p>首先这是一道逻辑清晰的题目，主要有添加书页、浏览书页、编辑书页和查看信息功能。</p>
+<h1 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h1><p>首先这是一道逻辑清晰的题目，主要有添加书页、浏览书页、编辑书页和查看信息功能。</p>
 <p><img src="/img/bookwriter/1.jpg" alt=""></p>
 <p>其中定义了两个int[8]数组在BSS段，分别存储书页的地址和书页内容大小信息，两数组在BSS段上位置相邻。</p>
 <ol>
@@ -440,8 +439,7 @@ height:50vh;
 <p>#漏洞分析</p>
 <h2 id="堆地址泄露"><a href="#堆地址泄露" class="headerlink" title="堆地址泄露"></a>堆地址泄露</h2><p>可以主要到bss段上的排列顺序是char author_name[0x40]、int page[8]、int page_size[8]。在输入author_name时，输入长度是0x40，打印时使用%s，造成泄露page中存储的堆地址。</p>
 <h2 id="堆溢出"><a href="#堆溢出" class="headerlink" title="堆溢出"></a>堆溢出</h2><p>堆溢出漏洞有两处，第一处在edit函数中，用户输入完数据后，程序使用strlen函数重置page_size的值，当用户输入与下一堆块中的size相连时，strlen会返回用户输入长度+下一堆块size，再次编辑造成了下一堆块的size被篡改。第二处在于add函数中对允许写入的判断是i&lt;=8,page[i]==NULL。可以发现&amp;page[8] = &amp;page[0]的地址，当page[0]被覆盖为一个堆块地址时，造成了对page[0]超长写入，可以覆盖到很远的地址,可以说是一个等号引发的血案了。</p>
-<p>#漏洞利用</p>
-<p>整个程序中没有出现free函数，常规的UAF、Double free都不存在。看了很多的house_of_orange资料，恰好想到使用这种方法，这种攻击成功需要如下条件（shellphish上提供的方法）：</p>
+<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>整个程序中没有出现free函数，常规的UAF、Double free都不存在。看了很多的house_of_orange资料，恰好想到使用这种方法，这种攻击成功需要如下条件（shellphish上提供的方法）：</p>
 <ol>
 <li>heap地址 2. 堆溢出 3. libc地址 4. libc 2.23及以下版本（2.24版本开始对vtable有check，不过也可以绕过）</li>
 </ol>
@@ -634,7 +632,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#堆地址泄露"><span class="toc-number">1.1.</span> <span class="toc-text">堆地址泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#堆溢出"><span class="toc-number">1.2.</span> <span class="toc-text">堆溢出</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EXP"><span class="toc-number">2.</span> <span class="toc-text">EXP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#reference"><span class="toc-number">3.</span> <span class="toc-text">reference</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#背景"><span class="toc-number">1.</span> <span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#题目分析"><span class="toc-number">2.</span> <span class="toc-text">题目分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#堆地址泄露"><span class="toc-number">2.1.</span> <span class="toc-text">堆地址泄露</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#堆溢出"><span class="toc-number">2.2.</span> <span class="toc-text">堆溢出</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞利用"><span class="toc-number">3.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EXP"><span class="toc-number">4.</span> <span class="toc-text">EXP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#reference"><span class="toc-number">5.</span> <span class="toc-text">reference</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -1003,15 +1001,15 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
-    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
-        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
+        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
         <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
         <span class="sidebar-tag-name" data-tags="PWNABLE.TW"><span class="iconfont-archer">&#xe606;</span>PWNABLE.TW</span>
+    
+        <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
     
