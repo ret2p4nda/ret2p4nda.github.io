@@ -457,9 +457,9 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -506,9 +506,9 @@ exp.py脚本如下
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -521,29 +521,175 @@ exp.py脚本如下
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2018/01/23/hello-world/" >
+        <a class="abstract-title" href = "/2017/12/06/pwnable-tw-alivenote/" >
             
-                <span>Hello World</span>
+                <span>【PWNABLE.TW】 alive_note 解题思路</span>
         </a>
         <div class="abstract-content">
-            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick StartCreate a new post1$ hexo new "My New Post"
-More info: Writing
-Run server1$ hexo server
-More...
+            突然发现已经两个月没写过WP了，愧疚- -…
+此题也算一道分数很高的题目，主要考察Shellcode的编写。
+题目功能又是一道题目逻辑很简单的题。
+首先提供了三个函数
+
+查看，删除，添加
+查看函数：
+
+此函数中readint()使用atoi进行解析，没有检查小于0的情况，造成越解读，可以泄露libc地址（然并卵）
+添加函数中一样有这个问题，并且可以任意写，
+
+显然是一道覆盖got表的题，并且没有开启NX保护，就是可以写shellcode。
+查看一下check函数
+
+不太清楚__ctype_b_loc是什么check，不过可以fuzz一下。
+发现只有如下这些是可以输入的
+123456789...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/01/23</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/12/06</span>
             </div>
             <!-- tags  -->
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "hello">hello</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "world">world</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2017/10/13/pwnable-tw-starbound/" >
+            
+                <span>【PWNABLE.TW】 starbound解题思路</span>
+        </a>
+        <div class="abstract-content">
+            题目功能此题的代码量很大，看了一整天的逻辑代码，没发现什么问题…
+
+ 整个函数的逻辑主要是红框中两个指针的循环赋值和调用，其中第一个指针是主功能函数，第二个数组是子功能函数。
+函数的漏洞主要在main函数中，main函数中使用了strtol函数将用户输入转换为字符串，并根据此转换结果，对子函数进行访问。
+
+当用户输入过大或过小时，会导致越界访问的问题，其中，strtol函数的返回值可能为负数。
+ bss段中，用户输入的名称最开始是随机生成的，但用户可以更改。而此字段在函数指针数组上面，也就是说，用户可以通过控制名称的方式获得一次指令执行的机会
+
+
+漏洞利用查看一下安全保护机制
+
+可以使用...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/10/13</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2017/09/29/pwnable-tw-deathnote/" >
+            
+                <span>【PWNABLE.TW】 deathnote 解题思路</span>
+        </a>
+        <div class="abstract-content">
+            一开始特别懵的一道题。
+题目功能题目逻辑比较简单，大概增加和删除和打印三个功能：
+
+show函数中，打印各日记内容，由于这题没有给出libc文件，应该不需要泄露地址，估计用处不大：
+
+delete函数中，正常的free，然后指针修改为null，可能不存在漏洞，唯一的bug在于read_int()函数中
+
+
+readint函数使用了atoi函数，当输入是“-12”这样的负数时，造成读越界，但是由于在delete函数中，用处不是特别大
+最后，add函数
+
+ 函数的逻辑是在note数组中写入malloc的返回的指针，并且同样用了readint函数，可以发现存在越界写的问题，而note变量在bs...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/29</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2017/09/20/pwnable-tw-seethefile/" >
+            
+                <span>【PWNABLE.TW】 seethefile解题思路</span>
+        </a>
+        <div class="abstract-content">
+            一开始特别懵的一道题。
+题目功能main函数中一共4个功能，openfile、readfile、writefile、closefile。
+
+其中，在最后退出时有一个明显的溢出，是scanf(“%s”,&amp;name);
+name位于bss段上，name下面有一个fp用于存储文件指针，可以被覆盖。
+
+再看其他函数：
+openfile.只有一个简单的输入并打开，保存文件指针在bss段上的fp变量中：
+
+readfile,从fp所指的文件中每次读取0x18F字节字节到magicbuf中，这个变量也在bss段上。
+writefile无法读取含有flag、FLAG、}的字符串，是一个打印函数
+...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/20</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
 </div>
             
@@ -588,9 +734,11 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
             
             <div class= abstract-tags >
     
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
 </div>
             
@@ -953,9 +1101,38 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 16
+        Total : 19
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -1042,11 +1219,6 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
         </li>
     
     
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2018/01/23/hello-world/" >Hello World</a>
-        </li>
-    
-    
     
     
     
@@ -1054,6 +1226,26 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
     
     <div class="archive-year"> 2017 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/pwnable-tw-alivenote/" >【PWNABLE.TW】 alive_note 解题思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/13</span><a class="archive-post-title" href= "/2017/10/13/pwnable-tw-starbound/" >【PWNABLE.TW】 starbound解题思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span><a class="archive-post-title" href= "/2017/09/29/pwnable-tw-deathnote/" >【PWNABLE.TW】 deathnote 解题思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/20</span><a class="archive-post-title" href= "/2017/09/20/pwnable-tw-seethefile/" >【PWNABLE.TW】 seethefile解题思路</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1065,15 +1257,13 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
-    
-        <span class="sidebar-tag-name" data-tags="world"><span class="iconfont-archer">&#xe606;</span>world</span>
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
-        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
-    
         <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
+    
+        <span class="sidebar-tag-name" data-tags="PWNABLE.TW"><span class="iconfont-archer">&#xe606;</span>PWNABLE.TW</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     

@@ -354,6 +354,94 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2017/09/29/pwnable-tw-deathnote/" >
+            
+                <span>【PWNABLE.TW】 deathnote 解题思路</span>
+        </a>
+        <div class="abstract-content">
+            一开始特别懵的一道题。
+题目功能题目逻辑比较简单，大概增加和删除和打印三个功能：
+
+show函数中，打印各日记内容，由于这题没有给出libc文件，应该不需要泄露地址，估计用处不大：
+
+delete函数中，正常的free，然后指针修改为null，可能不存在漏洞，唯一的bug在于read_int()函数中
+
+
+readint函数使用了atoi函数，当输入是“-12”这样的负数时，造成读越界，但是由于在delete函数中，用处不是特别大
+最后，add函数
+
+ 函数的逻辑是在note数组中写入malloc的返回的指针，并且同样用了readint函数，可以发现存在越界写的问题，而note变量在bs...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/29</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2017/09/20/pwnable-tw-seethefile/" >
+            
+                <span>【PWNABLE.TW】 seethefile解题思路</span>
+        </a>
+        <div class="abstract-content">
+            一开始特别懵的一道题。
+题目功能main函数中一共4个功能，openfile、readfile、writefile、closefile。
+
+其中，在最后退出时有一个明显的溢出，是scanf(“%s”,&amp;name);
+name位于bss段上，name下面有一个fp用于存储文件指针，可以被覆盖。
+
+再看其他函数：
+openfile.只有一个简单的输入并打开，保存文件指针在bss段上的fp变量中：
+
+readfile,从fp所指的文件中每次读取0x18F字节字节到magicbuf中，这个变量也在bss段上。
+writefile无法读取含有flag、FLAG、}的字符串，是一个打印函数
+...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/20</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2017/09/14/pwnable-tw-applestore/" >
             
                 <span>【pwnable.tw】 applestore解题思路</span>
@@ -386,9 +474,11 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
             
             <div class= abstract-tags >
     
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
 </div>
             
@@ -667,9 +757,38 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 16
+        Total : 19
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -756,11 +875,6 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
         </li>
     
     
-        <li class="archive-post-item">
-            <span class="archive-post-date">01/23</span><a class="archive-post-title" href= "/2018/01/23/hello-world/" >Hello World</a>
-        </li>
-    
-    
     
     
     
@@ -768,6 +882,26 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
     
     <div class="archive-year"> 2017 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/06</span><a class="archive-post-title" href= "/2017/12/06/pwnable-tw-alivenote/" >【PWNABLE.TW】 alive_note 解题思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/13</span><a class="archive-post-title" href= "/2017/10/13/pwnable-tw-starbound/" >【PWNABLE.TW】 starbound解题思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/29</span><a class="archive-post-title" href= "/2017/09/29/pwnable-tw-deathnote/" >【PWNABLE.TW】 deathnote 解题思路</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/20</span><a class="archive-post-title" href= "/2017/09/20/pwnable-tw-seethefile/" >【PWNABLE.TW】 seethefile解题思路</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -779,15 +913,13 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
-    
-        <span class="sidebar-tag-name" data-tags="world"><span class="iconfont-archer">&#xe606;</span>world</span>
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
-        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
-    
         <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
+    
+        <span class="sidebar-tag-name" data-tags="PWNABLE.TW"><span class="iconfont-archer">&#xe606;</span>PWNABLE.TW</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
