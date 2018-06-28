@@ -354,6 +354,40 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/06/28/pwnable-tw-wannaheap/" >
+            
+                <span>【PWNABLE.TW】 wannaheap 解题思路</span>
+        </a>
+        <div class="abstract-content">
+            这是PWNABLE.TW网站里400pt的一道题，本来以为是与堆相关，实际上是IO相关的一道题。
+最开始的题目应该是来自于WCTF 2016的同名题目，出题方是HITCON，这里多开了PIE保护，并没有造成太多限制，根据FlappyPig在安全客上分享的思路 踩了一些坑把这题出了。
+题目功能首先题目的结构体有两个，chunk和node
+12345678910111213struct __attribute__((packed)) __attribute__((aligned(4))) node&#123;  _QWORD left;  _QWORD right;  __int64 key...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/28</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/06/25/pwnhub_Panda's_gift/" >
             
                 <span>胖哈勃Panda&#39;s gift 及 TSCTF 2018 FINAL出题笔记</span>
@@ -374,9 +408,9 @@
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -416,9 +450,9 @@ pandora box:
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -455,9 +489,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -493,9 +527,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -526,9 +560,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -563,9 +597,9 @@ Linux 内核漏洞利用教程（二）：两个Demo
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "KERNEL">KERNEL</a>
     
@@ -600,9 +634,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -635,9 +669,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -669,58 +703,9 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/02/05/hitctf/" >
-            
-                <span>HITCTF 2018 PWN 题记录</span>
-        </a>
-        <div class="abstract-content">
-            HITCTF是哈尔滨工业大学组织的一场校赛，在假期时间看了一下题目，锻炼一下，以此记录。
-
-本次比赛共有五道PWN题：
-
-stackoverflow （栈溢出）
-login（爆破）
-DragonBall（整数溢出）
-nodes（溢出BSS段，影响程序逻辑）
-babynote（UAF）
-
-
-stackoverflow此题目是PWN题的签到题，函数逻辑简单，在主函数调用的vuln函数中存在明显的栈溢出漏洞
-
-可以溢出覆盖0x18个字节，并且没有开启canary保护， 可以利用ROP技术控制执行流
-
-如程序中存在一个flag函数，可以直接获取flag
-
-exp.py脚本如下
-123456789...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/02/05</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
 </div>
             
@@ -728,6 +713,10 @@ exp.py脚本如下
     </article>
     
     <!-- paginator  -->
+    
+    <nav class="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/tags/CTF/page/2/">2</a><a class="extend next" rel="next" href="/tags/CTF/page/2/">NEXT &#62;</a>
+    </nav>
     
 </main>
             <!-- profile -->
@@ -973,9 +962,10 @@ exp.py脚本如下
     
     
     
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 14
+        Total : 15
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -990,6 +980,11 @@ exp.py脚本如下
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2018/06/28/pwnable-tw-wannaheap/" >【PWNABLE.TW】 wannaheap 解题思路</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1066,9 +1061,9 @@ exp.py脚本如下
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
-    
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
     

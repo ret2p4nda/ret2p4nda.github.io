@@ -354,6 +354,40 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/06/28/pwnable-tw-wannaheap/" >
+            
+                <span>【PWNABLE.TW】 wannaheap 解题思路</span>
+        </a>
+        <div class="abstract-content">
+            这是PWNABLE.TW网站里400pt的一道题，本来以为是与堆相关，实际上是IO相关的一道题。
+最开始的题目应该是来自于WCTF 2016的同名题目，出题方是HITCON，这里多开了PIE保护，并没有造成太多限制，根据FlappyPig在安全客上分享的思路 踩了一些坑把这题出了。
+题目功能首先题目的结构体有两个，chunk和node
+12345678910111213struct __attribute__((packed)) __attribute__((aligned(4))) node&#123;  _QWORD left;  _QWORD right;  __int64 key...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/28</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/06/25/pwnhub_Panda's_gift/" >
             
                 <span>胖哈勃Panda&#39;s gift 及 TSCTF 2018 FINAL出题笔记</span>
@@ -374,9 +408,9 @@
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -416,9 +450,9 @@ pandora box:
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -455,9 +489,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -493,9 +527,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -526,9 +560,9 @@ note-service2这道题给出的hint是
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -563,9 +597,9 @@ Linux 内核漏洞利用教程（二）：两个Demo
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "KERNEL">KERNEL</a>
     
@@ -600,9 +634,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -635,9 +669,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -663,42 +697,6 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
             <!-- date  -->
             <div class="abstract-date">
                 <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "Linux">Linux</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/03/15/n1ctf2018/" >
-            
-                <span>N1CTF 2018 &amp;&amp; 线程堆知识源代码分析</span>
-        </a>
-        <div class="abstract-content">
-            Nu1L队组织的一场国际赛，涉及的知识面很广，仅记录PWN题的第一道和第二道。
-vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fastbin堆块的劫持。
-题目分析题目是一个投票系统，主要包括5个函数：
-
-涉及的数据结构是投票者的票数和名字：
-12340             8                16                 ...+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+| number      |     time       |   name  .........  | +-...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/15</span>
             </div>
             <!-- tags  -->
             
@@ -963,9 +961,10 @@ vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fas
     
     
     
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 14
+        Total : 15
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -980,6 +979,11 @@ vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fas
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">06/28</span><a class="archive-post-title" href= "/2018/06/28/pwnable-tw-wannaheap/" >【PWNABLE.TW】 wannaheap 解题思路</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1056,9 +1060,9 @@ vote一道比较常规套路的fastbin利用方法，主要涉及的知识是fas
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
-        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
-    
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
+    
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
         <span class="sidebar-tag-name" data-tags="hello"><span class="iconfont-archer">&#xe606;</span>hello</span>
     
