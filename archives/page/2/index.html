@@ -354,6 +354,39 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/20/tcache/" >
+            
+                <span>tcache 源码分析及利用思路</span>
+        </a>
+        <div class="abstract-content">
+            tcache，全称是thread local caching，是libc 2.26版本中新增加的内存管理机制，属于一种缓存机制，处理逻辑位于malloc函数和free函数中，优先级较高，第一次见到这个结构是在34C3 CTF中的SimpleGC一题。
+总体简介tcache是一个用于加速malloc分配的缓存结构，有由64个链表组成。其优先级很高，会先于全部的bin来处理。每个链表的个数是一定的，当缓存链表装满时，分配方式就与之前版本的malloc相同。但使用了tcache版本的malloc与free函数时，对于堆块的安全性检查就相比于之前的版本弱化很多。
+本文依据的代码是libc 2.2...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/20</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Linux">Linux</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2018/03/15/n1ctf2018/" >
             
                 <span>N1CTF 2018 &amp;&amp; 线程堆知识源代码分析</span>
@@ -409,9 +442,9 @@ LEVEL - WEEK 1guess_number题目流程很简单，首先使用/dev/urandom文件
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -495,9 +528,9 @@ exp.py脚本如下
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
 </div>
             
@@ -530,9 +563,9 @@ exp.py脚本如下
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
@@ -579,9 +612,9 @@ exp.py脚本如下
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
@@ -623,9 +656,9 @@ exp.py脚本如下
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
@@ -667,9 +700,9 @@ readint函数使用了atoi函数，当输入是“-12”这样的负数时，造
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
@@ -711,58 +744,9 @@ writefile无法读取含有flag、FLAG、}的字符串，是一个打印函数
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2017/09/14/pwnable-tw-applestore/" >
-            
-                <span>【PWNABLE.TW】 applestore 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            做到这道题的时候正赶上iPhone 8上市，撒花~（虽然不知道为啥）
-
-题目功能先进到main函数，比较简单。
-
- myCart位于bss段上，是一个长度为0x10。
-
-主要的处理函数是handler函数：
-
-这是一个标准的菜单类题目。挨个函数看下去 list：
-
-这个是各种手机的价格，什么都没有。
-再看第二个函数：
-
-这个函数是一个添加购物车的函数，具体采用my_read函数，得到用户输入的商品号，然后用atoi函数进行判断。
-my_read函数中存在一个问题，在read部分中以\0分割可以输入其他内容到栈上，并不影响运行结果，因为atoi函数是以\0为分割的。
-
-再看create函数...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/14</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
     
@@ -774,7 +758,7 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
     <!-- paginator  -->
     
     <nav class="page-nav">
-        <a class="extend prev" rel="prev" href="/archives/">&#60; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span>
+        <a class="extend prev" rel="prev" href="/archives/">&#60; PREV</a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/">NEXT &#62;</a>
     </nav>
     
 </main>
@@ -1087,9 +1071,20 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 20
+        Total : 21
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -1104,6 +1099,11 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">07/02</span><a class="archive-post-title" href= "/2018/07/02/patch-in-pwn/" >CTF线下赛中常用的PWN题patch方法</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -1219,17 +1219,19 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
+    
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
-        <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
+        <span class="sidebar-tag-name" data-tags="LINUX"><span class="iconfont-archer">&#xe606;</span>LINUX</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="PWNABLE.TW"><span class="iconfont-archer">&#xe606;</span>PWNABLE.TW</span>
     
-        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
-    
         <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
+    
+        <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
