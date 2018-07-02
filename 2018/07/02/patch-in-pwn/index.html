@@ -276,9 +276,9 @@ height:50vh;
                 
                     <div class= post-intro-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "LINUX">LINUX</a>
     
@@ -286,7 +286,7 @@ height:50vh;
                 
                 
                     <div class="post-intro-read">
-                        <span>Word count: <span class="post-count">0</span> / Reading time: <span class="post-count">1 min</span></span>
+                        <span>Word count: <span class="post-count">1,692</span> / Reading time: <span class="post-count">7 min</span></span>
                     </div>
                 
                 <div class="post-intro-meta">
@@ -415,7 +415,64 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        
+        <p>在国赛以后，突然发现对PWN题中的patch方法了解不太深入，尤其是不够优雅，经常就用IDA直接手改了，或者就是用加一个section的方法，导致patch后的文件改动很大，尤其是在国赛中，被主办方打电话过来问是不是加了通防，本文就简单介绍一下常用的patch方法。</p>
+<h1 id="IDA"><a href="#IDA" class="headerlink" title="IDA"></a>IDA</h1><p>IDA Pro是一个非常强大的工具，其中包含了对汇编指令修改的功能。</p>
+<p>以国赛华北赛区的半决赛为例，其中有一道PWN2是一个栈溢出，代码是这样的。</p>
+<p><img src="/img/patch-in-pwn/1-1.png" alt=""></p>
+<p>很显然，在read这里有一个明显的栈溢出，修复漏洞的方法也和容易，将这个值改小成0x138就好了，下面的write也一样的改法。</p>
+<p>这里使用IDA默认的修改插件来改，在Edit-Patch Program目录下，首先切换到IDA View-A这个汇编指令界面，并选中要改的汇编指令行:</p>
+<p><img src="/img/patch-in-pwn/1-2.png" alt=""></p>
+<p>选择Assemble/Change byte/Change word都可以，以Assemble为例在Instruction窗口，将mov     edx, 1cch改为mov     edx, 138h。</p>
+<p>此时，切换到类C语言窗口可以看到该行已经被修改为了read(a1, &amp;s, 0x138uLL);</p>
+<p><img src="/img/patch-in-pwn/1-3.png" alt=""></p>
+<p>但并没有完，这仅仅修改了IDA对于该文件的数据库，并没有应用到文件中去，同样在Edit-Patch Program目录下，选择Apply patches into file…，将修改写入文件，就完成了一道简单题目的patch。</p>
+<p><img src="/img/patch-in-pwn/1-3.png" alt=""></p>
+<p>这种方法完全依靠手动，而且不能修改文件结构，可以供手动修改的位置也很少，一旦出现如UAF等悬垂指针的问题基本就很难解决了，还得依靠其他更有力的方法来解决。</p>
+<h1 id="lief"><a href="#lief" class="headerlink" title="lief"></a>lief</h1><p>lief是一个开源的跨平台的可执行文件修改工具，链接如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/lief-project/LIEF</span><br></pre></td></tr></table></figure>
+<p>对外提供了Python、C++、C的接口。</p>
+<p>对于Python库安装可以使用pip，如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo pip install lief</span><br></pre></td></tr></table></figure>
+<p>对于lief的API和用法就不介绍了，RTFM。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://lief.quarkslab.com/doc/latest/api/python/index.html</span><br></pre></td></tr></table></figure>
+<p>以下是几种可行的patch方法</p>
+<h2 id="增加segment"><a href="#增加segment" class="headerlink" title="增加segment"></a>增加segment</h2><p>这个方法的目的是增加一个程序段，在这个程序段中加入一个修复漏洞的程序代码，一般程序会在call某个函数时触发漏洞，一般语句为call 0x8041234，可以劫持这句话的逻辑，改成call我们定义的修复函数。</p>
+<p>首先我们的代码程序如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span> </span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"/bin/sh%d"</span>,<span class="number">102</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">"let's go\n"</span>);</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"/bin/sh%d"</span>,<span class="number">102</span>);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">"let's gogo\n"</span>);</span><br><span class="line">  <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们想把第一处printf修改掉，改成我们自己的逻辑，首先需要编译一个包含实现patch函数的静态库，比如：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">myprintf</span><span class="params">(<span class="keyword">char</span> *a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">	<span class="keyword">asm</span>(</span><br><span class="line">		<span class="string">"mov %rdi,%rsi\n"</span></span><br><span class="line">		<span class="string">"mov $0,%rdi\n"</span></span><br><span class="line">		<span class="string">"mov $0x20,%rdx\n"</span></span><br><span class="line">		<span class="string">"mov $0x1,%rax\n"</span></span><br><span class="line">		<span class="string">"syscall\n"</span></span><br><span class="line">		);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">myputs</span><span class="params">(<span class="keyword">char</span> *a)</span></span>&#123;</span><br><span class="line">	<span class="keyword">asm</span>(</span><br><span class="line">		<span class="string">"push $0x41414141\n"</span></span><br><span class="line">		<span class="string">"push $0x42424242\n"</span></span><br><span class="line">		<span class="string">"push %rsp\n"</span></span><br><span class="line">		<span class="string">"pop  %rsi\n"</span></span><br><span class="line">		<span class="string">"mov $0,%rdi\n"</span></span><br><span class="line">		<span class="string">"mov $0x20,%rdx\n"</span></span><br><span class="line">		<span class="string">"mov $0x1,%rax\n"</span></span><br><span class="line">		<span class="string">"syscall\n"</span></span><br><span class="line">		<span class="string">"pop %rax\n"</span></span><br><span class="line">		<span class="string">"pop %rax\n"</span></span><br><span class="line">		);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//gcc -Os -nostdlib -nodefaultlibs -fPIC -Wl,-shared hook.c -o hook</span></span><br></pre></td></tr></table></figure>
+<p>如上，将printf改成了write(0,”/bin/sh%d”,0x20)，利用注释的gcc命令将其编译。</p>
+<p>patch程序的流程是首先将代码段加入到binary程序中，然后修改跳转逻辑，将call printf@plt，改成call myprintf。</p>
+<p>lief中提供了add参数可以用于为二进制文件增加段：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">binary    = lief.parse(binary_name)</span><br><span class="line">lib  = lief.parse(lib_name)	</span><br><span class="line">segment_add = binary.add(lib.segments[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<p>在修改跳转语句部分，由程序的call执行寻址方法是相对寻址的，即call addr = EIP + addr</p>
+<p>因此需要计算写入的新函数距离要修改指令的偏移，计算方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">call xxx  =(addr of new segment + offset function ) -  (addr of order + 5 /*length of call xx*/)</span><br></pre></td></tr></table></figure>
+<p>由于偏移地址是补码表示的，因此在用python计算时需要对结果异或0xffffffff，最终patch计算函数如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">patch_call</span><span class="params">(file,where,end,arch = <span class="string">"amd64"</span>)</span>:</span></span><br><span class="line">	<span class="keyword">print</span> hex(end)</span><br><span class="line"></span><br><span class="line">	length = p32((end - (where + <span class="number">5</span> )) &amp; <span class="number">0xffffffff</span>)</span><br><span class="line">	order = <span class="string">'\xe8'</span>+length</span><br><span class="line">	<span class="keyword">print</span> disasm(order,arch=arch)</span><br><span class="line">	file.patch_address(where,[ord(i) <span class="keyword">for</span> i <span class="keyword">in</span> order])</span><br></pre></td></tr></table></figure>
+<p>执行之后可以看到patch成功了，</p>
+<p><img src="/img/patch-in-pwn/1-5.png" alt=""></p>
+<p><img src="/img/patch-in-pwn/1-6.png" alt=""></p>
+<p>但是一个重大的问题是patch前后文件大小改动很大：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌─[p4nda@p4nda-virtual-machine] - [~/Desktop/pwn/patch] - [一 7月 02, 20:36]</span><br><span class="line">└─[$] &lt;&gt; python 1.py</span><br><span class="line">0x8022f9</span><br><span class="line">   0:   e8 70 1d 40 00          call   0x401d75</span><br><span class="line">[+] ori size 8656</span><br><span class="line">[+] patch size 15885</span><br><span class="line">[+] Seccessful patched <span class="keyword">in</span> adding segment</span><br></pre></td></tr></table></figure>
+<p>这样在一些线下赛中很容易由于修改过大和被判定为通防或者宕机。</p>
+<h2 id="增加library"><a href="#增加library" class="headerlink" title="增加library"></a>增加library</h2><p>这是借鉴LD_preload的一种思路，当程序中加载两个库时，在调用某一函数在两个库内同名存在时，是有一定查找顺序的，也就是可以实现，在不修改程序正常代码的前提下，对全部libc函数进行hook。如下例：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> __<span class="function">cdecl <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> **argv, <span class="keyword">const</span> <span class="keyword">char</span> **envp)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">"/bin/sh%d"</span>, <span class="number">102L</span>L, envp, argv);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译一个动态链接库</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//#include "/home/p4nda/linux-4.17.3/lib/syscall.c"</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"><span class="comment">//#include &lt;stdio.h&gt;</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dlfcn.h&gt;</span></span></span><br><span class="line"><span class="comment">// gcc -nostdlib  -nodefaultlibs -fPIC -Wl,-shared patch.c -o patch -ldl</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">printf</span><span class="params">(<span class="keyword">char</span> *a,<span class="keyword">int</span> b)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">char</span> str[] = <span class="string">"hacked by me\n "</span>;</span><br><span class="line">	<span class="comment">//puts(a);</span></span><br><span class="line">	<span class="keyword">if</span>(<span class="built_in">strstr</span>(a,<span class="string">"/bin/sh"</span>))&#123;</span><br><span class="line">		<span class="built_in">puts</span>(<span class="string">"find dangerous str~"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> (*old_printf)(<span class="keyword">char</span> *,<span class="keyword">int</span>);</span><br><span class="line">	old_printf =(<span class="keyword">int</span> (*)(<span class="keyword">char</span> *,<span class="keyword">int</span>)) dlsym(RTLD_NEXT, <span class="string">"printf"</span>);</span><br><span class="line">	old_printf(a,b); </span><br><span class="line">	<span class="built_in">puts</span>(<span class="string">"\n"</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译命令在注释中，则每次printf时都会先执行上述库中的函数，达到hook的目的。</p>
+<p><img src="/img/patch-in-pwn/1-7.png" alt=""></p>
+<p>优势很明显，可以执行任意libc内函数代码，让编程更容易。</p>
+<p>不过缺点也很明显，首先程序变得<strong>巨大</strong>，并且当不存在这个静态链接库的时候，程序跑不起来… 有些线下赛都是本地check的，比如*网杯，很容易就判断宕机了…</p>
+<p><img src="/img/patch-in-pwn/1-8.png" alt=""></p>
+<h2 id="修改程序-eh-frame段"><a href="#修改程序-eh-frame段" class="headerlink" title="修改程序.eh_frame段"></a>修改程序.eh_frame段</h2><p>在TSCTF 2018 Final时，我在NeSE战队的binary文件中找到了通防工具，但是程序改动并没有特别大，当时感觉很好奇，在赛后调试了一下，发现他们把通防的shellcode写在了一个叫.eh_frame的段中，这个段会加载到程序中来，并且自身带有可执行权限，在查找这个段用处时，发现该段对程序执行影响不大，故可以将patch代码写在这个段中，再用跳转的方法将程序逻辑劫持到这里来。</p>
+<p><img src="/img/patch-in-pwn/1-10.png" alt=""></p>
+<p><img src="/img/patch-in-pwn/1-11.png" alt=""></p>
+<p>可以看到在patch前后，程序大小保持不变。</p>
+<p><img src="/img/patch-in-pwn/1-9.png" alt=""></p>
+<p>缺点同样明显，.eh_frame的大小是有限的…</p>
+<p>综上，似乎没有比较简洁的通用方法，综合着来用吧….</p>
+
     </article>
     <!-- license  -->
     
@@ -559,7 +616,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#IDA"><span class="toc-number">1.</span> <span class="toc-text">IDA</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lief"><span class="toc-number">2.</span> <span class="toc-text">lief</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#增加segment"><span class="toc-number">2.1.</span> <span class="toc-text">增加segment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#增加library"><span class="toc-number">2.2.</span> <span class="toc-text">增加library</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#修改程序-eh-frame段"><span class="toc-number">2.3.</span> <span class="toc-text">修改程序.eh_frame段</span></a></li></ol></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -944,15 +1001,15 @@ top:50vh;
         <div class="sidebar-panel-tags">
     <div class="sidebar-tags-name">
     
+        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+    
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
-        <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
+        <span class="sidebar-tag-name" data-tags="LINUX"><span class="iconfont-archer">&#xe606;</span>LINUX</span>
     
         <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
-    
-        <span class="sidebar-tag-name" data-tags="LINUX"><span class="iconfont-archer">&#xe606;</span>LINUX</span>
     
         <span class="sidebar-tag-name" data-tags="PWNABLE.TW"><span class="iconfont-archer">&#xe606;</span>PWNABLE.TW</span>
     
