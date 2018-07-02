@@ -406,44 +406,6 @@ height:50vh;
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2018/07/02/patch-in-pwn/" >
-            
-                <span>CTF线下赛中常用的PWN题patch方法</span>
-        </a>
-        <div class="abstract-content">
-            在国赛以后，突然发现对PWN题中的patch方法了解不太深入，尤其是不够优雅，经常就用IDA直接手改了，或者就是用加一个section的方法，导致patch后的文件改动很大，尤其是在国赛中，被主办方打电话过来问是不是加了通防，本文就简单介绍一下常用的patch方法。
-IDAIDA Pro是一个非常强大的工具，其中包含了对汇编指令修改的功能。
-以国赛华北赛区的半决赛为例，其中有一道PWN2是一个栈溢出，代码是这样的。
-
-很显然，在read这里有一个明显的栈溢出，修复漏洞的方法也和容易，将这个值改小成0x138就好了，下面的write也一样的改法。
-这里使用IDA默认的修改插件来改，在Edi...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/07/02</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "LINUX">LINUX</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
         <a class="abstract-title" href = "/2018/06/28/pwnable-tw-wannaheap/" >
             
                 <span>【PWNABLE.TW】 wannaheap 解题思路</span>
@@ -732,10 +694,45 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
         </div>
     </article>
     
+    
+    
+    
+    
+    
+    <article class="index-post">
+        <a class="abstract-title" href = "/2018/03/27/QWB2018/" >
+            
+                <span>QWBCTF 2018 PWN 部分题解</span>
+        </a>
+        <div class="abstract-content">
+            opm题目分析本题逻辑比较清晰，仅有两个功能，添加成员和展示全部成员两个功能。
+
+其中，在BSS段上维护了一个数组，用于存储成员的数据结构。该数据结构包括两个从堆上申请的数据块组成。
+分别是定长为0x30（new（0x20））的节点，和由malloc（len(s)）申请的动态节点构成。
+12340             8             16          24        +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+| function ptr |   address  |   length   |   i...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/03/27</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
     <!-- paginator  -->
     
     <nav class="page-nav">
-        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">NEXT &#62;</a>
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">NEXT &#62;</a>
     </nav>
     
 </main>
@@ -1128,20 +1125,9 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 21
+        Total : 20
         <!-- search  -->
         </div>
             <div class="site-search popup-trigger">
@@ -1156,11 +1142,6 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
     
     <div class="archive-year"> 2018 </div>
     <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">07/02</span><a class="archive-post-title" href= "/2018/07/02/patch-in-pwn/" >CTF线下赛中常用的PWN题patch方法</a>
-        </li>
     
     
         <li class="archive-post-item">
@@ -1280,15 +1261,13 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
     
         <span class="sidebar-tag-name" data-tags="PWN"><span class="iconfont-archer">&#xe606;</span>PWN</span>
     
-        <span class="sidebar-tag-name" data-tags="LINUX"><span class="iconfont-archer">&#xe606;</span>LINUX</span>
-    
-        <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
-    
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="PWNABLE.TW"><span class="iconfont-archer">&#xe606;</span>PWNABLE.TW</span>
     
         <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
+    
+        <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
