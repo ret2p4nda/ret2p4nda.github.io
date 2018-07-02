@@ -15,7 +15,7 @@
     <meta name="description" content="">
     <meta name="Cache-Control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>p4nda&#39;s blog</title>
+    <title>CTF线下赛中常用的PWN题patch方法 · p4nda&#39;s blog</title>
     <style type="text/css">
     @font-face {
         font-family: 'Oswald-Regular';
@@ -70,6 +70,8 @@
 
     <link rel="preload" href= /css/style.css?v=20180604 as="style" onload="this.onload=null;this.rel='stylesheet'" />
     <link rel="stylesheet" href= /css/mobile.css?v=20180604 media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
     
     <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
 /* This file is meant as a standalone workflow for
@@ -209,12 +211,23 @@
 </head>
 
     
+        <body class="post-body">
+    
     
 <header class="header">
 
     <div class="read-progress"></div>
     <div class="header-sidebar-menu">&#xe775;</div>
     <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >p4nda@dubhe</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">CTF线下赛中常用的PWN题patch方法</a>
+            </div>
+    </div>
     
     <a class="home-link" href=/>p4nda@dubhe</a>
 </header>
@@ -228,24 +241,78 @@
 
 
 
+height:50vh;
+
 >
     
     <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
             
     <div class="site-intro-placeholder"></div>
-    <div class="site-intro-img" style="background-image: url(/)"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/haibara.jpg)"></div>
     <div class="site-intro-meta">
         <!-- 标题  -->
         <h1 class="intro-title">
             <!-- 主页  -->
+            
+            CTF线下赛中常用的PWN题patch方法
+            <!-- 404 -->
             
         </h1>
         <!-- 副标题 -->
         <p class="intro-subtitle">
             <!-- 主页副标题  -->
             
+            
+            <!-- 404 -->
+            
         </p>
         <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "LINUX">LINUX</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>Word count: <span class="post-count">0</span> / Reading time: <span class="post-count">1 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2018/07/02</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
         
     </div>
 </div>
@@ -346,310 +413,61 @@
 </script>        
         <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
         <div class="container container-unloaded">
-            <main class="main index-page">
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2018/06/28/pwnable-tw-wannaheap/" >
-            
-                <span>【PWNABLE.TW】 wannaheap 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            一道比较新的题目，暂时不开放了，有思路欢迎交流.
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2018/06/28</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
+            <main class="main post-page">
+    <article class="article-entry">
+        
     </article>
+    <!-- license  -->
     
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2017/12/15/pwnable-tw-bookwriter/" >
-            
-                <span>【PWNABLE.TW】 BookWriter 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            背景最开始是发到了看雪论坛上的
-最近在学习house_of_orange技术，house_of_orange技术已经和house_of_lore、house_of_Spirit一样，成为一种堆溢出利用技巧，思路来自ctf-HITCON-2016的同名题目。最近学习到这里，看了github上shellphish/how2heap中的讲解和多篇题解对漏洞触发条件依然不太理解，恰巧做到了pwnable.tw上的BookWriter题目，真正实践了一次。
-题目分析首先这是一道逻辑清晰的题目，主要有添加书页、浏览书页、编辑书页和查看信息功能。
-
-其中定义了两个int[8]数组在BSS段，分别存储书...
+        <div class="license-wrapper">
+            <p>原文作者: <a href="http://p4nda.top">P4NDA</a>
+            <p>原文链接: <a href="http://p4nda.top/2018/07/02/patch-in-pwn/">http://p4nda.top/2018/07/02/patch-in-pwn/</a>
+            <p>发表日期: <a href="http://p4nda.top/2018/07/02/patch-in-pwn/">July 2nd 2018, 7:26:13</a>
+            <p>版权声明: 本文采用<a rel="license" href="http://creativecommons.org/licenses/by-nc/4.0/">知识共享署名-非商业性使用 4.0 国际许可协议</a>进行许可</p>
         </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/12/15</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2017/12/06/pwnable-tw-alivenote/" >
-            
-                <span>【PWNABLE.TW】 alive_note 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            突然发现已经两个月没写过WP了，愧疚- -…
-此题也算一道分数很高的题目，主要考察Shellcode的编写。
-题目功能又是一道题目逻辑很简单的题。
-首先提供了三个函数
-
-查看，删除，添加
-查看函数：
-
-此函数中readint()使用atoi进行解析，没有检查小于0的情况，造成越解读，可以泄露libc地址（然并卵）
-添加函数中一样有这个问题，并且可以任意写，
-
-显然是一道覆盖got表的题，并且没有开启NX保护，就是可以写shellcode。
-查看一下check函数
-
-不太清楚__ctype_b_loc是什么check，不过可以fuzz一下。
-发现只有如下这些是可以输入的
-123456789...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/12/06</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2017/10/13/pwnable-tw-starbound/" >
-            
-                <span>【PWNABLE.TW】 starbound 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            题目功能此题的代码量很大，看了一整天的逻辑代码，没发现什么问题…
-
- 整个函数的逻辑主要是红框中两个指针的循环赋值和调用，其中第一个指针是主功能函数，第二个数组是子功能函数。
-函数的漏洞主要在main函数中，main函数中使用了strtol函数将用户输入转换为字符串，并根据此转换结果，对子函数进行访问。
-
-当用户输入过大或过小时，会导致越界访问的问题，其中，strtol函数的返回值可能为负数。
- bss段中，用户输入的名称最开始是随机生成的，但用户可以更改。而此字段在函数指针数组上面，也就是说，用户可以通过控制名称的方式获得一次指令执行的机会
-
-
-漏洞利用查看一下安全保护机制
-
-可以使用...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/10/13</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2017/09/29/pwnable-tw-deathnote/" >
-            
-                <span>【PWNABLE.TW】 deathnote 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            一开始特别懵的一道题。
-题目功能题目逻辑比较简单，大概增加和删除和打印三个功能：
-
-show函数中，打印各日记内容，由于这题没有给出libc文件，应该不需要泄露地址，估计用处不大：
-
-delete函数中，正常的free，然后指针修改为null，可能不存在漏洞，唯一的bug在于read_int()函数中
-
-
-readint函数使用了atoi函数，当输入是“-12”这样的负数时，造成读越界，但是由于在delete函数中，用处不是特别大
-最后，add函数
-
- 函数的逻辑是在note数组中写入malloc的返回的指针，并且同样用了readint函数，可以发现存在越界写的问题，而note变量在bs...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/29</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2017/09/20/pwnable-tw-seethefile/" >
-            
-                <span>【PWNABLE.TW】 seethefile 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            一开始特别懵的一道题。
-题目功能main函数中一共4个功能，openfile、readfile、writefile、closefile。
-
-其中，在最后退出时有一个明显的溢出，是scanf(“%s”,&amp;name);
-name位于bss段上，name下面有一个fp用于存储文件指针，可以被覆盖。
-
-再看其他函数：
-openfile.只有一个简单的输入并打开，保存文件指针在bss段上的fp变量中：
-
-readfile,从fp所指的文件中每次读取0x18F字节字节到magicbuf中，这个变量也在bss段上。
-writefile无法读取含有flag、FLAG、}的字符串，是一个打印函数
-...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/20</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
-    </article>
-    
-    
-    
-    
-    
-    
-    <article class="index-post">
-        <a class="abstract-title" href = "/2017/09/14/pwnable-tw-applestore/" >
-            
-                <span>【PWNABLE.TW】 applestore 解题思路</span>
-        </a>
-        <div class="abstract-content">
-            做到这道题的时候正赶上iPhone 8上市，撒花~（虽然不知道为啥）
-
-题目功能先进到main函数，比较简单。
-
- myCart位于bss段上，是一个长度为0x10。
-
-主要的处理函数是handler函数：
-
-这是一个标准的菜单类题目。挨个函数看下去 list：
-
-这个是各种手机的价格，什么都没有。
-再看第二个函数：
-
-这个函数是一个添加购物车的函数，具体采用my_read函数，得到用户输入的商品号，然后用atoi函数进行判断。
-my_read函数中存在一个问题，在read部分中以\0分割可以输入其他内容到栈上，并不影响运行结果，因为atoi函数是以\0为分割的。
-
-再看create函数...
-        </div>
-        <div class="abstract-post-meta">
-            <!-- date  -->
-            <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2017/09/14</span>
-            </div>
-            <!-- tags  -->
-            
-            <div class= abstract-tags >
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWN">PWN</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
-    
-        <a class="post-tag" href="javascript:void(0);" data-tags = "PWNABLE.TW">PWNABLE.TW</a>
-    
-</div>
-            
-        </div>
-    </article>
     
     <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2018/06/28/pwnable-tw-wannaheap/" title= 【PWNABLE.TW】 wannaheap 解题思路 >
+                    <div class="prevTitle">【PWNABLE.TW】 wannaheap 解题思路</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+    <div id="lv-container" data-id="city" data-uid= MTAyMC8zMzUzOS8xMDA5NQ==>
+        <script type="text/javascript">
+            (function (d, s) {
+                var j, e = d.getElementsByTagName(s)[0];
+                if (typeof LivereTower === 'function') { return; }
+                j = d.createElement(s);
+                j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+                j.async = true;
+
+                e.parentNode.insertBefore(j, e);
+            })(document, 'script');
+        </script>
+        <noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+    </div>
+
+<!-- City版安装代码已完成 -->
     
+    
+    <!--PC版-->
+
+    <!--PC版-->
+
+
+    
+    <!-- 评论 -->
 </main>
             <!-- profile -->
             
@@ -725,6 +543,24 @@ my_read函数中存在一个问题，在read部分中以\0分割可以输入其�
 </footer>
     </div>
     <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        
+    </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
     <div class="sidebar sidebar-hide">
@@ -1210,6 +1046,8 @@ jsonContent:
     
     </div>
     <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
      
     <script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/assets/nico.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":0,"vOffset":-20},"mobile":{"show":true,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
 </html>

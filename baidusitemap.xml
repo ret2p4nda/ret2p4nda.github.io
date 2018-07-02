@@ -4,8 +4,29 @@
 
     
   <url>
+    <loc>http://p4nda.top/2018/07/02/patch-in-pwn/</loc>
+    <lastmod>2018-07-02T11:29:54.810Z</lastmod>
+    <data>
+        <display>
+        <title>CTF线下赛中常用的PWN题patch方法</title>
+        <pubTime>2018-07-02T11:26:13.000Z</pubTime>
+        
+        <tag>PWN</tag>
+         
+        <tag>CTF</tag>
+         
+        <tag>LINUX</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://p4nda.top/2018/06/28/pwnable-tw-wannaheap/</loc>
-    <lastmod>2018-07-01T15:35:30.959Z</lastmod>
+    <lastmod>2018-07-01T15:41:49.540Z</lastmod>
     <data>
         <display>
         <title>【PWNABLE.TW】 wannaheap 解题思路</title>
