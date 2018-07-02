@@ -411,7 +411,12 @@ height:50vh;
                 <span>CTF线下赛中常用的PWN题patch方法</span>
         </a>
         <div class="abstract-content">
-            一些关于PWN线下赛中Patch的方法，由于在别的地方没有找到相关的，大部分都是自己和队友们想的，欢迎交流思路...
+            在国赛以后，突然发现对PWN题中的patch方法了解不太深入，尤其是不够优雅，经常就用IDA直接手改了，或者就是用加一个section的方法，导致patch后的文件改动很大，尤其是在国赛中，被主办方打电话过来问是不是加了通防，本文就简单介绍一下常用的patch方法。
+IDAIDA Pro是一个非常强大的工具，其中包含了对汇编指令修改的功能。
+以国赛华北赛区的半决赛为例，其中有一道PWN2是一个栈溢出，代码是这样的。
+
+很显然，在read这里有一个明显的栈溢出，修复漏洞的方法也和容易，将这个值改小成0x138就好了，下面的write也一样的改法。
+这里使用IDA默认的修改插件来改，在Edi...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
@@ -426,7 +431,7 @@ height:50vh;
     
         <a class="post-tag" href="javascript:void(0);" data-tags = "CTF">CTF</a>
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "LINUX">LINUX</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Linux">Linux</a>
     
 </div>
             
@@ -1275,13 +1280,11 @@ babystack一道不做作的栈溢出题目，没有开PIE和CANARY保护，也�
     
         <span class="sidebar-tag-name" data-tags="CTF"><span class="iconfont-archer">&#xe606;</span>CTF</span>
     
-        <span class="sidebar-tag-name" data-tags="LINUX"><span class="iconfont-archer">&#xe606;</span>LINUX</span>
+        <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
         <span class="sidebar-tag-name" data-tags="Linux"><span class="iconfont-archer">&#xe606;</span>Linux</span>
     
         <span class="sidebar-tag-name" data-tags="PWNABLE.TW"><span class="iconfont-archer">&#xe606;</span>PWNABLE.TW</span>
-    
-        <span class="sidebar-tag-name" data-tags="KERNEL"><span class="iconfont-archer">&#xe606;</span>KERNEL</span>
     
         <span class="sidebar-tag-name" data-tags="Questions"><span class="iconfont-archer">&#xe606;</span>Questions</span>
     
