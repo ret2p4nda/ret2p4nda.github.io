@@ -294,6 +294,15 @@
       <time datetime="2017-09-14T07:31:00.000Z" itemprop="datePublished">2017-09-14</time>
 </a>
 
+ 
+    <a href="/2017/09/14/pwnable-tw-applestore/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2017/09/14/pwnable-tw-applestore/"></span>
+        
+    </a>
 
     </div>
   
@@ -396,6 +405,22 @@
 
     
 
+    
+        <script id="dsq-count-scr" src="//p4nda.disqus.com/count.js" async></script>
+        <script>
+            if ($(".left-col").is(":visible")) {
+                var $disqusCount = $(".disqus-comment-count");
+                $disqusCount.bind("DOMNodeInserted", function(e) {
+                    var num = $(this).text().replace(/[^0-9]/ig,"");
+                    if (num > 0) {
+                        $(this).siblings(".count-comment").text(num);
+                    }
+                    $(this).remove();
+                })
+            } else {
+                $(".disqus-comment-count").remove();
+            }
+        </script>
      
 
 
