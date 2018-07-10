@@ -16,7 +16,7 @@
 
 
 <meta name="description" content="题目功能此题的代码量很大，看了一整天的逻辑代码，没发现什么问题…   整个函数的逻辑主要是红框中两个指针的循环赋值和调用，其中第一个指针是主功能函数，第二个数组是子功能函数。 函数的漏洞主要在main函数中，main函数中使用了strtol函数将用户输入转换为字符串，并根据此转换结果，对子函数进行访问。  当用户输入过大或过小时，会导致越界访问的问题，其中，strtol函数的返回值可能为负数。">
-<meta name="keywords" content="CTF,PWN,PWNABLE.TW">
+<meta name="keywords" content="PWN,CTF,PWNABLE.TW">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【PWNABLE.TW】 starbound 解题思路">
 <meta property="og:url" content="http://p4nda.top/2017/10/13/pwnable-tw-starbound/index.html">
