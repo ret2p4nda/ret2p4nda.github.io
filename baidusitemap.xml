@@ -4,8 +4,69 @@
 
     
   <url>
+    <loc>http://p4nda.top/2018/11/26/XNUCA-secretcenter/</loc>
+    <lastmod>2018-11-26T04:38:54.543Z</lastmod>
+    <data>
+        <display>
+        <title>X-NUCA'2018 secretcenter 解题思路</title>
+        <pubTime>2018-11-26T02:54:00.000Z</pubTime>
+        
+        <tag>CTF</tag>
+         
+        <tag>PWN</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://p4nda.top/2018/07/13/ciscn2018-core/</loc>
+    <lastmod>2018-11-13T11:23:25.785Z</lastmod>
+    <data>
+        <display>
+        <title>【KERNEL PWN】强网杯CTF2018 core题解</title>
+        <pubTime>2018-07-13T02:01:41.000Z</pubTime>
+        
+        <tag>CTF</tag>
+         
+        <tag>PWN</tag>
+         
+        <tag>KERNEL</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://p4nda.top/2018/07/20/0ctf-baby/</loc>
+    <lastmod>2018-11-13T11:22:35.681Z</lastmod>
+    <data>
+        <display>
+        <title>【KERNEL PWN】0ctf 2018 final baby题解</title>
+        <pubTime>2018-07-20T10:39:12.000Z</pubTime>
+        
+        <tag>CTF</tag>
+         
+        <tag>PWN</tag>
+         
+        <tag>KERNEL</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://p4nda.top/2018/11/07/stringipc/</loc>
-    <lastmod>2018-11-07T08:32:19.174Z</lastmod>
+    <lastmod>2018-11-13T11:21:11.526Z</lastmod>
     <data>
         <display>
         <title>【KERNEL PWN】从内存任意读写到权限提升</title>
@@ -15,7 +76,28 @@
          
         <tag>KERNEL</tag>
          
-        <tag>LINUX</tag>
+        <tag>Linux</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://p4nda.top/2018/10/11/ciscn-2017-babydriver/</loc>
+    <lastmod>2018-11-13T11:20:53.923Z</lastmod>
+    <data>
+        <display>
+        <title>【KERNEL PWN】CISCN 2017 babydriver题解</title>
+        <pubTime>2018-10-11T02:23:23.000Z</pubTime>
+        
+        <tag>PWN</tag>
+         
+        <tag>KERNEL</tag>
+         
+        <tag>Linux</tag>
          
          
            
@@ -35,27 +117,6 @@
         <tag>CTF</tag>
          
         <tag>PWN</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://p4nda.top/2018/10/11/ciscn-2017-babydriver/</loc>
-    <lastmod>2018-10-11T09:08:14.867Z</lastmod>
-    <data>
-        <display>
-        <title>【kernel pwn】CISCN 2017 babydriver题解</title>
-        <pubTime>2018-10-11T02:23:23.000Z</pubTime>
-        
-        <tag>PWN</tag>
-         
-        <tag>KERNEL</tag>
-         
-        <tag>LINUX</tag>
          
          
            
@@ -112,27 +173,6 @@
         <tag>CTF</tag>
          
         <tag>PWN</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://p4nda.top/2018/07/13/ciscn2018-core/</loc>
-    <lastmod>2018-10-03T12:46:49.760Z</lastmod>
-    <data>
-        <display>
-        <title>【kernel pwn】强网杯CTF2018 core题解</title>
-        <pubTime>2018-07-13T02:01:41.000Z</pubTime>
-        
-        <tag>CTF</tag>
-         
-        <tag>PWN</tag>
-         
-        <tag>KERNEL</tag>
          
          
            
@@ -213,27 +253,6 @@
         <tag>PWN</tag>
          
         <tag>PWNABLE.TW</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://p4nda.top/2018/07/20/0ctf-baby/</loc>
-    <lastmod>2018-07-23T05:43:52.765Z</lastmod>
-    <data>
-        <display>
-        <title>【kernel pwn】0ctf 2018 final baby题解</title>
-        <pubTime>2018-07-20T10:39:12.000Z</pubTime>
-        
-        <tag>CTF</tag>
-         
-        <tag>PWN</tag>
-         
-        <tag>KERNEL</tag>
          
          
            

