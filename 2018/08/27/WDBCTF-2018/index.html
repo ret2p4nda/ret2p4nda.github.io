@@ -49,7 +49,7 @@
 <meta name="twitter:title" content="网鼎杯CTF部分PWN题复现">
 <meta name="twitter:description" content="没有参加网鼎杯的比赛，在家放假咸鱼了两周，回来复现了几道题，本篇记录blind、EasyCoin两题。">
 <meta name="twitter:image" content="http://p4nda.top/img/wdb2018/1-1.png">
-
+<link rel="stylesheet" href="/live2d/css/live2d.css" />
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
 
@@ -582,6 +582,22 @@
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
             </div>
         </div>
+		<!-- 血小板 -->
+  <div id="landlord">
+      <div class="message" style="opacity:0"></div>
+      <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
+      <div class="hide-button">隐藏</div>
+  </div>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+    var message_Path = '/live2d/'
+    var home_Path = 'https://haremu.com/'
+</script>
+<script type="text/javascript" src="/live2d/js/live2d.js"></script>
+<script type="text/javascript" src="/live2d/js/message.js"></script>
+<script type="text/javascript">
+    loadlive2d("live2d", "/live2d/model/xiaoban/model.json");
+</script>  
         
             <div class="visit">
                 
@@ -600,8 +616,9 @@
                     </span>
                 
             </div>
-        
+        		
     </div>
+	
 </footer>
     </div>
     
@@ -660,5 +677,5 @@
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
 </script>
   </div>
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":0.5,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
+</body>
 </html>

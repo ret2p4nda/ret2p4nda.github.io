@@ -40,7 +40,7 @@
 <meta name="twitter:title" content="全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解">
 <meta name="twitter:description" content="拖了好久才来整理全国大学生信息安全竞赛的题解，最近都在忙着DEF CON CHINA的RHG比赛的开发，虽然最后貌似只混了一件T恤... 这次比赛本来不想打的，三、四月份的比赛略多，最后趁着五一的假期，被Misty大佬召唤过来打了一天，队伍名称是Xopowo（俄语好的意思？хорошо）。最后做出来和复现的有三道：note-service2  、 house_of_grey 、 echo_back">
 <meta name="twitter:image" content="http://p4nda.top/img/ciscn/0.png">
-
+<link rel="stylesheet" href="/live2d/css/live2d.css" />
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
 
@@ -554,6 +554,22 @@
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
             </div>
         </div>
+		<!-- 血小板 -->
+  <div id="landlord">
+      <div class="message" style="opacity:0"></div>
+      <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
+      <div class="hide-button">隐藏</div>
+  </div>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+    var message_Path = '/live2d/'
+    var home_Path = 'https://haremu.com/'
+</script>
+<script type="text/javascript" src="/live2d/js/live2d.js"></script>
+<script type="text/javascript" src="/live2d/js/message.js"></script>
+<script type="text/javascript">
+    loadlive2d("live2d", "/live2d/model/xiaoban/model.json");
+</script>  
         
             <div class="visit">
                 
@@ -572,8 +588,9 @@
                     </span>
                 
             </div>
-        
+        		
     </div>
+	
 </footer>
     </div>
     
@@ -632,5 +649,5 @@
 <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
 </script>
   </div>
-<script src="/live2dw/lib/L2Dwidget.min.js?0c58a1486de42ac6cc1c59c7d98ae887"></script><script>L2Dwidget.init({"pluginModelPath":"assets/","model":{"scale":0.5,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/koharu.model.json"},"mobile":{"show":false,"scale":0.5},"react":{"opacityDefault":0.7,"opacityOnHover":0.2},"pluginJsPath":"lib/","pluginRootPath":"live2dw/"});</script></body>
+</body>
 </html>
