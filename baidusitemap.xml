@@ -5,11 +5,11 @@
     
   <url>
     <loc>http://p4nda.top/2019/01/02/kernel-bpf-overflow/</loc>
-    <lastmod>2019-01-02T14:01:21.851Z</lastmod>
+    <lastmod>2019-01-02T14:21:34.913Z</lastmod>
     <data>
         <display>
         <title>Linux kernel 4.20 BPF 整数溢出漏洞分析</title>
-        <pubTime>2019-01-02T15:33:33.000Z</pubTime>
+        <pubTime>2019-01-02T14:20:06.000Z</pubTime>
         
         <tag>KERNEL</tag>
          
