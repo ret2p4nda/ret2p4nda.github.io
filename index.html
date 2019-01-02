@@ -210,7 +210,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWN/">PWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Questions/">Questions</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWN/">PWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Questions/">Questions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VULNERABILITY/">VULNERABILITY</a></li></ul>
                     </div>
                 </section>
                 
@@ -358,6 +358,79 @@
       
         <p class="article-more-link">
           <a href="/2018/03/03/question/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-kernel-bpf-overflow" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/01/02/kernel-bpf-overflow/" class="article-date">
+      <time datetime="2019-01-02T15:33:33.000Z" itemprop="datePublished">2019-01-02</time>
+</a>
+
+ 
+    <a href="/2019/01/02/kernel-bpf-overflow/#comments" title="查看评论">
+        <i class="fa fa-comments-o" aria-hidden="true"></i>
+        <span class="count-comment"></span>
+        
+        
+            <span class="disqus-comment-count" data-disqus-identifier="2019/01/02/kernel-bpf-overflow/"></span>
+        
+    </a>
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/02/kernel-bpf-overflow/">Linux kernel 4.20 BPF 整数溢出漏洞分析</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              从github上看到很多dalao点赞的一个repo，clone之后发现所给的EXP没有办法提取成功，分析了一下，稍微修改了原来的EXP，作为分析的第一个真实漏洞。
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VULNERABILITY/">VULNERABILITY</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2019/01/02/kernel-bpf-overflow/#more">阅读全文 >></a>
         </p>
       
       <div class="clearfix"></div>
@@ -960,79 +1033,6 @@
 
 
   
-    <article id="post-0ctf-baby" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2018/07/20/0ctf-baby/" class="article-date">
-      <time datetime="2018-07-20T10:39:12.000Z" itemprop="datePublished">2018-07-20</time>
-</a>
-
- 
-    <a href="/2018/07/20/0ctf-baby/#comments" title="查看评论">
-        <i class="fa fa-comments-o" aria-hidden="true"></i>
-        <span class="count-comment"></span>
-        
-        
-            <span class="disqus-comment-count" data-disqus-identifier="2018/07/20/0ctf-baby/"></span>
-        
-    </a>
-
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/07/20/0ctf-baby/">【KERNEL PWN】0ctf 2018 final baby题解</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-          
-              这个比赛也过去好久了，比赛的时候没有去线下赛，只能赛后复现一下。拿这道题来作为入门的第二道KERNEL PWN吧...
-          
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CTF/">CTF</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
-    </div>
-
-      
-        <p class="article-more-link">
-          <a href="/2018/07/20/0ctf-baby/#more">阅读全文 >></a>
-        </p>
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1044,7 +1044,7 @@
         <div id="footer-info">
             <div class="footer-left">
                 <i class="fa fa-copyright"></i> 
-                2017-2018 P4nda
+                2017-2019 P4nda
             </div>
             <div class="footer-right">
                 <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
