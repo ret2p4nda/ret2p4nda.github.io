@@ -16,7 +16,7 @@
 
 
 <meta name="description" content="这个比赛也过去好久了，比赛的时候没有去线下赛，只能赛后复现一下。拿这道题来作为入门的第二道KERNEL PWN吧...">
-<meta name="keywords" content="PWN,CTF,KERNEL">
+<meta name="keywords" content="KERNEL,PWN,CTF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【KERNEL PWN】0ctf 2018 final baby题解">
 <meta property="og:url" content="http://p4nda.top/2018/07/20/0ctf-baby/index.html">
@@ -28,7 +28,7 @@
 <meta property="og:image" content="http://p4nda.top/img/0ctf-babyko/2-3.png">
 <meta property="og:image" content="http://p4nda.top/img/0ctf-babyko/2-2.png">
 <meta property="og:image" content="http://p4nda.top/img/0ctf-babyko/0.png">
-<meta property="og:updated_time" content="2018-11-13T11:22:35.681Z">
+<meta property="og:updated_time" content="2019-01-29T13:40:18.583Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【KERNEL PWN】0ctf 2018 final baby题解">
 <meta name="twitter:description" content="这个比赛也过去好久了，比赛的时候没有去线下赛，只能赛后复现一下。拿这道题来作为入门的第二道KERNEL PWN吧...">
@@ -343,7 +343,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <p><a href="https://pan.baidu.com/s/1s_lqbRZdPsAcp2qm52A-kw" target="_blank" rel="noopener">题目及相关下载</a> 密码:<strong><em>fant</em></strong></p>
+        <p><strong><em><a href="https://github.com/ret2p4nda/kernel-pwn/tree/master/0ctf-final-baby" target="_blank" rel="noopener">题目及相关下载</a></em></strong></p>
 <h1 id="题目分析"><a href="#题目分析" class="headerlink" title="题目分析"></a>题目分析</h1><p>题目代码很简单，仅注册了ioctl函数，里面包含了两个case，在参数为0x6666时，可以泄露出bss段flag的地址。</p>
 <p>在参数为0x1337时，用户输入是一个结构体，而传入驱动的是一个指针。</p>
 <p>这个结构体应该是这样的：</p>
@@ -399,7 +399,7 @@
         <p><span>本文标题:</span><a href="/2018/07/20/0ctf-baby/">【KERNEL PWN】0ctf 2018 final baby题解</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
         <p><span>发布时间:</span>2018-07-20, 18:39:12</p>
-        <p><span>最后更新:</span>2018-11-13, 19:22:35</p>
+        <p><span>最后更新:</span>2019-01-29, 21:40:18</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/07/20/0ctf-baby/" title="【KERNEL PWN】0ctf 2018 final baby题解">http://p4nda.top/2018/07/20/0ctf-baby/</a>
             <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2018/07/20/0ctf-baby/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
